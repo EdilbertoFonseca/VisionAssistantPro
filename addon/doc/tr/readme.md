@@ -14,26 +14,30 @@ Profesyonel Görsel Asistan Dokümantasyonu
 * **Model:** `gemini-2.5-flash-lite` (En hızlı) veya standart Flash modellerini seçin.
 * **Diller:** Kaynak, Hedef ve Yapay Zekâ Yanıt dillerini ayarlayın.
 * **Akıllı takas:** Kaynak metin hedef dille eşleşirse dilleri otomatik olarak değiştirir.
+- **Pano Entegrasyonu:** Yapay zeka yanıtını otomatik olarak panoya kopyalar.
 
-## 2. Genel Kısayollar
+## 2. Komut Katmanı ve Kısayollar
 
-Dizüstü bilgisayar düzenleriyle maksimum uyumluluk sağlamak için tüm kısayollar **NVDA + Kontrol + Shift** kullanır.
+Klavye kısayol çakışmalarını önlemek için bu eklenti bir **Komut Katmanı** kullanır.
 
-| Kısayol           | İşlev               | Açıklama                                                                               |
-| ----------------- | ------------------- | -------------------------------------------------------------------------------------- |
-| NVDA+Ctrl+Shift+T | Akıllı Çevirmen     | Gezgin imleci altındaki metni çevirir. Seçimi önceliklendirir.                         |
-| NVDA+Ctrl+Shift+Y | Pano Çevirmeni      | Panodaki içeriği çevirir. **Web tarayıcıları için önerilir**.                          |
-| NVDA+Ctrl+Shift+S | Akıllı Dikte        | Konuşmayı metne dönüştürür. Başlatmak için bir kez, durdurup yazmak için tekrar basın. |
-| NVDA+Ctrl+Shift+R | Metin İyileştirici  | Özetle, Dilbilgisini Düzelt, Açıkla veya **Özel İstemler** çalıştırır.                 |
-| NVDA+Ctrl+Shift+C | CAPTCHA Çözücü      | CAPTCHA’yı otomatik olarak yakalar ve çözer.                                           |
-| NVDA+Ctrl+Shift+V | Nesne Görüntüsü     | Dolaşım nesnesini takip eden sohbetle birlikte tanımlar.                                  |
-| NVDA+Ctrl+Shift+O | Tam Ekran Görüntüsü | Tüm ekran düzenini ve içeriğini analiz eder.                                           |
-| NVDA+Ctrl+Shift+D | Belge Analizi       | PDF/TXT/MD/PY dosyalarıyla sohbet eder.                                                |
-| NVDA+Ctrl+Shift+F | Dosya OCR           | Görüntü/PDF dosyasından doğrudan OCR yapar.                                            |
-| NVDA+Ctrl+Shift+A | Ses Yazıya Dökme    | MP3/WAV/OGG dosyalarını yazıya döker.                                                  |
-| NVDA+Ctrl+Shift+L | Son Çeviri          | Son çeviriyi API kullanmadan tekrar okur.                                              |
-| NVDA+Ctrl+Shift+U | Güncellemeleri Denetle | GitHub üzerinden en son sürümü kontrol eder.                                           |
-| NVDA+Ctrl+Shift+I | Durumu Seslendirme     | Mevcut durumu seslendirir (ör. “Yükleniyor…”, “Boşta”).                                    |
+1. Katmanı etkinleştirmek için **NVDA + Shift + V** (Ana Tuş) tuşlarına basın (bir bip sesi duyacaksınız).
+2. Tuşları bırakın, ardından aşağıdaki tek tuşlardan birine basın:
+
+| Tuş           | İşlev                   | Açıklama                                                                                    |
+| ------------- | ----------------------- | ------------------------------------------------------------------------------------------- |
+| **T**         | Akıllı Çeviri         | Dolaşım imleci altındaki veya seçili metni çevirir.                                         |
+| **Shift + T** | Panodan Çeviri          | Panodaki mevcut içeriği çevirir.                                                            |
+| **R**         | Metin İyileştirici      | Özetler, Dilbilgisini Düzeltir, Açıklar veya **Özel İstemler** çalıştırır.                  |
+| **V**         | Görsel Nesne            | Mevcut dolaşım nesnesini betimler.                                                            |
+| **O**         | Tam Ekran görseli        | Tüm ekran düzenini ve içeriğini analiz eder.                                                |
+| **Shift + V** | Çevrimiçi Video Analizi | **YouTube** veya **Instagram** videolarını Bağlantı üzerinden analiz eder.                       |
+| **D**         | Belge Analizi           | PDF/TXT/MD/PY dosyaları hakkında sohbet eder.                                                     |
+| **F**         | Dosya OCR               | Görüntü/PDF/TIFF dosyalarından doğrudan OCR yapar (Çok sayfalı TIFF desteklenir).           |
+| **A**         | Ses Transkripsiyonu     | MP3/WAV/OGG dosyalarını yazıya döker.                                                       |
+| **C**         | CAPTCHA Çözücü          | CAPTCHA’yı otomatik olarak yakalar ve çözer.                                                |
+| **S**         | Akıllı Dikte            | Konuşmayı metne dönüştürür. Kaydı başlatmak için basın, durdurmak/yazmak için tekrar basın. |
+| **L**         | Durumu Seslendir         | Mevcut durumu seslendirir (örn. "Yükleniyor...", "Boşta").                                      |
+| **U**         | Güncelleme Kontrolü     | GitHub üzerinden en son sürümü denetler.                                                |
 
 ## 3. Özel İstemler ve Değişkenler
 
@@ -59,6 +63,14 @@ Ayarlar bölümünde komutlar oluşturun: `Ad:İstem Metni` (`|` veya yeni satı
 * **Kod Hata Ayıklayıcı:** `Debug:Bu koddaki hataları bul ve açıkla: [selection]`
 
 **Not:** Tüm yapay zekâ özellikleri için aktif bir internet bağlantısı gereklidir. Çok sayfalı TIFF dosyaları otomatik olarak işlenir.
+
+## 3.5.0 için değişiklikler
+*   **Komut Katmanı:** Kısayolları tek bir ana tuş altında gruplamak için bir Komut Katmanı sistemi (varsayılan: `NVDA+Shift+V`) kullanıma sunuldu. Örneğin, çeviri için 'NVDA+Control+Shift+T' tuşlarına basmak yerine artık 'NVDA+Shift+V' ve ardından 'T' tuşlarına basıyorsunuz.
+*   **Çevrimiçi Video Analizi:** YouTube ve Instagram videolarını bir Bağlantı sağlayarak doğrudan analiz etmek için yeni bir özellik eklendi.
+
+## 3.1.0 için değişiklikler
+* **Doğrudan Çıktı Modu:** Daha hızlı ve daha kusursuz bir deneyim için sohbet iletişim kutusunu atlayıp yapay zeka yanıtlarını doğrudan konuşma yoluyla duyma seçeneği eklendi.
+* **Pano Entegrasyonu:** Yapay zeka yanıtlarını otomatik olarak panoya kopyalamak için yeni bir ayar eklendi.
 
 ## 3.0 için Değişiklikler
 

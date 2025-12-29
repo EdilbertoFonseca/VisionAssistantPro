@@ -11,24 +11,24 @@ addon_info = AddonInfo(
     # Add-on description
     # Translators: Long description to be shown for this add-on on add-on information from add-on store
     addon_description=_("""An advanced AI assistant for NVDA using Gemini models.
-Features:
-- Smart Translator (NVDA+Ctrl+Shift+T/Y)
-- Smart Dictation (NVDA+Ctrl+Shift+S)
-- Text Refiner (NVDA+Ctrl+Shift+R)
-- Vision & Screen Analysis (NVDA+Ctrl+Shift+V/O)
-- Document QA (NVDA+Ctrl+Shift+D)
-- CAPTCHA Solver (NVDA+Ctrl+Shift+C)
-- Audio Transcription (NVDA+Ctrl+Shift+A)
-- File Selection & OCR (NVDA+Ctrl+Shift+F)
-- Status Reporting (NVDA+Ctrl+Shift+I)"""),
-    addon_version="3.0.2",
+Command Layer: Press NVDA+Shift+V, then:
+- Smart Translator (T) / Clipboard (Shift+T)
+- Text Refiner (R)
+- Describe Object (V) / Full Screen (O)
+- Online Video Analysis (Shift+V)
+- Document QA (D)
+- File OCR (F)
+- CAPTCHA Solver (C)
+- Audio Transcription (A)
+- Smart Dictation (S)
+- Announce Status (L)
+- Check Update (U)"""),
+    addon_version="3.5.1",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
-    addon_changelog=_("""## Changes for 3.0.2
-*   **Batch OCR:** Added support for selecting and processing multiple images or PDF files simultaneously. The files are now processed in alphabetical order.
-*   **Compatibility Fix:** Bundled the `markdown` library within the add-on to resolve startup errors (ModuleNotFoundError) on NVDA 2024.3+ and ensure stability across all versions.
-*   **Code Safety:** Implemented a safer import mechanism to prevent conflicts with other add-ons or NVDA's internal libraries.
-*   **Translation:** Fixed an issue where the "Custom:" prefix in the Refine menu was not translatable."""),
+    addon_changelog=_("""## Changes for 3.5.0
+*   **Command Layer:** Introduced a Command Layer system (default: `NVDA+Shift+V`) to group shortcuts under a single master key. For example, instead of pressing `NVDA+Control+Shift+T` for translation, you now press `NVDA+Shift+V` followed by `T`.
+*   **Online Video Analysis:** Added a new feature to analyze YouTube and Instagram videos directly by providing a URL."""),
     addon_author="Mahmood Hozhabri",
     addon_url="https://github.com/mahmoodhozhabri/VisionAssistantPro",
     addon_sourceURL="https://github.com/mahmoodhozhabri/VisionAssistantPro",

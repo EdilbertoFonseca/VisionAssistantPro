@@ -10,30 +10,36 @@ _This add-on was released to the community in honor of the International Day of 
 
 Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
 
-- **API Key:** Required. Get a free key from [Google AI Studio](https://aistudio.google.com/).
-- **Model:** Choose `gemini-2.5-flash-lite` (Fastest) or standard Flash models.
+- **API Key:** Required. The field is masked by default for security (use "Show API Key" to view). Get a free key from [Google AI Studio](https://aistudio.google.com/).
+- **Model:** Choose between **Flash** (Fastest/Free) or **Pro** (High Intelligence) models based on your needs.
+- **Proxy URL:** Optional. Use this if Google is blocked in your region. You need a server address (URL) that receives your requests and forwards them to the Gemini API.
+  > **Note:** This is **not** for standard VPN/SOCKS proxies (like `127.0.0.1:1080`). It must be a web address (e.g., `https://my-custom-proxy.com`) that acts as a bridge to Google.
 - **Languages:** Set Source, Target, and AI Response languages.
 - **Smart Swap:** Automatically swaps languages if the source text matches the target language.
+- **Direct Output:** Skips the chat window and announces the response directly via speech.
+- **Clipboard Integration:** Automatically copies the AI response to the clipboard.
 
-## 2. Global Shortcuts
+## 2. Command Layer & Shortcuts
 
-To ensure maximum compatibility with laptop layouts, all shortcuts use **NVDA + Control + Shift**.
+To prevent keyboard conflicts, this add-on uses a **Command Layer**.
+1. Press **NVDA + Shift + V** (Master Key) to activate the layer (you will hear a beep).
+2. Release keys, then press one of the following single keys:
 
-| Shortcut                    | Function             | Description                                                                 |
-|-----------------------------|----------------------|-----------------------------------------------------------------------------|
-| NVDA+Ctrl+Shift+T           | Smart Translator     | Translates the text under the navigator cursor. Prioritizes selection.     |
-| NVDA+Ctrl+Shift+Y | Clipboard Translator | Translates clipboard content. |
-| NVDA+Ctrl+Shift+S           | Smart Dictation      | Converts speech to text. Press once to start, again to stop and type.       |
-| NVDA+Ctrl+Shift+R           | Text Refiner         | Summarize, Fix Grammar, Explain, or run **Custom Prompts**.                 |
-| NVDA+Ctrl+Shift+C           | CAPTCHA Solver       | Captures and solves CAPTCHA automatically.                                 |
-| NVDA+Ctrl+Shift+V           | Object Vision        | Describes the navigator object with follow-up chat.                         |
-| NVDA+Ctrl+Shift+O           | Full Screen Vision   | Analyzes entire screen layout and content.                                  |
-| NVDA+Ctrl+Shift+D           | Document Analysis    | Chat with PDF/TXT/MD/PY files.                                              |
-| NVDA+Ctrl+Shift+F           | File OCR             | Direct OCR from image/PDF file.                                             |
-| NVDA+Ctrl+Shift+A           | Audio Transcription  | Transcribe MP3/WAV/OGG files.                                               |
-| NVDA+Ctrl+Shift+L           | Last Translation     | Re-read last translation without API.                                      |
-| NVDA+Ctrl+Shift+U           | Update Check         | Check GitHub for latest version.                                            |
-| NVDA+Ctrl+Shift+I           | Status Reporting     | Announces the current status (e.g., "Uploading...", "Idle").                |
+| Key           | Function                 | Description                                                                 |
+|---------------|--------------------------|-----------------------------------------------------------------------------|
+| **T**         | Smart Translator         | Translates text under navigator cursor or selection.                        |
+| **Shift + T** | Clipboard Translator     | Translates content currently in the clipboard.                              |
+| **R**         | Text Refiner             | Summarize, Fix Grammar, Explain, or run **Custom Prompts**.                 |
+| **V**         | Object Vision            | Describes the current navigator object.                                     |
+| **O**         | Full Screen Vision       | Analyzes the entire screen layout and content.                              |
+| **Shift + V** | Online Video Analysis    | Analyze **YouTube** or **Instagram** videos via URL.                        |
+| **D**         | Document Analysis        | Chat with PDF/TXT/MD/PY files.                                              |
+| **F**         | File OCR                 | Direct OCR from image/PDF/TIFF files (Multi-page TIFF supported).           |
+| **A**         | Audio Transcription      | Transcribe MP3/WAV/OGG files.                                               |
+| **C**         | CAPTCHA Solver           | Captures and solves CAPTCHA automatically.                                  |
+| **S**         | Smart Dictation          | Converts speech to text. Press to start recording, again to stop/type.      |
+| **L**         | Status Reporting         | Announces the current status (e.g., "Uploading...", "Idle").                |
+| **U**         | Update Check             | Check GitHub for the latest version.                                        |
 
 ## 3. Custom Prompts & Variables
 
@@ -59,6 +65,14 @@ Create commands in Settings: `Name:Prompt Text` (separate with `|` or new lines)
 - **Code Debugger:** `Debug:Find bugs in this code and explain them: [selection]`
 
 **Note:** An active internet connection is required for all AI features. Multi-page TIFFs are automatically processed.
+
+## Changes for 3.5.0
+\*   \*\*Command Layer:\*\* Introduced a Command Layer system (default: `NVDA+Shift+V`) to group shortcuts under a single master key. For example, instead of pressing `NVDA+Control+Shift+T` for translation, you now press `NVDA+Shift+V` followed by `T`.
+\*   \*\*Online Video Analysis:\*\* Added a new feature to analyze YouTube and Instagram videos directly by providing a URL.
+
+## Changes for 3.1.0
+*   **Direct Output Mode:** Added an option to skip the chat dialog and hear AI responses directly via speech for a faster and more seamless experience.
+*   **Clipboard Integration:** Added a new setting to automatically copy AI responses to the clipboard.
 
 ## Changes for 3.0
 
