@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 'VisionAssistant' '2.7.0'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-01-23 22:57+0100\n"
-"PO-Revision-Date: 2026-01-23 23:51+0100\n"
+"PO-Revision-Date: 2026-01-24 18:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -129,98 +129,98 @@ msgstr "[Pro]"
 #: addon\globalPlugins\visionAssistant\__init__.py:83
 #: addon\globalPlugins\visionAssistant\__init__.py:92
 msgid "Bright"
-msgstr ""
+msgstr "Lumineux"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:84
 #: addon\globalPlugins\visionAssistant\__init__.py:101
 msgid "Upbeat"
-msgstr ""
+msgstr "Enjoué"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:85
 #: addon\globalPlugins\visionAssistant\__init__.py:100
 msgid "Informative"
-msgstr ""
+msgstr "Informatif"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:86
 #: addon\globalPlugins\visionAssistant\__init__.py:89
 #: addon\globalPlugins\visionAssistant\__init__.py:103
 msgid "Firm"
-msgstr ""
+msgstr "Ferme"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:87
 msgid "Excitable"
-msgstr ""
+msgstr "Énergique"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:88
 msgid "Youthful"
-msgstr ""
+msgstr "Jeune"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:90
 msgid "Breezy"
-msgstr ""
+msgstr "Léger"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:91
 #: addon\globalPlugins\visionAssistant\__init__.py:95
 msgid "Easy-going"
-msgstr ""
+msgstr "Détendu"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:93
 msgid "Breathy"
-msgstr ""
+msgstr "Aérienne"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:94
 #: addon\globalPlugins\visionAssistant\__init__.py:98
 msgid "Clear"
-msgstr ""
+msgstr "Claire"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:96
 #: addon\globalPlugins\visionAssistant\__init__.py:97
 msgid "Smooth"
-msgstr ""
+msgstr "Fluide"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:99
 msgid "Gravelly"
-msgstr ""
+msgstr "Graveleux"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:102
 msgid "Soft"
-msgstr ""
+msgstr "Douce"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:104
 msgid "Even"
-msgstr ""
+msgstr "Équilibrée"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:105
 msgid "Mature"
-msgstr ""
+msgstr "Mature"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:106
 msgid "Forward"
-msgstr ""
+msgstr "Directe"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:107
 msgid "Friendly"
-msgstr ""
+msgstr "Amical"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:108
 msgid "Casual"
-msgstr ""
+msgstr "Naturel"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:109
 msgid "Gentle"
-msgstr ""
+msgstr "Doux"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:110
 msgid "Lively"
-msgstr ""
+msgstr "Vive"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:111
 msgid "Knowledgeable"
-msgstr ""
+msgstr "Experte"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:112
 msgid "Warm"
-msgstr ""
+msgstr "Chaleureux"
 
 #. Translators: OCR Engine option (Fast but less formatted)
 #: addon\globalPlugins\visionAssistant\__init__.py:133
@@ -229,10 +229,8 @@ msgstr "Chrome (rapide)"
 
 #. Translators: OCR Engine option (Slower but better formatting)
 #: addon\globalPlugins\visionAssistant\__init__.py:135
-#, fuzzy
-#| msgid "View Formatted"
 msgid "Gemini (Formatted)"
-msgstr "View Formatted"
+msgstr "Gemini (avec mise en forme)"
 
 #. Translators: Title of the error dialog box
 #: addon\globalPlugins\visionAssistant\__init__.py:255
@@ -659,10 +657,8 @@ msgstr "IA : "
 
 #. Translators: Initial status message
 #: addon\globalPlugins\visionAssistant\__init__.py:1273
-#, fuzzy
-#| msgid "Analyzing..."
 msgid "Initializing..."
-msgstr "Analyse en cours..."
+msgstr "Initialisation en cours..."
 
 #. Translators: Button to go to previous page
 #: addon\globalPlugins\visionAssistant\__init__.py:1279
@@ -696,10 +692,8 @@ msgstr "Générer de l'audio (Alt+G)"
 
 #. Translators: Button to save text
 #: addon\globalPlugins\visionAssistant\__init__.py:1315
-#, fuzzy
-#| msgid "Save Result"
 msgid "Save (Alt+S)"
-msgstr "Enregistrer le résultat"
+msgstr "Enregistrer (Alt+S)"
 
 #. Translators: Spoken message when the current page is ready
 #: addon\globalPlugins\visionAssistant\__init__.py:1354
@@ -714,10 +708,8 @@ msgstr "[Échec de l'OCR. Essayez Re-scanner avec Gemini.]"
 
 #. Translators: Error message for page processing failure
 #: addon\globalPlugins\visionAssistant\__init__.py:1385
-#, fuzzy
-#| msgid "Error processing audio."
 msgid "Error processing page."
-msgstr "Erreur lors du traitement de l'audio."
+msgstr "Erreur lors du traitement de la page."
 
 #. Translators: Status label format
 #: addon\globalPlugins\visionAssistant\__init__.py:1390
@@ -727,10 +719,8 @@ msgstr "Page {current} sur {total}"
 
 #. Translators: Status when page is loading
 #: addon\globalPlugins\visionAssistant\__init__.py:1397
-#, fuzzy
-#| msgid "Processing Video..."
 msgid "Processing in background..."
-msgstr "Traitement de la vidéo en cours..."
+msgstr "Traitement en arrière-plan..."
 
 #. Translators: Spoken message when switching pages
 #: addon\globalPlugins\visionAssistant\__init__.py:1408
@@ -740,10 +730,8 @@ msgstr "Page {num}"
 
 #. Translators: Title of the formatted result window
 #: addon\globalPlugins\visionAssistant\__init__.py:1426
-#, fuzzy
-#| msgid "Formatted Conversation"
 msgid "Formatted Content"
-msgstr "Conversation formatée"
+msgstr "Conversation mise en forme"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:1432
 #: addon\globalPlugins\visionAssistant\__init__.py:1517
@@ -771,10 +759,8 @@ msgstr "Toutes les pages (dans l'intervalle)"
 
 #. Translators: Message during manual scan
 #: addon\globalPlugins\visionAssistant\__init__.py:1448
-#, fuzzy
-#| msgid "Scanning..."
 msgid "Scanning with Gemini..."
-msgstr "Analyse..."
+msgstr "Numérisation avec Gemini..."
 
 #. Translators: Message when scan is complete
 #: addon\globalPlugins\visionAssistant\__init__.py:1464
@@ -796,10 +782,10 @@ msgid "Unknown error"
 msgstr "Erreur inconnue"
 
 #: addon\globalPlugins\visionAssistant\__init__.py:1492
-#, fuzzy, python-brace-format
+#, python-brace-format
 #| msgid "Save failed: {error}"
 msgid "Scan failed: {err}"
-msgstr "Échec de l'enregistrement : {error}"
+msgstr "Échec de la numérisation : {err}"
 
 #. Translators: Message when batch scan is complete
 #: addon\globalPlugins\visionAssistant\__init__.py:1505
@@ -818,24 +804,19 @@ msgstr "Générer pour toutes les pages (dans l'intervalle)"
 
 #. Translators: Error message when text field is empty
 #: addon\globalPlugins\visionAssistant\__init__.py:1533
-#, fuzzy
 #| msgid "No text found."
 msgid "No text to read."
-msgstr "Aucun texte trouvé."
+msgstr "Aucun texte à lire."
 
 #. Translators: Message while gathering text
 #: addon\globalPlugins\visionAssistant\__init__.py:1543
-#, fuzzy
-#| msgid "Checking for updates..."
 msgid "Gathering text for audio..."
-msgstr "Vérification des mises à jour..."
+msgstr "Récupération du texte pour l'audio..."
 
 #. Translators: File dialog title for saving audio
 #: addon\globalPlugins\visionAssistant\__init__.py:1553
-#, fuzzy
-#| msgid "Saved."
 msgid "Save Audio"
-msgstr "Enregistré."
+msgstr "Enregistrer en tant qu'audio"
 
 #. Translators: Message while generating audio
 #: addon\globalPlugins\visionAssistant\__init__.py:1560
@@ -853,10 +834,8 @@ msgstr "Fichier audio généré et enregistré avec succès."
 
 #. Translators: File dialog title for saving
 #: addon\globalPlugins\visionAssistant\__init__.py:1602
-#, fuzzy
-#| msgid "Saved."
 msgid "Save"
-msgstr "Enregistré."
+msgstr "Enregistrer"
 
 #. Translators: Message showing save progress
 #: addon\globalPlugins\visionAssistant\__init__.py:1613
@@ -866,10 +845,8 @@ msgstr "Enregistrement de la page {num}..."
 
 #. Translators: Status label when save is complete
 #: addon\globalPlugins\visionAssistant\__init__.py:1626
-#, fuzzy
-#| msgid "Saved."
 msgid "Saved"
-msgstr "Enregistré."
+msgstr "Enregistré"
 
 #. Translators: Message box content for successful save
 #: addon\globalPlugins\visionAssistant\__init__.py:1628
@@ -883,17 +860,13 @@ msgstr "Lecteur de &document..."
 
 #. Translators: Menu item for Audio Transcription
 #: addon\globalPlugins\visionAssistant\__init__.py:1663
-#, fuzzy
-#| msgid "Transcribes a selected audio file."
 msgid "Transcribe &Audio File..."
-msgstr "Transcrit un fichier audio sélectionné."
+msgstr "Transcrire un fichier &audio..."
 
 #. Translators: Menu item for Video Analysis
 #: addon\globalPlugins\visionAssistant\__init__.py:1667
-#, fuzzy
-#| msgid "Analyzing..."
 msgid "Analyze &Video URL..."
-msgstr "Analyse en cours..."
+msgstr "Analyser une &vidéo..."
 
 #. Translators: Menu item to open settings
 #: addon\globalPlugins\visionAssistant\__init__.py:1673
@@ -902,10 +875,8 @@ msgstr "&Paramètres..."
 
 #. Translators: Menu item to check for updates
 #: addon\globalPlugins\visionAssistant\__init__.py:1677
-#, fuzzy
-#| msgid "Checking for updates..."
 msgid "Check for &Update"
-msgstr "Vérification des mises à jour..."
+msgstr "Vérification des mises à jo&ur"
 
 #. Translators: Menu item to open documentation
 #: addon\globalPlugins\visionAssistant\__init__.py:1681
@@ -1189,10 +1160,8 @@ msgstr "Téléversement et extraction en cours..."
 
 #. Translators: Error message if PDF creation fails
 #: addon\globalPlugins\visionAssistant\__init__.py:2485
-#, fuzzy
-#| msgid "Error processing audio."
 msgid "Error creating PDF."
-msgstr "Erreur lors du traitement de l'audio."
+msgstr "Erreur de création du PDF."
 
 #: addon\globalPlugins\visionAssistant\__init__.py:2538
 #, python-brace-format
@@ -1347,21 +1316,6 @@ msgstr "Vision Assistant Pro"
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on add-on information from add-on store
 #: buildVars.py:13
-#, fuzzy
-#| msgid ""
-#| "An advanced AI assistant for NVDA using Gemini models.\n"
-#| "Command Layer: Press NVDA+Shift+V, then:\n"
-#| "- Smart Translator (T) / Clipboard (Shift+T)\n"
-#| "- Text Refiner (R)\n"
-#| "- Describe Object (V) / Full Screen (O)\n"
-#| "- Online Video Analysis (Shift+V)\n"
-#| "- Document QA (D)\n"
-#| "- File OCR (F)\n"
-#| "- CAPTCHA Solver (C)\n"
-#| "- Audio Transcription (A)\n"
-#| "- Smart Dictation (S)\n"
-#| "- Announce Status (L)\n"
-#| "- Check Update (U)"
 msgid ""
 "An advanced AI assistant for NVDA using Gemini models.\n"
 "Command Layer: Press NVDA+Shift+V, then:\n"
@@ -1383,7 +1337,7 @@ msgstr ""
 "- Analyseur de texte (R)\n"
 "- Décrire l'objet (V) / Tout l'écran (O)\n"
 "- Analyse de vidéos en ligne (Maj+V)\n"
-"- Questions/réponses sur les documents (D)\n"
+"- Lecteur de document (D)\n"
 "- Reconnaissance de texte d'un fichier (F)\n"
 "- Résolution de CAPTCHA (C)\n"
 "- Transcription audio (A)\n"
