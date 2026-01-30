@@ -955,6 +955,8 @@ class VisionQADialog(wx.Dialog):
             wx.CallLater(300, ui.message, display_text)
 
     def onAsk(self, event):
+        if not self.inputArea:
+            return
         question = self.inputArea.Value
         if not question.strip(): return
         # Translators: Format for displaying User message in a chat dialog
@@ -2308,11 +2310,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.CallAfter(self._announce_translation, clean_res)
 
     def _announce_translation(self, text):
-        if self._handle_direct_output(text):
-            return
+        if config.conf["VisionAssistant"]["copy_to_clipboard"] and not config.conf["VisionAssistant"]["skip_chat_dialog"]:
+            api.copyToClip(text)
         # Translators: Message reported when calling translation command
         msg = _("Translated: {text}").format(text=text)
-        self.current_status = msg
+        self.report_status(msg)
+        if self._handle_direct_output(text):
+            return
         wx.CallAfter(self._open_translation_dialog, text)
 
     def _open_translation_dialog(self, text):
