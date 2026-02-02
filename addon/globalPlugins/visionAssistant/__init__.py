@@ -497,6 +497,7 @@ class GoogleTranslator:
 class GeminiHandler:
     _working_key_idx = 0 
     _file_uri_keys = {}
+    _max_retries = 5
 
     @staticmethod
     def _get_api_keys():
@@ -520,6 +521,23 @@ class GeminiHandler:
         return str(e)
 
     @staticmethod
+    def _call_with_retry(func_logic, key, *args):
+        last_exc = None
+        for attempt in range(GeminiHandler._max_retries):
+            try:
+                return func_logic(key, *args)
+            except error.HTTPError as e:
+                err_msg = GeminiHandler._handle_error(e)
+                if err_msg not in ["QUOTA_EXCEEDED", "SERVER_ERROR"]:
+                    raise
+                last_exc = e
+            except error.URLError as e:
+                last_exc = e
+            if attempt < GeminiHandler._max_retries - 1:
+                time.sleep(0.5 * (attempt + 1))
+        raise last_exc
+
+    @staticmethod
     def _register_file_uri(uri, key):
         if uri and key:
             GeminiHandler._file_uri_keys[uri] = key
@@ -535,7 +553,7 @@ class GeminiHandler:
     @staticmethod
     def _call_with_key(func_logic, key, *args):
         try:
-            return func_logic(key, *args)
+            return GeminiHandler._call_with_retry(func_logic, key, *args)
         except error.HTTPError as e:
             err_msg = GeminiHandler._handle_error(e)
             if err_msg == "QUOTA_EXCEEDED":
@@ -560,7 +578,7 @@ class GeminiHandler:
             idx = (GeminiHandler._working_key_idx + i) % num_keys
             key = keys[idx]
             try:
-                res = func_logic(key, *args)
+                res = GeminiHandler._call_with_retry(func_logic, key, *args)
                 GeminiHandler._working_key_idx = idx 
                 return res
             except error.HTTPError as e:
