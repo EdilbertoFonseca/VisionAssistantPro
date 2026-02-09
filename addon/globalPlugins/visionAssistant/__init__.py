@@ -1039,7 +1039,9 @@ class GeminiHandler:
     def translate(text, target_lang):
         def _logic(key, txt, lang):
             model = config.conf["VisionAssistant"]["model_name"]
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
+            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            url = f"{base_url}/v1beta/models/{model}:generateContent"
             quick_template = get_prompt_text("translate_quick") or "Translate to {target_lang}. Output ONLY translation."
             quick_prompt = apply_prompt_template(quick_template, [("target_lang", lang)])
             payload = {"contents": [{"parts": [{"text": quick_prompt}, {"text": txt}]}]}
@@ -1052,7 +1054,9 @@ class GeminiHandler:
     def ocr_page(image_bytes):
         def _logic(key, img_data):
             model = config.conf["VisionAssistant"]["model_name"]
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+            proxy_url = config.conf["VisionAssistant"]["proxy_url"].strip()
+            base_url = proxy_url.rstrip('/') if proxy_url else "https://generativelanguage.googleapis.com"
+            url = f"{base_url}/v1beta/models/{model}:generateContent"
             ocr_image_prompt = get_prompt_text("ocr_image_extract")
             payload = {"contents": [{"parts": [{"inline_data": {"mime_type": "image/jpeg", "data": base64.b64encode(img_data).decode('utf-8')}}, {"text": ocr_image_prompt}]}]}
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
