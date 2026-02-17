@@ -321,7 +321,7 @@ class PromptManagerDialog(wx.Dialog):
         lines.extend([f"- {required_item}" for required_item in required_items])
         lines.append("")
         # Translators: Guidance shown after listing missing required text.
-        lines.append(_("Add these items exactly as shown, then try again."))
+        lines.append(_("Add these items exactly as written, then try again."))
         # Translators: Title of validation warning dialog for guarded prompt checks.
         title = _("Required Text Missing")
         wx.MessageBox("\n".join(lines), title, wx.OK | wx.ICON_WARNING)
