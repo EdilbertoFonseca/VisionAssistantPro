@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v5
 
     - run: echo -e "pre-commit\nscons\nmarkdown">requirements.txt
 
@@ -40,7 +40,7 @@ jobs:
     - name: building addon
       run: scons && scons pot
 
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v5
       with:
         name: packaged_addon
         path: |
@@ -54,9 +54,9 @@ jobs:
     permissions:
       contents: write
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v5
     - name: download releases files
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v6
     - name: Display structure of downloaded files
       run: ls -R
     - name: Calculate sha256
@@ -73,3 +73,30 @@ jobs:
         body_path: changelog.md
         fail_on_unmatched_files: true
         prerelease: ${{ contains(github.ref, '-') }}
+
+    - name: Send Telegram Notification
+      run: |
+        head -c 3500 changelog.md > log_part.txt
+        sed -i 's/^## /🔹 /g' log_part.txt
+        sed -i 's/^# //g' log_part.txt
+        sed -i 's/^\* /• /g' log_part.txt
+
+        cat << 'EOF' > tg_msg.txt
+        *🚀 New Release: Vision Assistant Pro*
+
+        *Version:* `${{ github.ref_name }}`
+
+        *What's New:*
+        EOF
+        cat log_part.txt >> tg_msg.txt
+        cat << 'EOF' >> tg_msg.txt
+
+        [📦 View and Download on GitHub](${{ github.event.repository.html_url }}/releases/tag/${{ github.ref_name }})
+
+        #NVDA #AI #VisionAssistant
+        EOF
+
+        curl -v -f -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+          -d "chat_id=${{ secrets.TELEGRAM_TO }}" \
+          -d "parse_mode=Markdown" \
+          --data-urlencode "text@tg_msg.txt"

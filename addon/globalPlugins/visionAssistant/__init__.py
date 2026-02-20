@@ -2455,6 +2455,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         item_donate = self.va_menu.Append(wx.ID_ANY, _("D&onate"))
         self.va_menu.Bind(wx.EVT_MENU, self.on_donate_click, item_donate)
         
+        # Translators: Menu item to open the Telegram channel
+        item_telegram = self.va_menu.Append(wx.ID_ANY, _("Telegram &Channel"))
+        
+        self.va_menu.Bind(wx.EVT_MENU, self.on_telegram_click, item_telegram)
         self.tools_menu = gui.mainFrame.sysTrayIcon.toolsMenu
         # Translators: The name of the addon's sub-menu in the NVDA Tools menu.
         self.va_submenu_item = self.tools_menu.AppendSubMenu(self.va_menu, _("Vision Assistant"))
@@ -3813,7 +3817,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             wx.CallAfter(donate_dialog.requestDonations, gui.mainFrame)
         except Exception as e:
             show_error_dialog(str(e))
-
+            
+    def on_telegram_click(self, event):
+        try:
+            os.startfile("https://t.me/VisionAssistantPro")
+        except Exception as e:
+            show_error_dialog(str(e))
+            
     __gestures = {
         "kb:NVDA+shift+v": "activateLayer",
     }
