@@ -100,7 +100,27 @@ Cập nhật những tin tức, tính năng và bản phát hành mới nhất:
 - **Kênh Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** Dành cho báo cáo lỗi và yêu cầu tính năng.
 
+## 5. Người ủng hộ dự án
+
+Lời cảm ơn chân thành đến các thành viên trong cộng đồng đã ủng hộ việc phát triển và duy trì liên tục dự án này thông qua những đóng góp tài chính hào phóng của họ:
+
+* **@Alyabani94**
+
+*Nếu bạn muốn ủng hộ dự án về mặt tài chính và muốn thấy tên mình ở đây, bạn có thể tìm thấy tùy chọn **Quyên góp** trong menu Công cụ của NVDA (menu con Vision Assistant) hoặc trong quá trình thiết lập sau khi cài đặt.*
+
 ---
+
+## Những thay đổi trong phiên bản 5.6
+
+* **Bổ sung Công cụ OCR "None (Lớp trích xuất văn bản)"**: Người dùng hiện có thể trích xuất văn bản trực tiếp từ các tệp PDF có thể tìm kiếm mà không cần sử dụng hạn ngạch AI, giúp cải thiện đáng kể tốc độ và tính riêng tư cho các tài liệu dạng văn bản.
+* **Tinh chỉnh độ chính xác của UI Explorer**: Cải thiện prompt của UI Explorer để nhận diện tốt hơn các loại thành phần (như List Item) và báo cáo chính xác các trạng thái như "(Checked)", "(Selected)", hoặc "(Expanded)" trong khi bỏ qua các thành phần hệ thống của Windows như Thanh tác vụ và Đồng hồ.
+* **Nhắc nhở thiết lập cài đặt**: Thêm một thông báo sau khi cài đặt để hướng dẫn người dùng đến menu cài đặt nhằm cấu hình khóa API và các tùy chọn cá nhân của họ.
+
+## Những thay đổi trong phiên bản 5.5.2
+
+* **Sửa lỗi nhập liệu của AI Operator:** Khắc phục lỗi chữ 'v' bị gõ thay vì dán văn bản trên một số hệ thống nhất định. Bản sửa lỗi này giải quyết các xung đột về thời gian xảy ra khi hệ thống tải nặng.
+* **Tăng cường độ ổn định:** Thêm tính năng xử lý lỗi mạnh mẽ cho các thao tác với clipboard để ngăn chặn add-on bị treo khi clipboard hệ thống tạm thời bị khóa bởi các ứng dụng khác.
+* **Tối ưu hóa thời gian:** Điều chỉnh độ trễ nội bộ cho các sự kiện bàn phím để đảm bảo độ tin cậy cao hơn trên các tốc độ hệ thống khác nhau và khả năng tương thích tốt hơn với các trình quản lý Clipboard của bên thứ ba.
 
 ## Những thay đổi trong phiên bản 5.5 (Bản cập nhật Tự động hóa)
 
