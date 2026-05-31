@@ -82,7 +82,7 @@ Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy polec
 
 ## 3. Polecenia niestandardowe i zmienne
 
-Zarządzaj poleceniami w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
+Tymi poleceniami można zarządzać w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
 
 ### Obsługiwane zmienne
 - `[selection]`: Aktualnie zaznaczony tekst.
@@ -111,6 +111,15 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 *Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
 
+
+---
+## Zmiany w wersji 6.1.0
+
+*   **Uniwersalna integracja lokalnej AI (Konfiguracja lokalnej AI)**: Dodano nowy przycisk **„Konfiguracja lokalnej AI"** w ustawieniach niestandardowego dostawcy. Teraz można od razu automatycznie skonfigurować lokalne silniki AI, w tym **Ollama**, **LM Studio**, **Jan.ai** i **KoboldCPP**.
+*   **Ominięcie lokalnego proxy**: Przebudowano logikę połączenia z zaawansowanym mechanizmem omijania proxy. Dodatek całkowicie omija systemowe proxy Windows przy połączeniach lokalnych, dzięki czemu połączenie z lokalną AI jest stabilne nawet przy aktywnym VPN lub trybie TUN.
+*   **Awaryjne zatrzymanie Operatora AI (Shift+A)**: Dodano wyzwalacz zatrzymania. Naciśnięcie polecenia Operatora AI (**Shift+A** w warstwie poleceń) podczas trwającej operacji autonomicznej natychmiast przerywa pętlę i ogłasza *„Operator AI zatrzymany."*
+*   **Bardzo stabilne etykietowanie AI (v2)**: Zastąpiono klucze oparte na bezwzględnych współrzędnych ekranu zaawansowanym, hybrydowym systemem **sygnatur obiektów**. Etykiety opierają się teraz na identyfikatorach programowych (UIA **AutomationId** lub Win32 **ControlID**) oraz współrzędnych względem okna, dzięki czemu są one całkowicie odporne na zmianę rozmiaru, przesuwanie, zmianę monitora czy skalowanie okna.
+*   **Płynna automatyczna migracja etykiet**: Aktualizacja jest całkowicie przezroczysta. Dodatek automatycznie przeniesie starsze etykiety oparte na współrzędnych do nowego, stabilnego formatu sygnatur w tle przy pierwszym ustawieniu fokusu, bez utraty danych.
 
 ---
 ## Zmiany w wersji 6.0
