@@ -2300,6 +2300,34 @@ class UpdateDialog(wx.Dialog):
         self.yes_btn.Bind(wx.EVT_BUTTON, lambda e: self.EndModal(wx.ID_YES))
         self.no_btn.Bind(wx.EVT_BUTTON, lambda e: self.EndModal(wx.ID_NO))
 
+    def _refresh_minimax_voices_in_format_dialog(self):
+        # Background refresh: fetch fresh MiniMax voice list and update the
+        # combobox in the Document Format dialog.
+        try:
+            config.conf["VisionAssistant"]["minimax_voices_cache"] = ""
+            config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0
+            voices = AIHandler.get_voices("minimax")
+            if voices and hasattr(self, 'voice_sel'):
+                wx.CallAfter(self._populate_format_voice_sel, voices)
+        except Exception as e:
+            log.warning(f"Background MiniMax voice refresh (format dialog) failed: {e}")
+
+    def _populate_format_voice_sel(self, voices):
+        try:
+            self.voice_sel.Clear()
+            for v in voices:
+                self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
+            curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Portuguese_Narrator")
+            for i in range(self.voice_sel.GetCount()):
+                if self.voice_sel.GetClientData(i) == curr_voice:
+                    self.voice_sel.SetSelection(i)
+                    return
+            if self.voice_sel.GetCount() > 0:
+                self.voice_sel.SetSelection(0)
+        except Exception as e:
+            log.warning(f"Failed to populate format voice_sel: {e}")
+
+
 class UpdateManager:
     def __init__(self, repo_name):
         self.repo_name = repo_name
@@ -2953,13 +2981,9 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             pass
 
     def _updateVoiceList_legacy(self, p_name):
-        # Original implementation kept for reference (no longer called)
+        # Legacy fallback - uses get_voices() so it works for MiniMax too
         self.voice_sel.Clear()
-        if p_name == "openai" or p_name == "custom":
-            voices = OPENAI_VOICES
-        else:
-            voices = GEMINI_VOICES
-
+        voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
         for v in voices:
             self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
 
@@ -3759,7 +3783,7 @@ class DocumentViewerDialog(wx.Dialog):
             hbox_tts.Add(self.lbl_voice, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
             
             p_name = config.conf["VisionAssistant"]["active_provider"]
-            voices = OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES
+            voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
             voice_choices = [f"{v[0]} - {v[1]}" for v in voices]
             
             self.voice_sel = wx.Choice(panel, choices=voice_choices)
@@ -3768,6 +3792,10 @@ class DocumentViewerDialog(wx.Dialog):
                 v_idx = next(i for i, v in enumerate(voices) if v[0] == curr_voice)
                 self.voice_sel.SetSelection(v_idx)
             except Exception: self.voice_sel.SetSelection(0)
+            # If this is MiniMax, fetch the fresh voice list from the API in the background
+            # (the cache may be empty, stale, or missing new voices added by MiniMax)
+            if p_name == "minimax":
+                threading.Thread(target=self._refresh_minimax_voices_in_format_dialog, daemon=True).start()
             
             hbox_tts.Add(self.voice_sel, 1, wx.EXPAND)
             vbox.Add(hbox_tts, 0, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, 10)
