@@ -2218,6 +2218,10 @@ class AIHandler:
         # and returns audio as hex inside JSON (data.audio field).
         if p == "minimax":
             minimax_tts_url = "https://api.minimax.io/v1/t2a_v2"
+            # Override model with the dedicated TTS model (default: speech-2.8-hd),
+            # NOT the chat model (minimax_model_name = MiniMax-M3).
+            # Sending MiniMax-M3 to /t2a_v2 returns empty audio (model mismatch).
+            model = config.conf["VisionAssistant"].get("minimax_tts_model", "speech-2.8-hd").strip() or "speech-2.8-hd"
             minimax_voice = voice_name if voice_name else config.conf["VisionAssistant"]["minimax_tts_voice"].strip() or "Calm_Woman"
             minimax_payload = {
                 "model": model,
