@@ -3783,9 +3783,18 @@ class DocumentViewerDialog(wx.Dialog):
             hbox_tts.Add(self.lbl_voice, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
             
             p_name = config.conf["VisionAssistant"]["active_provider"]
-            voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
+            # Use cached voices synchronously for instant combobox population.
+            # The fresh list (if needed) will be fetched in background below.
+            # This prevents blocking the main thread on API calls.
+            try:
+                # Try cache first; never block on API for combobox population
+                voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
+            except Exception:
+                # Defensive: if get_voices raises (shouldn't, but...), use hardcoded fallback
+                log.warning("AIHandler.get_voices raised; using hardcoded fallback")
+                voices = OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES
             voice_choices = [f"{v[0]} - {v[1]}" for v in voices]
-            
+
             self.voice_sel = wx.Choice(panel, choices=voice_choices)
             curr_voice = config.conf["VisionAssistant"]["tts_voice"]
             try:
