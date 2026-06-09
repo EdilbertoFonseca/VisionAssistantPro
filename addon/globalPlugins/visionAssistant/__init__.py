@@ -1784,7 +1784,12 @@ class AIHandler:
             try:
                 import time
                 cache = config.conf["VisionAssistant"].get("minimax_voices_cache", "")
-                cache_time = config.conf["VisionAssistant"].get("minimax_voices_cache_time", 0)
+                cache_time_raw = config.conf["VisionAssistant"].get("minimax_voices_cache_time", 0)
+                # Defensive: cache_time may be a string from older config versions
+                try:
+                    cache_time = float(cache_time_raw)
+                except (TypeError, ValueError):
+                    cache_time = 0
                 # Cache valid for 24 hours (86400 seconds)
                 if cache and (time.time() - cache_time < 86400):
                     # Parse cache: "voice_id|display_name,voice_id|display_name,..."
@@ -2299,33 +2304,6 @@ class UpdateDialog(wx.Dialog):
         self.yes_btn.SetDefault()
         self.yes_btn.Bind(wx.EVT_BUTTON, lambda e: self.EndModal(wx.ID_YES))
         self.no_btn.Bind(wx.EVT_BUTTON, lambda e: self.EndModal(wx.ID_NO))
-
-    def _refresh_minimax_voices_in_format_dialog(self):
-        # Background refresh: fetch fresh MiniMax voice list and update the
-        # combobox in the Document Format dialog.
-        try:
-            config.conf["VisionAssistant"]["minimax_voices_cache"] = ""
-            config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0
-            voices = AIHandler.get_voices("minimax")
-            if voices and hasattr(self, 'voice_sel'):
-                wx.CallAfter(self._populate_format_voice_sel, voices)
-        except Exception as e:
-            log.warning(f"Background MiniMax voice refresh (format dialog) failed: {e}")
-
-    def _populate_format_voice_sel(self, voices):
-        try:
-            self.voice_sel.Clear()
-            for v in voices:
-                self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
-            curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Portuguese_Narrator")
-            for i in range(self.voice_sel.GetCount()):
-                if self.voice_sel.GetClientData(i) == curr_voice:
-                    self.voice_sel.SetSelection(i)
-                    return
-            if self.voice_sel.GetCount() > 0:
-                self.voice_sel.SetSelection(0)
-        except Exception as e:
-            log.warning(f"Failed to populate format voice_sel: {e}")
 
 
 class UpdateManager:
@@ -3783,16 +3761,11 @@ class DocumentViewerDialog(wx.Dialog):
             hbox_tts.Add(self.lbl_voice, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
             
             p_name = config.conf["VisionAssistant"]["active_provider"]
-            # Use cached voices synchronously for instant combobox population.
-            # The fresh list (if needed) will be fetched in background below.
-            # This prevents blocking the main thread on API calls.
-            try:
-                # Try cache first; never block on API for combobox population
-                voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
-            except Exception:
-                # Defensive: if get_voices raises (shouldn't, but...), use hardcoded fallback
-                log.warning("AIHandler.get_voices raised; using hardcoded fallback")
-                voices = OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES
+            # Use cached/hardcoded voices synchronously (no API call here).
+            # Background thread (_refresh_minimax_voices_in_format_dialog) fetches
+            # fresh list from API after dialog opens. This prevents blocking
+            # the main thread on API calls.
+            voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
             voice_choices = [f"{v[0]} - {v[1]}" for v in voices]
 
             self.voice_sel = wx.Choice(panel, choices=voice_choices)
@@ -4277,6 +4250,40 @@ class DocumentViewerDialog(wx.Dialog):
             wx.CallAfter(wx.MessageBox, _("Save Error: {error}").format(error=e), _("Error"), wx.ICON_ERROR)
         finally: wx.CallAfter(self.btn_save.Enable)
 
+    def _refresh_minimax_voices_in_format_dialog(self):
+        # Background refresh: fetch fresh MiniMax voice list and update the
+        # combobox in the Document Format dialog.
+        try:
+            # Bypass cache to force a fresh fetch from the API
+            config.conf["VisionAssistant"]["minimax_voices_cache"] = ""
+            try:
+                config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0
+            except (TypeError, ValueError):
+                # cache_time may be a string from older configs; reset defensively
+                config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0.0
+            voices = AIHandler.get_voices("minimax")
+            if voices and hasattr(self, 'voice_sel') and self.voice_sel:
+                wx.CallAfter(self._populate_format_voice_sel, voices)
+        except Exception as e:
+            log.warning(f"Background MiniMax voice refresh (format dialog) failed: {e}")
+
+    def _populate_format_voice_sel(self, voices):
+        try:
+            if not hasattr(self, 'voice_sel') or not self.voice_sel:
+                return
+            self.voice_sel.Clear()
+            for v in voices:
+                self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
+            curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Portuguese_Narrator")
+            for i in range(self.voice_sel.GetCount()):
+                if self.voice_sel.GetClientData(i) == curr_voice:
+                    self.voice_sel.SetSelection(i)
+                    return
+            if self.voice_sel.GetCount() > 0:
+                self.voice_sel.SetSelection(0)
+        except Exception as e:
+            log.warning(f"Failed to populate format voice_sel: {e}")
+
 def _generate_object_signature(obj):
     role_type = int(getattr(obj, "role", 0))
     unique_signature = ""
@@ -4320,7 +4327,7 @@ def _generate_object_signature(obj):
     except Exception:
         raw_name = getattr(obj, "name", "")
     raw_name = raw_name or ""
-    
+
     return f"sig_{role_type}_{unique_signature}_{raw_name}"
 
 class CustomLabelOverlay(NVDAObjects.NVDAObject):
