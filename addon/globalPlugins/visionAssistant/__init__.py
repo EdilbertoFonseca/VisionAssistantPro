@@ -250,7 +250,7 @@ confspec = {
     "mistral_api_key": "string(default='')",
     "groq_api_key": "string(default='')",
     "minimax_api_key": "string(default='')",
-    "minimax_api_host": "string(default='https://api.minimaxi.com/v1')",
+    "minimax_api_host": "string(default='https://api.minimax.io/v1')",
     "minimax_model_name": "string(default='MiniMax-M3')",
     "minimax_vision_model": "string(default='MiniMax-M3')",
     "minimax_ocr_model": "string(default='MiniMax-M3')",
@@ -1839,7 +1839,7 @@ class AIHandler:
         elif provider == "groq":
             return proxy_url.rstrip('/') if proxy_url else "https://api.groq.com/openai"
         elif provider == "minimax":
-            return proxy_url.rstrip('/') if proxy_url else config.conf["VisionAssistant"].get("minimax_api_host", "https://api.minimaxi.com/v1").strip() or "https://api.minimaxi.com/v1"
+            return proxy_url.rstrip('/') if proxy_url else config.conf["VisionAssistant"].get("minimax_api_host", "https://api.minimax.io/v1").strip() or "https://api.minimax.io/v1"
         return ""
 
     @staticmethod
@@ -1876,7 +1876,7 @@ class AIHandler:
             else: model = "gemini-3.1-flash-tts-preview"
 
         if not base:
-            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com", "minimax": "https://api.minimaxi.com/v1"}
+            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com", "minimax": "https://api.minimax.io/v1"}
             base = base_map.get(p, "")
             
         if p == "custom" and adv:
