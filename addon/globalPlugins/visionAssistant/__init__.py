@@ -155,6 +155,54 @@ GEMINI_VOICES = [
     # Translators: Adjective describing a warm AI voice style.
     ("Sulafat", _("Warm"))
 ]
+
+# MiniMax TTS system voices - PT-BR voices are listed first for Portuguese
+# users, followed by EN, ES, FR. Full list of 300+ available via API.
+MINIMAX_VOICES = [
+    # --- Portuguese (BR/PT) voices ---
+    # Translators: Adjective describing a sentimental female AI voice style.
+    ("Portuguese_SentimentalLady", _("Sentimental Lady")),
+    # Translators: Adjective describing a confident female AI voice style.
+    ("Portuguese_ConfidentWoman", _("Confident Woman")),
+    # Translators: Adjective describing a deep-voiced male AI voice style.
+    ("Portuguese_Deep-VoicedGentleman", _("Deep-voiced Gentleman")),
+    # Translators: Adjective describing a calm female leader AI voice style.
+    ("Portuguese_CalmLeader", _("Calm Leader")),
+    # Translators: Adjective describing a narrator AI voice style.
+    ("Portuguese_Narrator", _("Narrator")),
+    # Translators: Adjective describing a lovely female AI voice style.
+    ("Portuguese_LovelyLady", _("Lovely Lady")),
+    # Translators: Adjective describing a serene female AI voice style.
+    ("Portuguese_SereneWoman", _("Serene Woman")),
+    # Translators: Adjective describing a wise female AI voice style.
+    ("Portuguese_Wiselady", _("Wise Lady")),
+    # Translators: Adjective describing a gentle female teacher AI voice style.
+    ("Portuguese_GentleTeacher", _("Gentle Teacher")),
+    # Translators: Adjective describing an inspiring female AI voice style.
+    ("Portuguese_InspiringLady", _("Inspiring Lady")),
+    # --- English voices (high quality, useful for English content) ---
+    # Translators: Adjective describing a calm female AI voice style.
+    ("English_CalmWoman", _("Calm Woman")),
+    # Translators: Adjective describing a friendly male AI voice style.
+    ("English_FriendlyPerson", _("Friendly Guy")),
+    # Translators: Adjective describing a deep male AI voice style.
+    ("English_ManWithDeepVoice", _("Man With Deep Voice")),
+    # Translators: Adjective describing an expressive narrator AI voice style.
+    ("English_expressive_narrator", _("Expressive Narrator")),
+    # --- Spanish voices ---
+    # Translators: Adjective describing a serene female AI voice style.
+    ("Spanish_SereneWoman", _("Serene Woman")),
+    # Translators: Adjective describing a wise scholar male AI voice style.
+    ("Spanish_WiseScholar", _("Wise Scholar")),
+    # Translators: Adjective describing a deep-toned male AI voice style.
+    ("Spanish_Deep-tonedMan", _("Deep-toned Man")),
+    # --- French voices ---
+    # Translators: Adjective describing a movie lead female AI voice style.
+    ("French_MovieLeadFemale", _("Movie Lead Female")),
+    # Translators: Adjective describing a male narrator AI voice style.
+    ("French_MaleNarrator", _("Male Narrator")),
+]
+
 OPENAI_VOICES = [
     # Translators: Adjective describing a neutral AI voice style.
     ("Alloy", _("Neutral")),
@@ -2837,6 +2885,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
         self.voice_sel.Clear()
         if p_name in ["openai", "custom"]:
             voices = OPENAI_VOICES
+        elif p_name == "minimax":
+            voices = MINIMAX_VOICES
         else:
             voices = GEMINI_VOICES
         
