@@ -155,6 +155,7 @@ GEMINI_VOICES = [
     # Translators: Adjective describing a warm AI voice style.
     ("Sulafat", _("Warm"))
 ]
+
 OPENAI_VOICES = [
     # Translators: Adjective describing a neutral AI voice style.
     ("Alloy", _("Neutral")),
@@ -249,6 +250,14 @@ confspec = {
     "openai_api_key": "string(default='')",
     "mistral_api_key": "string(default='')",
     "groq_api_key": "string(default='')",
+    "minimax_api_key": "string(default='')",
+    "minimax_api_host": "string(default='https://api.minimax.io/v1')",
+    "minimax_model_name": "string(default='MiniMax-M3')",
+    "minimax_vision_model": "string(default='MiniMax-M3')",
+    "minimax_ocr_model": "string(default='MiniMax-M3')",
+    "minimax_stt_model": "string(default='asr-01')",
+    "minimax_tts_model": "string(default='speech-2.8-hd')",
+    "minimax_tts_voice": "string(default='Portuguese_Narrator')",
     "custom_api_key": "string(default='')",
     "custom_api_url": "string(default='')",
     "custom_api_type": "string(default='openai')",
@@ -951,6 +960,22 @@ def clean_markdown(text):
     text = re.sub(r'```', '', text)
     text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
     text = re.sub(r'^\s*-\s+', '', text, flags=re.MULTILINE)
+    return text.strip()
+
+def strip_thinking_tags(text):
+    # Remove reasoning/thinking blocks emitted by reasoning-capable models
+    # (e.g. MiniMax-M3, DeepSeek-R1, o1) before sending to TTS or display.
+    # Supported tag forms:
+    #   <think>...</think>
+    #   <reasoning>...</reasoning>
+    #   <thought>...</thought>
+    if not text: return ""
+    # Strip tagged blocks (multiline, non-greedy)
+    text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<reasoning>.*?</reasoning>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<thought>.*?</thought>', '', text, flags=re.DOTALL | re.IGNORECASE)
+    # Collapse leftover blank lines created by removed blocks
+    text = re.sub(r'\n{3,}', '\n\n', text)
     return text.strip()
 
 def markdown_to_html(text, full_page=False):
@@ -1756,14 +1781,86 @@ class AIHandler:
     @staticmethod
     def is_tts_supported(provider=None):
         p = provider if provider else config.conf["VisionAssistant"]["active_provider"]
-        
-        if p in ["gemini", "openai"]:
+
+        if p in ["gemini", "openai", "minimax"]:
             return True
-        
+
         if p == "custom":
             return True
-            
+
         return False
+
+    @staticmethod
+    def get_voices(provider):
+        # Returns a list of (voice_id, display_name) tuples for the given provider.
+        # For minimax, fetches dynamically from the API (cached 24h in config).
+        # For gemini/openai, returns the hardcoded constant.
+        # Returns empty list on error.
+        if provider == "minimax":
+            try:
+                import time
+                cache = config.conf["VisionAssistant"].get("minimax_voices_cache", "")
+                cache_time_raw = config.conf["VisionAssistant"].get("minimax_voices_cache_time", 0)
+                # Defensive: cache_time may be a string from older config versions
+                try:
+                    cache_time = float(cache_time_raw)
+                except (TypeError, ValueError):
+                    cache_time = 0
+                # Cache valid for 24 hours (86400 seconds)
+                if cache and (time.time() - cache_time < 86400):
+                    # Parse cache: "voice_id|display_name,voice_id|display_name,..."
+                    voices = []
+                    for entry in cache.split(""):
+                        if "" in entry:
+                            vid, vname = entry.split("", 1)
+                            voices.append((vid, vname))
+                    if voices:
+                        log.debug(f"Using cached MiniMax voices ({len(voices)} entries)")
+                        return voices
+
+                # Cache miss or expired - fetch from API
+                base = AIHandler.get_base_url("minimax")
+                url = f"{base.rstrip('/')}/get_voice"
+                keys = AIHandler.get_keys("minimax")
+                if not keys:
+                    return []
+                key = keys[0]
+                payload = json.dumps({"voice_type": "system"}).encode("utf-8")
+                req = request.Request(url, data=payload, headers={
+                    "Authorization": f"Bearer {key}",
+                    "Content-Type": "application/json"
+                })
+                with get_proxy_opener().open(req, timeout=30) as r:
+                    resp = json.loads(r.read().decode("utf-8"))
+                    system_voices = resp.get("system_voice", [])
+                    if not system_voices:
+                        log.warning("MiniMax /get_voice returned no system_voice list")
+                        return []
+                    voices = []
+                    storage_parts = []
+                    for v in system_voices:
+                        vid = v.get("voice_id", "")
+                        vname = v.get("voice_name", vid)
+                        if vid:
+                            voices.append((vid, vname))
+                            storage_parts.append(f"{vid}{vname}")
+                    if voices:
+                        # Save to cache (24h)
+                        config.conf["VisionAssistant"]["minimax_voices_cache"] = "".join(storage_parts)
+                        config.conf["VisionAssistant"]["minimax_voices_cache_time"] = int(time.time())
+                        log.debug(f"Fetched and cached {len(voices)} MiniMax voices")
+                        return voices
+                    return []
+            except Exception as e:
+                log.warning(f"Failed to fetch MiniMax voices: {e}")
+                return []
+        if provider == "gemini":
+            return GEMINI_VOICES
+        if provider == "openai":
+            return OPENAI_VOICES
+        if provider == "custom":
+            return OPENAI_VOICES
+        return []
 
     @staticmethod
     def filter_models(provider, models_info, task="main"):
@@ -1830,6 +1927,8 @@ class AIHandler:
             return proxy_url.rstrip('/') if proxy_url else "https://api.mistral.ai"
         elif provider == "groq":
             return proxy_url.rstrip('/') if proxy_url else "https://api.groq.com/openai"
+        elif provider == "minimax":
+            return proxy_url.rstrip('/') if proxy_url else config.conf["VisionAssistant"].get("minimax_api_host", "https://api.minimax.io/v1").strip() or "https://api.minimax.io/v1"
         return ""
 
     @staticmethod
@@ -1866,7 +1965,7 @@ class AIHandler:
             else: model = "gemini-3.1-flash-tts-preview"
 
         if not base:
-            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com"}
+            base_map = {"mistral": "https://api.mistral.ai", "openai": "https://api.openai.com", "groq": "https://api.groq.com/openai", "gemini": "https://generativelanguage.googleapis.com", "minimax": "https://api.minimax.io/v1"}
             base = base_map.get(p, "")
             
         if p == "custom" and adv:
@@ -1989,6 +2088,7 @@ class AIHandler:
             model = "whisper-1"
             if p == "groq": model = "whisper-large-v3-turbo"
             elif p == "mistral": model = "voxtral-mini-latest"
+            elif p == "minimax": model = config.conf["VisionAssistant"]["minimax_stt_model"].strip() or "asr-01"
             if p == "custom":
                 model = config.conf["VisionAssistant"]["custom_stt_model"].strip() or config.conf["VisionAssistant"]["custom_model_name"].strip() or model
             elif config.conf["VisionAssistant"].get("advanced_model_routing", False):
@@ -2040,7 +2140,13 @@ class AIHandler:
                     res = json.loads(r.read().decode('utf-8'))
                     if isinstance(res, dict):
                         if "choices" in res and res["choices"]:
-                            return res["choices"][0]["message"]["content"]
+                            content = res["choices"][0]["message"]["content"]
+                            # MiniMax reasoning models emit visible thinking blocks
+                            # (e.g. "<think>...</think>") in the response content.
+                            # Strip them so the user sees only the final answer.
+                            if p == "minimax" and content:
+                                content = strip_thinking_tags(content)
+                            return content
                         elif "error" in res:
                             err_val = res["error"]
                             err_msg = err_val.get("message") if isinstance(err_val, dict) else str(err_val)
@@ -2121,15 +2227,46 @@ class AIHandler:
         m_key = "model_name" if p == "gemini" else f"{p}_model_name"
         model = model_override or config.conf["VisionAssistant"].get(m_key, "")
         
-        if p == "custom": 
+        if p == "custom":
             model = config.conf["VisionAssistant"]["custom_tts_model"].strip() or "tts-1"
         elif config.conf["VisionAssistant"].get("advanced_model_routing", False):
             adv_tts = config.conf["VisionAssistant"].get(f"{p}_tts_model", "").strip()
             if adv_tts: model = adv_tts
             elif p == "openai": model = "tts-1"
-        elif p == "openai": 
+        elif p == "openai":
             model = "tts-1"
-            
+
+        # MiniMax TTS uses a custom payload (text + voice_setting + audio_setting)
+        # and returns audio as hex inside JSON (data.audio field).
+        if p == "minimax":
+            minimax_tts_url = "https://api.minimax.io/v1/t2a_v2"
+            # Override model with the dedicated TTS model (default: speech-2.8-hd),
+            # NOT the chat model (minimax_model_name = MiniMax-M3).
+            # Sending MiniMax-M3 to /t2a_v2 returns empty audio (model mismatch).
+            model = config.conf["VisionAssistant"].get("minimax_tts_model", "speech-2.8-hd").strip() or "speech-2.8-hd"
+            minimax_voice = voice_name if voice_name else config.conf["VisionAssistant"]["minimax_tts_voice"].strip() or "Portuguese_Narrator"
+            minimax_payload = {
+                "model": model,
+                "text": text,
+                "voice_setting": {"voice_id": minimax_voice, "speed": 1.0, "vol": 1.0, "pitch": 0},
+                "audio_setting": {"sample_rate": 32000, "bitrate": 128000, "format": "mp3", "channel": 1}
+            }
+            for key in keys:
+                try:
+                    headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
+                    if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
+                    req = request.Request(minimax_tts_url, data=json.dumps(minimax_payload).encode(), headers=headers)
+                    with get_proxy_opener().open(req, timeout=120) as r:
+                        resp_json = json.loads(r.read().decode("utf-8"))
+                        hex_audio = resp_json.get("data", {}).get("audio", "")
+                        if not hex_audio:
+                            return "ERROR: MiniMax TTS returned no audio data.", False
+                        audio_bytes = bytes.fromhex(hex_audio)
+                        return base64.b64encode(audio_bytes).decode("utf-8"), False
+                except Exception as e:
+                    if key == keys[-1]: return f"ERROR: {str(e)}", False
+                    continue
+
         payload = {"model": model, "input": text, "voice": voice_name.lower(), "response_format": "mp3"}
         for key in keys:
             try:
@@ -2193,6 +2330,7 @@ class UpdateDialog(wx.Dialog):
         self.yes_btn.SetDefault()
         self.yes_btn.Bind(wx.EVT_BUTTON, lambda e: self.EndModal(wx.ID_YES))
         self.no_btn.Bind(wx.EVT_BUTTON, lambda e: self.EndModal(wx.ID_NO))
+
 
 class UpdateManager:
     def __init__(self, repo_name):
@@ -2487,6 +2625,8 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             (_("Mistral AI"), "mistral"),
             # Translators: Name of the Groq AI provider
             (_("Groq"), "groq"),
+            # Translators: Name of the MiniMax AI provider
+            (_("MiniMax"), "minimax"),
             # Translators: Option for a user-defined custom AI provider
             (_("Custom"), "custom")
         ]
@@ -2795,14 +2935,62 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
     def updateVoiceList(self, p_name):
         self.voice_sel.Clear()
-        if p_name in ["openai", "custom"]:
+        if p_name == "openai" or p_name == "custom":
             voices = OPENAI_VOICES
         else:
-            voices = GEMINI_VOICES
-        
+            voices = AIHandler.get_voices(p_name) or GEMINI_VOICES
+        # Render the list immediately (either Gemini/OpenAI hardcoded, or MiniMax cache hit)
         for v in voices:
             self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
-            
+        # If this is MiniMax, trigger async refresh in the background to fetch the
+        # latest official voice list from /v1/get_voice (the cache may be stale or empty)
+        if p_name == "minimax":
+            threading.Thread(target=self._refresh_minimax_voices, daemon=True).start()
+        else:
+            curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Puck")
+            self._select_voice_in_list(curr_voice)
+
+    def _refresh_minimax_voices(self):
+        # Background thread: fetch fresh MiniMax voice list, then update UI
+        try:
+            # Force a refresh by clearing cache and re-fetching
+            config.conf["VisionAssistant"]["minimax_voices_cache"] = ""
+            config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0
+            voices = AIHandler.get_voices("minimax")
+            if voices and hasattr(self, 'voice_sel'):
+                # wx widget updates must happen on the main thread
+                wx.CallAfter(self._populate_voice_sel, voices)
+        except Exception as e:
+            log.warning(f"Background MiniMax voice refresh failed: {e}")
+
+    def _populate_voice_sel(self, voices):
+        try:
+            self.voice_sel.Clear()
+            for v in voices:
+                self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
+            curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Portuguese_Narrator")
+            self._select_voice_in_list(curr_voice)
+        except Exception as e:
+            log.warning(f"Failed to populate voice_sel: {e}")
+
+    def _select_voice_in_list(self, voice_id):
+        try:
+            for i in range(self.voice_sel.GetCount()):
+                if self.voice_sel.GetClientData(i) == voice_id:
+                    self.voice_sel.SetSelection(i)
+                    return
+            if self.voice_sel.GetCount() > 0:
+                self.voice_sel.SetSelection(0)
+        except Exception:
+            pass
+
+    def _updateVoiceList_legacy(self, p_name):
+        # Legacy fallback - uses get_voices() so it works for MiniMax too
+        self.voice_sel.Clear()
+        voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
+        for v in voices:
+            self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
+
         curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Puck")
         idx = wx.NOT_FOUND
         for i in range(self.voice_sel.GetCount()):
@@ -2915,7 +3103,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
     def onProviderChange(self, event):
         p_idx = self.provider_sel.GetSelection()
-        p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+        p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
         
         key_name = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
         val = config.conf["VisionAssistant"].get(key_name, "")
@@ -3011,7 +3199,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
 
     def onFetchModels(self, event):
         p_idx = self.provider_sel.GetSelection()
-        p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+        p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
         
         val = self.apiKeyCtrl_visible.Value if self.showApiCheck.IsChecked() else self.apiKeyCtrl_hidden.Value
         k_key = "api_key" if p_name == "gemini" else (f"{p_name}_api_key" if p_name != "custom" else "custom_api_key")
@@ -3166,7 +3354,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
     def onToggleAdvanced(self, event):
         p_idx = self.provider_sel.GetSelection()
         if p_idx != wx.NOT_FOUND:
-            p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+            p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
             self.updateCustomFieldsVisibility(p_name)
 
     def onToggleApiVisibility(self, event):
@@ -3187,7 +3375,7 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             model_id = cb.GetClientData(sel)
             if model_id:
                 p_idx = self.provider_sel.GetSelection()
-                p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+                p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
                 self._temp_models[p_name] = model_id
                 if p_name == "custom":
                     self.customModelName.SetValue(model_id)
@@ -3198,14 +3386,14 @@ class SettingsPanel(gui.settingsDialogs.SettingsPanel):
             voice_id = self.voice_sel.GetClientData(sel)
             p_idx = self.provider_sel.GetSelection()
             if p_idx != wx.NOT_FOUND:
-                p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+                p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
                 if p_name == "custom":
                     self.customTtsVoice.SetValue(voice_id)
 
     def onSave(self):
         try:
             p_idx = self.provider_sel.GetSelection()
-            p_name = ["gemini", "openai", "mistral", "groq", "custom"][p_idx]
+            p_name = ["gemini", "openai", "mistral", "groq", "minimax", "custom"][p_idx]
             config.conf["VisionAssistant"]["active_provider"] = p_name
             
             val = self.apiKeyCtrl_visible.Value if self.showApiCheck.IsChecked() else self.apiKeyCtrl_hidden.Value
@@ -3599,15 +3787,23 @@ class DocumentViewerDialog(wx.Dialog):
             hbox_tts.Add(self.lbl_voice, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 5)
             
             p_name = config.conf["VisionAssistant"]["active_provider"]
-            voices = OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES
+            # Use cached/hardcoded voices synchronously (no API call here).
+            # Background thread (_refresh_minimax_voices_in_format_dialog) fetches
+            # fresh list from API after dialog opens. This prevents blocking
+            # the main thread on API calls.
+            voices = AIHandler.get_voices(p_name) or (OPENAI_VOICES if p_name in ["openai", "custom"] else GEMINI_VOICES)
             voice_choices = [f"{v[0]} - {v[1]}" for v in voices]
-            
+
             self.voice_sel = wx.Choice(panel, choices=voice_choices)
             curr_voice = config.conf["VisionAssistant"]["tts_voice"]
             try:
                 v_idx = next(i for i, v in enumerate(voices) if v[0] == curr_voice)
                 self.voice_sel.SetSelection(v_idx)
             except Exception: self.voice_sel.SetSelection(0)
+            # If this is MiniMax, fetch the fresh voice list from the API in the background
+            # (the cache may be empty, stale, or missing new voices added by MiniMax)
+            if p_name == "minimax":
+                threading.Thread(target=self._refresh_minimax_voices_in_format_dialog, daemon=True).start()
             
             hbox_tts.Add(self.voice_sel, 1, wx.EXPAND)
             vbox.Add(hbox_tts, 0, wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, 10)
@@ -4080,6 +4276,40 @@ class DocumentViewerDialog(wx.Dialog):
             wx.CallAfter(wx.MessageBox, _("Save Error: {error}").format(error=e), _("Error"), wx.ICON_ERROR)
         finally: wx.CallAfter(self.btn_save.Enable)
 
+    def _refresh_minimax_voices_in_format_dialog(self):
+        # Background refresh: fetch fresh MiniMax voice list and update the
+        # combobox in the Document Format dialog.
+        try:
+            # Bypass cache to force a fresh fetch from the API
+            config.conf["VisionAssistant"]["minimax_voices_cache"] = ""
+            try:
+                config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0
+            except (TypeError, ValueError):
+                # cache_time may be a string from older configs; reset defensively
+                config.conf["VisionAssistant"]["minimax_voices_cache_time"] = 0.0
+            voices = AIHandler.get_voices("minimax")
+            if voices and hasattr(self, 'voice_sel') and self.voice_sel:
+                wx.CallAfter(self._populate_format_voice_sel, voices)
+        except Exception as e:
+            log.warning(f"Background MiniMax voice refresh (format dialog) failed: {e}")
+
+    def _populate_format_voice_sel(self, voices):
+        try:
+            if not hasattr(self, 'voice_sel') or not self.voice_sel:
+                return
+            self.voice_sel.Clear()
+            for v in voices:
+                self.voice_sel.Append(f"{v[0]} - {v[1]}", v[0])
+            curr_voice = config.conf["VisionAssistant"].get("tts_voice", "Portuguese_Narrator")
+            for i in range(self.voice_sel.GetCount()):
+                if self.voice_sel.GetClientData(i) == curr_voice:
+                    self.voice_sel.SetSelection(i)
+                    return
+            if self.voice_sel.GetCount() > 0:
+                self.voice_sel.SetSelection(0)
+        except Exception as e:
+            log.warning(f"Failed to populate format voice_sel: {e}")
+
 def _generate_object_signature(obj):
     role_type = int(getattr(obj, "role", 0))
     unique_signature = ""
@@ -4123,7 +4353,7 @@ def _generate_object_signature(obj):
     except Exception:
         raw_name = getattr(obj, "name", "")
     raw_name = raw_name or ""
-    
+
     return f"sig_{role_type}_{unique_signature}_{raw_name}"
 
 class CustomLabelOverlay(NVDAObjects.NVDAObject):
