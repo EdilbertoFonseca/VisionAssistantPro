@@ -521,8 +521,8 @@ DEFAULT_SYSTEM_PROMPTS = (
         "label": _("Document OCR + Translate"),
         "prompt": (
             "Extract all text from this document. Preserve formatting (Markdown). Then translate "
-            "the content to {target_lang}. Output ONLY the translated content. Do not add "
-            "explanations."
+            "the content to {target_lang}. Output ONLY the translated content. You MUST insert "
+            "the exact delimiter '[[[PAGE_SEP]]]' immediately after the translated content of every single page."
         ),
     },
     {
@@ -1604,7 +1604,7 @@ class GeminiHandler:
         return GeminiHandler._call_with_rotation(_logic, image_bytes)
 
     @staticmethod
-    def upload_and_process_batch(file_path, mime_type, page_count):
+    def upload_and_process_batch(file_path, mime_type, page_count, prompt=None):
         keys = GeminiHandler._get_api_keys()
         if not keys: 
             # Translators: Error message for missing API Keys
@@ -1627,8 +1627,9 @@ class GeminiHandler:
                     img_data = base64.b64encode(pix.tobytes("jpg")).decode('utf-8')
                     parts.append({"inline_data": {"mime_type": "image/jpeg", "data": img_data}})
                 doc.close()
-                prompt = get_prompt_text("ocr_document_extract")
-                parts.append({"text": prompt})
+                if not prompt:
+                    prompt = get_prompt_text("ocr_document_extract")
+                contents = [{"parts": [{"file_data": {"mime_type": mime_type, "file_uri": uri}}, {"text": prompt}]}]
                 res_text = GeminiHandler._call_with_rotation(GeminiHandler._logic, [{"parts": parts}], None, False, "ocr")
                 if res_text.startswith("ERROR:"): return [res_text]
                 return res_text.split('[[[PAGE_SEP]]]')
@@ -1678,7 +1679,8 @@ class GeminiHandler:
                 connector = "&" if "?" in url else "?"
                 full_url = f"{url}{connector}key={key}"
                 
-                prompt = get_prompt_text("ocr_document_extract")
+                if not prompt:
+                    prompt = get_prompt_text("ocr_document_extract")
                 contents = [{"parts": [{"file_data": {"mime_type": mime_type, "file_uri": uri}}, {"text": prompt}]}]
 
                 payload = {"contents": contents}
@@ -4819,7 +4821,11 @@ class DocumentViewerDialog(wx.Dialog):
             if not upload_path: continue
 
             try:
-                results = GeminiHandler.upload_and_process_batch(upload_path, "application/pdf", current_batch_count)
+                p_text = apply_prompt_template(
+                    get_prompt_text("ocr_document_translate" if self.do_translate else "ocr_document_extract"),
+                    [("target_lang", self.target_lang)]
+                )
+                results = GeminiHandler.upload_and_process_batch(upload_path, "application/pdf", current_batch_count, prompt=p_text)
                 if results and not str(results[0]).startswith("ERROR:"):
                     for j, text_part in enumerate(results):
                         page_idx = i + j
