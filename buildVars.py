@@ -29,16 +29,17 @@ Command Layer: Press NVDA+Shift+V, then:
 - Check Update (U)
 - Recall Last Result (Space)
 - Commands Help (H)"""),
-    addon_version="6.1.2",
+    addon_version="6.5.0",
     # Brief changelog for this version
     # Translators: what's new content for the add-on version to be shown in the add-on store
-    addon_changelog=_("""## Changes for 6.1.2
+    addon_changelog=_("""## Changes for 6.5.0
 
-*   **Duplicate Label Pre-Check**: Fixed an issue in single labeling where the duplicate check used old coordinate keys, causing NVDA to make duplicate AI requests for already labeled objects instead of announcing the existing label.
-*   **Document Chat for Non-Gemini Providers**: Fixed a strict API key check in Document Chat (`on_ask`) to ensure that users on OpenAI, Groq, or local Custom providers (like Ollama) can successfully chat with documents without being blocked.
-*   **Fast Chrome OCR Translation**: Restored the free, keyless translation API for Chrome OCR. Translating extracted text now bypasses Gemini AI, saving API quotas and speeding up the translation process.
-*   **CAPTCHA Alphanumeric Filter**: Corrected the filtering logic in the CAPTCHA solver to ensure non-alphanumeric characters are properly cleaned in all situations.
-*   **Command Layer Help Update**: Corrected the status announcement shortcut in the help menu from `L` to `I`, and added both labeling commands (`L` and `Shift+L`) to the list."""),
+*   **Live Assistant**: Added a real-time voice and screen assistant feature, available exclusively for the Google Gemini provider (or Gemini-compatible custom providers). Includes interactive voice and thinking depth customization directly inside the dialog, with automatic reconnection upon changing settings.
+*   **MiniMax AI Provider**: Integrated MiniMax as a peer provider with full multimodal support (chat, vision, OCR), custom TTS using over 300+ dynamic voices, and automatic stripping of reasoning blocks (e.g., `<think>...</think>`) from outputs.
+*   **Document Viewer Translation**: Corrected a silent translation failure for non-English NVDA users by ensuring the standard 2-letter language code is sent to Google Translate instead of the localized language name.
+*   **PDF Batch Scan Retry**: Implemented a highly optimized, separate, and silent retry logic for PDF document batch scanning to prevent redundant uploads and avoid disruptive error popups during retries.
+*   **Document Viewer Status**: Fixed a bug where the plugin's overall status (checked via `I`) remained stuck on "Batch Processing Started" during long document scans.
+*   **Resolved Threading Crash**: Fixed a severe `IsMain() failed in wxTimerImpl` thread assertion crash when opening documents from a background thread by transitioning the GUI callback queue to `wx.CallAfter`."""),
     addon_author="Mahmood Hozhabri",
     addon_url="https://github.com/mahmoodhozhabri/VisionAssistantPro",
     addon_sourceURL="https://github.com/mahmoodhozhabri/VisionAssistantPro",

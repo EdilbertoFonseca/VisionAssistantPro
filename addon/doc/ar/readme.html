@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="../style.css" media="screen">
-<title>Vision Assistant Pro 6.1.0</title>
+<title>Vision Assistant Pro 6.1.2</title>
 </head>
 <body>
 <h1 id="vision-assistant-pro">وثائق Vision Assistant Pro</h1>
@@ -14,7 +14,7 @@
 <p>انتقل إلى <strong>قائمة NVDA &gt; تفضيلات &gt; الإعدادات &gt; Vision Assistant Pro</strong>.</p>
 <h3 id="11">1.1 إعدادات الاتصال</h3>
 <ul>
-<li><strong>المزود (Provider):</strong> اختر خدمة الذكاء الاصطناعي المفضلة لديك. المزودون المدعومون يشملون <strong>Google Gemini</strong> و <strong>OpenAI</strong> و <strong>Mistral</strong> و <strong>Groq</strong> و <strong>مخصص (Custom)</strong> (خوادم متوافقة مع OpenAI مثل Ollama و LM Studio و Jan.ai أو KoboldCPP).</li>
+<li><strong>المزود (Provider):</strong> اختر خدمة الذكاء الاصطناعي المفضلة لديك. المزودون المدعومون يشملون <strong>Google Gemini</strong> و <strong>OpenAI</strong> و <strong>Mistral</strong> و <strong>Groq</strong> و <strong>MiniMax</strong> و <strong>مخصص (Custom)</strong> (خوادم متوافقة مع OpenAI مثل Ollama و LM Studio و Jan.ai أو KoboldCPP).</li>
 <li><strong>ملاحظة هامة:</strong> نوصي بشدة باستخدام <strong>Google Gemini</strong> للحصول على أفضل أداء ودقة (خاصة لتحليل الصور/الملفات).</li>
 <li><strong>مفتاح API:</strong> مطلوب. يمكنك إدخال مفاتيح متعددة (مفصولة بفواصل أو أسطر جديدة) للتدوير التلقائي.</li>
 <li><strong>جلب النماذج (Fetch Models):</strong> بعد إدخال مفتاح API، اضغط على هذا الزر لتنزيل أحدث قائمة بالنماذج المتاحة من المزود.</li>
@@ -141,6 +141,11 @@
 <td>يحول الكلام إلى نص. اضغط لبدء التسجيل، اضغط مرة أخرى للإيقاف/الكتابة.</td>
 </tr>
 <tr>
+<td><strong>Control+L</strong></td>
+<td><strong>المساعد المباشر</strong></td>
+<td><strong>مساعد فوري (Gemini فقط):</strong> يبدأ أو ينهي محادثة صوتية وبصرية مباشرة مع المساعد الذكي.</td>
+</tr>
+<tr>
 <td><strong>I</strong></td>
 <td>الإبلاغ عن الحالة</td>
 <td>يعلن عن التقدم الحالي (مثل "جار المسح..."، "خامل").</td>
@@ -208,6 +213,15 @@
 </ul>
 <p><em>إذا كنت ترغب في دعم المشروع مالياً ورؤية اسمك هنا، يمكنك العثور على خيار </em><em>التبرع</em><em> في قائمة أدوات NVDA (القائمة الفرعية Vision Assistant) أو أثناء عملية الإعداد بعد التثبيت.</em></p>
 <hr />
+<h2 id="650">تغييرات الإصدار 6.5.0</h2>
+<ul>
+<li><strong>المساعد المباشر (Live Assistant)</strong>: تمت إضافة ميزة المساعد الصوتي والبصري المباشر، والمتاحة حصرياً لمزود Google Gemini (أو المزود المخصص المتوافق مع Gemini). تتضمن تفاعلاً صوتياً وتخصيص عمق التفكير مباشرة داخل الحوار، مع إعادة اتصال تلقائي عند تغيير الإعدادات.</li>
+<li><strong>مزود MiniMax AI</strong>: تم دمج MiniMax كمزود مكافئ مع دعم كامل متعدد الوسائط (دردشة، رؤية، OCR)، وصوت TTS مخصص باستخدام أكثر من 300+ صوت ديناميكي، وإزالة تلقائية لكتل التفكير (مثل <code>&lt;think&gt;...&lt;/think&gt;</code>) من المخرجات.</li>
+<li><strong>تصحيح ترجمة عارض المستندات</strong>: تم إصلاح فشل الترجمة الصامت لمستخدمي NVDA غير الناطقين بالإنجليزية من خلال ضمان إرسال رمز اللغة المكون من حرفين إلى Google Translate بدلاً من اسم اللغة المحلي.</li>
+<li><strong>إعادة محاولة المسح المجمع PDF</strong>: تم تنفيذ منطق إعادة محاولة منفصل وصامت وعالي التحسين لمسح دفعات مستندات PDF لمنع الرفع المكرر وتجنب النوافذ المنبثقة المزعجة أثناء إعادة المحاولة.</li>
+<li><strong>حالة عارض المستندات</strong>: تم إصلاح خطأ حيث كانت حالة الإضافة الإجمالية (التي يتم التحقق منها عبر <code>I</code>) تبقى عالقة على "بدأت المعالجة المجمعة" أثناء مسح المستندات الطويلة.</li>
+<li><strong>إصلاح تعطل الخيوط</strong>: تم إصلاح تعطل حاد في تأكيد الخيط (<code>IsMain() failed in wxTimerImpl</code>) عند فتح المستندات من خيط خلفي عن طريق تحويل قائمة انتظار ردود GUI إلى <code>wx.CallAfter</code>.</li>
+</ul>
 <h2 id="610">تغييرات الإصدار 6.1.0</h2>
 <ul>
 <li><strong>دمج شامل للذكاء الاصطناعي المحلي (إعداد الذكاء الاصطناعي المحلي)</strong>: تمت إضافة زر جديد <strong>"إعداد الذكاء الاصطناعي المحلي"</strong> في إعدادات المزود المخصص. يمكن للمستخدمين الآن تكوين محركات الذكاء الاصطناعي المحلية تلقائياً، بما في ذلك <strong>Ollama</strong> و <strong>LM Studio</strong> و <strong>Jan.ai</strong> و <strong>KoboldCPP</strong> فوراً.</li>

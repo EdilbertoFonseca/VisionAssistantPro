@@ -9,7 +9,7 @@ _This add-on was released to the community in honor of the International Day of 
 Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**.
 
 ### 1.1 Connection Settings
-- **Provider:** Select your preferred AI service. Supported providers include **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, and **Custom** (OpenAI-compatible servers like Ollama, LM Studio, Jan.ai, or KoboldCPP).
+- **Provider:** Select your preferred AI service. Supported providers include **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax**, and **Custom** (OpenAI-compatible servers like Ollama, LM Studio, Jan.ai, or KoboldCPP).
 - **Important Note:** We strongly recommend using **Google Gemini** for the best performance and accuracy (especially for image/file analysis).
 - **API Key:** Required. You can enter multiple keys (separated by commas or new lines) for automatic rotation.
 - **Fetch Models:** After entering your API key, press this button to download the latest list of available models from the provider.
@@ -80,6 +80,7 @@ To prevent keyboard conflicts, this add-on uses a **Command Layer**.
 | **A**         | Audio Transcription      | Transcribe MP3, WAV, or OGG files into text.                                |
 | **C**         | CAPTCHA Solver           | Captures and solves CAPTCHAs (Supports Gov portals).                        |
 | **S**         | Smart Dictation          | Converts speech to text. Press to start recording, again to stop/type.      |
+| **Control+L** | **Live Assistant**       | **Real-time Copilot (Gemini only):** Starts or ends a live voice and screen conversation with the AI assistant. |
 | **I**         | Status Reporting         | Announces current progress (e.g., "Scanning...", "Idle").                   |
 | **L**         | **Label Object**         | **Semantic AI Labeling:** Permanently labels the current focused element/icon. |
 | **Shift + L** | **Manage/Scan Labels**   | Opens Label Manager (if labels exist) or scans the app for unnamed elements. |
@@ -131,6 +132,15 @@ A heartfelt thank you to our community members who support the continuous develo
 
 
 ---
+## Changes for 6.5.0
+
+*   **Live Assistant**: Added a real-time voice and screen assistant feature, available exclusively for the Google Gemini provider (or Gemini-compatible custom providers). Includes interactive voice and thinking depth customization directly inside the dialog, with automatic reconnection upon changing settings.
+*   **MiniMax AI Provider**: Integrated MiniMax as a peer provider with full multimodal support (chat, vision, OCR), custom TTS using over 300+ dynamic voices, and automatic stripping of reasoning blocks (e.g., `<think>...</think>`) from outputs.
+*   **Document Viewer Translation**: Corrected a silent translation failure for non-English NVDA users by ensuring the standard 2-letter language code is sent to Google Translate instead of the localized language name.
+*   **PDF Batch Scan Retry**: Implemented a highly optimized, separate, and silent retry logic for PDF document batch scanning to prevent redundant uploads and avoid disruptive error popups during retries.
+*   **Document Viewer Status**: Fixed a bug where the plugin's overall status (checked via `I`) remained stuck on "Batch Processing Started" during long document scans.
+*   **Resolved Threading Crash**: Fixed a severe `IsMain() failed in wxTimerImpl` thread assertion crash when opening documents from a background thread by transitioning the GUI callback queue to `wx.CallAfter`.
+
 ## Changes for 6.1.2
 
 *   **Duplicate Label Pre-Check**: Fixed an issue in single labeling where the duplicate check used old coordinate keys, causing NVDA to make duplicate AI requests for already labeled objects instead of announcing the existing label.
