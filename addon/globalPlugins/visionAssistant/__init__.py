@@ -1370,8 +1370,8 @@ class GeminiHandler:
         return [k.strip() for k in clean_raw.split(',') if k.strip()]
 
     @staticmethod
-    def _get_opener():
-        return get_proxy_opener()
+    def _get_opener(url=None):
+        return get_proxy_opener(url)
 
     @staticmethod
     def _handle_error(e):
@@ -1476,7 +1476,7 @@ class GeminiHandler:
         headers = {"Content-Type": "application/json"}
         req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
         
-        with GeminiHandler._get_opener().open(req, timeout=120) as r:
+        with GeminiHandler._get_opener(url).open(req, timeout=120) as r:
             res = json.loads(r.read().decode())
             candidates = res.get('candidates')
             if not candidates:
@@ -1562,7 +1562,7 @@ class GeminiHandler:
             _apply_gemma_thinking_patch(payload, url)
             
             req = request.Request(full_url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json"})
-            with GeminiHandler._get_opener().open(req, timeout=120) as r:
+            with GeminiHandler._get_opener(full_url).open(req, timeout=120) as r:
                 res = json.loads(r.read().decode())
                 parts = res['candidates'][0]['content'].get('parts', [])
                 return _extract_text_from_parts(parts)
@@ -1600,8 +1600,8 @@ class GeminiHandler:
             except Exception as e:
                 return ["ERROR:" + str(e)]
 
-        opener = GeminiHandler._get_opener()
         upload_url_base = AIHandler.get_endpoint("upload")
+        opener = GeminiHandler._get_opener(upload_url_base)
         
         for i, key in enumerate(keys):
             try:
@@ -1691,7 +1691,7 @@ class GeminiHandler:
             _apply_gemma_thinking_patch(payload, url)
             
             req = request.Request(full_url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
-            with GeminiHandler._get_opener().open(req, timeout=120) as r:
+            with GeminiHandler._get_opener(full_url).open(req, timeout=120) as r:
                 res = json.loads(r.read().decode())
                 parts = res['candidates'][0]['content'].get('parts', [])
                 return _extract_text_from_parts(parts)
@@ -1708,8 +1708,8 @@ class GeminiHandler:
             
         keys = GeminiHandler._get_api_keys()
         if not keys: return None
-        opener = GeminiHandler._get_opener()
         upload_url_base = AIHandler.get_endpoint("upload")
+        opener = GeminiHandler._get_opener(upload_url_base)
         base_api_url = AIHandler.get_base_url(p_active).rstrip('/')
         clean_base = base_api_url.lower().split("/v1beta")[0].split("/v1")[0].rstrip('/')
         v_tag = "/v1beta"
@@ -1763,7 +1763,7 @@ class GeminiHandler:
                 }
             }
             req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={"Content-Type": "application/json", "x-goog-api-key": key})
-            with GeminiHandler._get_opener().open(req, timeout=600) as r:
+            with GeminiHandler._get_opener(url).open(req, timeout=600) as r:
                 res = json.loads(r.read().decode())
                 candidates = res.get('candidates', [])
                 if not candidates: raise Exception("No candidates returned")
@@ -1830,7 +1830,7 @@ class AIHandler:
                     "Authorization": f"Bearer {key}",
                     "Content-Type": "application/json"
                 })
-                with get_proxy_opener().open(req, timeout=30) as r:
+                with get_proxy_opener(url).open(req, timeout=30) as r:
                     resp = json.loads(r.read().decode("utf-8"))
                     system_voices = resp.get("system_voice", [])
                     if not system_voices:
@@ -2055,7 +2055,11 @@ class AIHandler:
             try:
                 raw_err = e.read().decode('utf-8')
                 err_json = json.loads(raw_err)
-                server_msg = err_json.get("error", {}).get("message") or err_json.get("message")
+                err_val = err_json.get("error")
+                if isinstance(err_val, dict):
+                    server_msg = err_val.get("message")
+                else:
+                    server_msg = err_val or err_json.get("message")
                 if server_msg:
                     log.error(f"Fetch models failed for {p}: {server_msg}")
                     return []
@@ -2129,14 +2133,14 @@ class AIHandler:
                     messages = prompt
 
                 temp = config.conf["VisionAssistant"].get("ai_temperature", 0.7)
-                payload = {"model": model, "messages": messages, "temperature": temp}
+                payload = {"model": model, "messages": messages, "temperature": temp, "stream": False}
                 if json_mode: payload["response_format"] = {"type": "json_object"}
                 
                 headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
                 if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
                 
                 req = request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
-                with get_proxy_opener().open(req, timeout=180) as r:
+                with get_proxy_opener(url).open(req, timeout=180) as r:
                     res = json.loads(r.read().decode('utf-8'))
                     if isinstance(res, dict):
                         if "choices" in res and res["choices"]:
@@ -2159,7 +2163,11 @@ class AIHandler:
                 try:
                     raw_err = e.read().decode('utf-8')
                     err_json = json.loads(raw_err)
-                    server_msg = err_json.get("error", {}).get("message") or err_json.get("message")
+                    err_val = err_json.get("error")
+                    if isinstance(err_val, dict):
+                        server_msg = err_val.get("message")
+                    else:
+                        server_msg = err_val or err_json.get("message")
                     if server_msg:
                         if key == keys[-1]: return f"ERROR: {server_msg}"
                         continue
@@ -2184,7 +2192,7 @@ class AIHandler:
             for key in keys:
                 try:
                     req = request.Request(url, data=json.dumps(payload).encode(), headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0"})
-                    with get_proxy_opener().open(req, timeout=120) as r:
+                    with get_proxy_opener(url).open(req, timeout=120) as r:
                         res = json.loads(r.read().decode())
                         return "\n\n".join([pg.get("markdown", "") for pg in res.get("pages", [])])
                 except error.HTTPError as e:
@@ -2204,7 +2212,7 @@ class AIHandler:
             headers = {"Content-Type": f"multipart/form-data; boundary={boundary}", "User-Agent": "Mozilla/5.0"}
             if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
             req = request.Request(url, data=b'\r\n'.join(body), headers=headers)
-            with get_proxy_opener().open(req, timeout=60) as r: return json.loads(r.read().decode())["text"]
+            with get_proxy_opener(url).open(req, timeout=60) as r: return json.loads(r.read().decode())["text"]
         except Exception as e: 
             log.error(f"Transcription helper failed: {e}")
             # Translators: Error message when speech-to-text fails.
@@ -2256,7 +2264,7 @@ class AIHandler:
                     headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
                     if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
                     req = request.Request(minimax_tts_url, data=json.dumps(minimax_payload).encode(), headers=headers)
-                    with get_proxy_opener().open(req, timeout=120) as r:
+                    with get_proxy_opener(minimax_tts_url).open(req, timeout=120) as r:
                         resp_json = json.loads(r.read().decode("utf-8"))
                         hex_audio = resp_json.get("data", {}).get("audio", "")
                         if not hex_audio:
@@ -2273,7 +2281,7 @@ class AIHandler:
                 headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}
                 if key and key.strip(): headers["Authorization"] = f"Bearer {key}"
                 req = request.Request(url, data=json.dumps(payload).encode(), headers=headers)
-                with get_proxy_opener().open(req, timeout=120) as r: return base64.b64encode(r.read()).decode('utf-8'), False
+                with get_proxy_opener(url).open(req, timeout=120) as r: return base64.b64encode(r.read()).decode('utf-8'), False
             except Exception as e:
                 if key == keys[-1]: return f"ERROR: {str(e)}", False
                 continue
@@ -4823,7 +4831,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             for key in keys:
                 try:
                     req = request.Request(url, data=b'\r\n'.join(body), headers={"Authorization": f"Bearer {key}", "Content-Type": f"multipart/form-data; boundary={boundary}"}, method="POST")
-                    with get_proxy_opener().open(req, timeout=120) as r:
+                    with get_proxy_opener(url).open(req, timeout=120) as r:
                         res = json.loads(r.read().decode())
                         return res.get("id") or res.get("name")
                 except Exception: continue
@@ -4835,12 +4843,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             file_size = os.path.getsize(file_path)
             headers_init = {"X-Goog-Upload-Protocol": "resumable", "X-Goog-Upload-Command": "start", "X-Goog-Upload-Header-Content-Length": str(file_size), "X-Goog-Upload-Header-Content-Type": mime_type, "Content-Type": "application/json", "x-goog-api-key": api_key}
             req_init = request.Request(base_upload_url, data=json.dumps({"file": {"display_name": os.path.basename(file_path)}}).encode(), headers=headers_init, method="POST")
-            with get_proxy_opener().open(req_init, timeout=30) as r:
+            with get_proxy_opener(base_upload_url).open(req_init, timeout=30) as r:
                 upload_url = r.headers.get("x-goog-upload-url")
             if not upload_url: return None
             with open(file_path, "rb") as f: data = f.read()
             req_up = request.Request(upload_url, data=data, headers={"Content-Length": str(file_size), "X-Goog-Upload-Offset": "0", "X-Goog-Upload-Command": "upload, finalize"}, method="POST")
-            with get_proxy_opener().open(req_up, timeout=300) as r:
+            with get_proxy_opener(upload_url).open(req_up, timeout=300) as r:
                 res = json.loads(r.read().decode())
                 file_name_id = res['file']['name']
             
@@ -4848,7 +4856,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             check_url = f"{p_base}/v1beta/{file_name_id}"
             for attempt in range(30):
                 req_check = request.Request(check_url, headers={"x-goog-api-key": api_key})
-                with get_proxy_opener().open(req_check, timeout=10) as r:
+                with get_proxy_opener(check_url).open(req_check, timeout=10) as r:
                     data = json.loads(r.read().decode())
                     if data.get('state') == "ACTIVE":
                         uri = data.get('uri')
