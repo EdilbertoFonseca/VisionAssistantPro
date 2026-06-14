@@ -9,7 +9,7 @@ _Acest add-on a fost lansat pentru comunitate cu ocazia Zilei Internaționale a 
 Mergi la **Meniul NVDA > Preferințe > Setări > Vision Assistant Pro**.
 
 ### 1.1 Setări de conexiune
-- **Furnizor:** Selectează serviciul AI preferat. Furnizorii acceptați includ **Google Gemini**, **OpenAI**, **Mistral**, **Groq** și **Personalizat** (servere compatibile OpenAI, cum ar fi Ollama, LM Studio, Jan.ai sau KoboldCPP).
+- **Furnizor:** Selectează serviciul AI preferat. Furnizorii acceptați includ **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax** și **Personalizat** (servere compatibile OpenAI, cum ar fi Ollama, LM Studio, Jan.ai sau KoboldCPP).
 - **Notă importantă:** Recomandăm **Google Gemini** pentru cea mai bună performanță și acuratețe, mai ales pentru analiza imaginilor și fișierelor.
 - **Cheie API:** Obligatorie. Poți introduce mai multe chei, separate prin virgulă sau pe linii diferite, pentru rotație automată.
 - **Preia modelele:** După ce introduci cheia API, apasă acest buton pentru a descărca lista recentă de modele disponibile de la furnizor.
@@ -80,6 +80,7 @@ Pentru a preveni conflictele de tastatură, acest add-on folosește un **strat d
 | **A**         | Transcriere audio        | Transcrie fișiere MP3, WAV sau OGG în text.                                 |
 | **C**         | Rezolvare CAPTCHA        | Capturează și rezolvă CAPTCHA-uri. Acceptă portaluri guvernamentale.         |
 | **S**         | Dictare inteligentă      | Convertește vorbirea în text. Apasă pentru a porni înregistrarea, apasă din nou pentru a opri și scrie textul. |
+| **Control+L** | **Asistent live**       | **Copilot în timp real (doar Gemini):** Pornește sau încheie o conversație vocală și de ecran live cu asistentul AI. |
 | **I**         | Raportare stare          | Anunță progresul curent, de exemplu „Se scanează...” sau „Inactiv”.          |
 | **L**         | **Etichetează obiectul** | **Etichetare AI semantică:** Etichetează permanent elementul sau pictograma focalizată curent. |
 | **Shift + L** | **Gestionează/scanează etichetele** | Deschide Managerul de etichete, dacă există etichete, sau scanează aplicația pentru elemente fără nume. |
@@ -124,11 +125,35 @@ Le mulțumim membrilor comunității care susțin dezvoltarea și întreținerea
 *   **@Alyabani94**
 *   **Ali Alamri**
 *   **Ilya**
+*   **Anonymous Supporter** (`UQDd...CnMY`)
+*   **leonardo0216**
 
 *Dacă vrei să susții financiar proiectul și să îți vezi numele aici, poți găsi opțiunea **Donează** în meniul Instrumente al NVDA, în submeniul Vision Assistant, sau în timpul configurării după instalare.*
 
 
 ---
+## Modificări pentru 6.5.0
+
+*   **Asistent live**: A fost adăugată o funcție de asistent vocal și de ecran în timp real, disponibilă exclusiv pentru furnizorul Google Gemini sau pentru furnizori personalizați compatibili cu Gemini. Include personalizarea interactivă a vocii și a profunzimii de gândire direct în dialog, cu reconectare automată când se modifică setările.
+*   **Furnizorul AI MiniMax**: MiniMax a fost integrat ca furnizor de același nivel, cu suport multimodal complet (chat, vision, OCR), TTS personalizat folosind peste 300 de voci dinamice și eliminarea automată a blocurilor de raționament, de exemplu `<think>...</think>`, din rezultate.
+*   **Traducerea în vizualizatorul de documente**: A fost corectată o eroare silențioasă de traducere pentru utilizatorii NVDA în alte limbi decât engleza, asigurând trimiterea codului standard de limbă din 2 litere către Google Translate în locul numelui localizat al limbii.
+*   **Reîncercare pentru scanarea PDF în lot**: A fost implementată o logică de reîncercare foarte optimizată, separată și silențioasă pentru scanarea documentelor PDF în lot, pentru a preveni încărcările redundante și pentru a evita popup-urile de eroare deranjante în timpul reîncercărilor.
+*   **Starea vizualizatorului de documente**: A fost remediată o eroare prin care starea generală a add-on-ului, verificată cu `I`, rămânea blocată pe „Procesarea lotului a început” în timpul scanărilor lungi de documente.
+*   **Blocare de threading rezolvată**: A fost remediată o blocare severă cauzată de aserțiunea de fir `IsMain() failed in wxTimerImpl` la deschiderea documentelor dintr-un fir de fundal, prin trecerea cozii de callback-uri GUI la `wx.CallAfter`.
+
+## Modificări pentru 6.1.2
+
+*   **Preverificare pentru etichete duplicate**: A fost remediată o problemă în etichetarea individuală, unde verificarea duplicatelor folosea chei vechi bazate pe coordonate, făcând NVDA să trimită cereri AI duplicate pentru obiecte deja etichetate în loc să anunțe eticheta existentă.
+*   **Chat pentru documente cu furnizori non-Gemini**: A fost remediată o verificare strictă a cheii API în Chatul pentru documente (`on_ask`), astfel încât utilizatorii cu OpenAI, Groq sau furnizori personalizați locali, precum Ollama, să poată discuta cu documentele fără să fie blocați.
+*   **Traducere rapidă pentru Chrome OCR**: A fost restaurat API-ul gratuit de traducere, fără cheie, pentru Chrome OCR. Traducerea textului extras ocolește acum AI-ul Gemini, economisind cotele API și accelerând procesul de traducere.
+*   **Filtru alfanumeric pentru CAPTCHA**: A fost corectată logica de filtrare din rezolvatorul CAPTCHA, pentru a se asigura că caracterele non-alfanumerice sunt curățate corect în toate situațiile.
+*   **Actualizare ajutor pentru stratul de comenzi**: A fost corectată scurtătura pentru anunțarea stării din meniul de ajutor, de la `L` la `I`, și au fost adăugate în listă ambele comenzi de etichetare (`L` și `Shift+L`).
+
+## Modificări pentru 6.1.1
+
+*   **Remediere pentru rezultatul de gândire Gemma 4**: A fost remediată o problemă cu modelele Gemma 4, în care întregul proces intern de gândire era afișat ca răspuns final sau în care dezactivarea gândirii producea răspunsuri goale. Add-on-ul izolează și extrage acum corect doar răspunsul final curat.
+*   **OCR în lot din File Explorer**: Acum poți selecta mai multe fotografii sau PDF-uri direct în Windows File Explorer și poți extrage textul sau le poți analiza în lot. Add-on-ul va filtra și procesa automat doar formatele de fișier acceptate.
+
 ## Modificări pentru 6.1.0
 
 *   **Integrare universală cu AI local (Configurează AI local)**: A fost adăugat un nou buton **„Configurează AI local”** în Setările furnizorului personalizat. Utilizatorii pot configura automat și instant motoare AI locale, inclusiv **Ollama**, **LM Studio**, **Jan.ai** și **KoboldCPP**.

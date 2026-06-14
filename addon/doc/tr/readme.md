@@ -88,6 +88,7 @@ Klavye çakışmalarını önlemek için bu eklenti bir **Komut Katmanı** kulla
 | **A**         | Ses Dökümü               | MP3, WAV veya OGG dosyalarını metne dönüştürür.                                       |
 | **C**         | CAPTCHA Çözücü           | CAPTCHA’ları yakalar ve çözer (Kamu portalları desteklenir).                          |
 | **S**         | Akıllı Dikte             | Konuşmayı metne dönüştürür. Başlatmak için basın, durdurmak/yazmak için tekrar basın. |
+| **Kontrol+L** | **Live Assistant**       | **Gerçek Zamanlı Yardımcı Pilot (yalnızca Gemini):** Yapay zeka asistanıyla canlı sesli ve ekran görüşmesini başlatır veya bitirir. |
 | **I**         | Durumu Seslendir          | Geçerli durumu bildirir (ör. “Taranıyor…”, “Boşta”).                                  |
 | **L**         | **Nesne Etiketleme**         | **Anlamsal Yapay Zeka Etiketleme:** Odaklanılan geçerli öğeyi/simgeyi kalıcı olarak etiketler. |
 | **Shift + L** | **Etiketleri Yönet/Tara**   | Etiket Yöneticisini açar (etiketler varsa) veya uygulamayı adsız öğelere karşı tarar. |
@@ -136,10 +137,21 @@ Cömert mali katkılarıyla bu projenin sürekli geliştirilmesini ve sürdürü
 * **@Alyabani94**
 *   **Ali Alamri**
 *   **Ilya**
+*   **Anonim Destekçi** (`UQDd...CnMY`)
+*   **leonardo0216**
 *Projeye finansal olarak destek olmak istiyorsanız ve adınızı burada görmek istiyorsanız, **Bağış Yap** seçeneğini NVDA Araçlar menüsünde (Profesyonel Görsel Asistan alt menüsü) veya kurulum sonrasında kurulum sürecinde bulabilirsiniz.*
 
 
 ---
+
+## 6.5.0 Sürümündeki Değişiklikler
+
+*   **Live Assistant**: Yalnızca Google Gemini sağlayıcısı (veya Gemini uyumlu özel sağlayıcılar) için kullanılabilen bir gerçek zamanlı sesli ve ekran asistanı özelliği eklendi. Bu özellik, ayarların değiştirilmesi durumunda otomatik yeniden bağlanma ile birlikte, doğrudan diyalog içinde etkileşimli ses ve düşünme derinliği özelleştirme seçeneklerini içerir.
+*   **MiniMax AI Sağlayıcı**: MiniMax, tam multimodal destek (sohbet, görme, OCR), 300'den fazla dinamik ses kullanan özel TTS ve çıktılardan akıl yürütme bloklarının (ör. `<think>...</think>`) otomatik olarak çıkarılması özellikleriyle eş sağlayıcı olarak entegre edildi.
+*   **Belge Görüntüleyici Çevirisi**: Yerelleştirilmiş dil adı yerine standart 2 harfli dil kodunun Google Translate'e gönderilmesini sağlayarak, İngilizce olmayan NVDA kullanıcıları için sessiz çeviri hatası düzeltildi.
+*   **PDF Toplu Tarama Yeniden Denemesi**: Gereksiz yüklemeleri önlemek ve yeniden denemeler sırasında rahatsız edici hata pencerelerinin açılmasını engellemek için, PDF belge toplu taraması için yüksek düzeyde optimize edilmiş, ayrı ve sessiz bir yeniden deneme mantığı uygulandı.
+*   **Belge Görüntüleyici Durumu**: Uzun belge taramaları sırasında eklentinin genel durumunun (`I` ile kontrol edilir) “Toplu İşleme Başladı” durumunda takılı kalmasına neden olan bir hata düzeltildi.
+*   **İş Parçacığı Çökmesi Çözüldü**: Arka plan iş parçacığından belgeler açılırken ortaya çıkan ciddi bir `IsMain() failed in wxTimerImpl` iş parçacığı onaylama çökmesi, GUI geri arama kuyruğunun `wx.CallAfter`'a geçirilmesiyle düzeltildi.
 
 ## 6.1.0 Sürümündeki Değişiklikler
 
