@@ -89,6 +89,7 @@ Tymi poleceniami można zarządzać w **Ustawienia > Polecenia > Zarządzaj pole
 - `[selection]`: Aktualnie zaznaczony tekst.
 - `[clipboard]`: Zawartość schowka.
 - `[screen_obj]`: Zrzut ekranu obiektu nawigatora.
+- `[screen_fg_obj]`: Zrzut ekranu aktywnego okna pierwszoplanowego.
 - `[screen_full]`: Zrzut całego ekranu.
 - `[file_ocr]`: Wybierz obraz/PDF do wyodrębnienia tekstu.
 - `[file_read]`: Wybierz dokument do odczytu (TXT, kod, PDF).
@@ -116,6 +117,21 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 
 ---
+## Zmiany w wersji 7.0.0
+
+* **Wznawianie niedokończonych skanów:** Dodano wznawianie w czytniku dokumentów i w akcjach na pliku. Jeśli skan zostanie przerwany, można teraz kontynuować od miejsca zatrzymania zamiast zaczynać od nowa.
+* **Nowa zmienna `[screen_fg_obj]`:** Dodano zmienną do poleceń niestandardowych, która przechwytuje zrzut ekranu tylko aktywnego okna pierwszoplanowego zamiast całego ekranu.
+* **Ponawianie i rotacja kluczy:** Dodatek ponawia teraz po cichu do 5 razy na tym samym kluczu przy chwilowym przeciążeniu serwera (np. „duży ruch” lub błędne odpowiedzi). Jeśli ponawianie się nie powiedzie, automatycznie przełącza na następny klucz API z listy.
+* **Wykrywanie kurtyny ekranowej:** Dodano sprawdzanie, które zapobiega robieniu zrzutów ekranu, gdy kurtyna ekranowa jest aktywna (na stałe albo włączona chwilowo skrótem). Ostrzega i zatrzymuje działanie, chroniąc przed wysyłaniem czarnych obrazów i marnowaniem tokenów API.
+* **Poprawki czytnika dokumentów:** Okno zakresu stron PDF wybiera teraz automatycznie domyślny język docelowy z ustawień dodatku. Ulepszono też obsługę wątków, aby zadania w tle zatrzymywały się czysto po zamknięciu czytnika.
+* **Natywna integracja Mistral OCR:** Zintegrowano natywne API Document OCR firmy Mistral. Dokumenty wielostronicowe są automatycznie łączone, przesyłane i przetwarzane wsadowo przez wyspecjalizowany endpoint `/v1/ocr` Mistrala, a obrazy jednostronicowe są przetwarzane bezpośrednio, bez zbędnej konwersji do PDF.
+* **Dynamiczna obsługa niestandardowych adresów URL:** Zmiana niestandardowego adresu API czyści teraz natychmiast zbuforowaną listę modeli i przywraca pole ręcznego wpisania modelu. Zapewnia to pełną zgodność z niestandardowymi endpointami (np. Cloudflare AI Gateway), które nie obsługują standardowego endpointu listy `/v1/models`.
+* **Przebudowany silnik wejścia Operatora AI:** Całkowicie przepisano system symulacji myszy i klawiatury dla Operatora AI. Zastąpiono stare API `mouse_event` nowoczesnym API `SendInput` systemu Windows, co daje znacznie większą zgodność z nowoczesnymi aplikacjami, oknami chronionymi przez UAC i ekranami o wysokim DPI.
+* **Naprawiono przeciąganie i upuszczanie:** Przeciąganie i upuszczanie w Operatorze AI jest teraz w pełni stabilne i niezawodne. Nowy silnik używa naturalnych krzywych wygładzania, precyzyjnego pozycjonowania kursora, zoptymalizowanego czasu i techniki muśnięcia kursorem, aby Windows i aplikacje poprawnie rozpoznawały i wykonywały gesty przeciągania bez przerywania w połowie.
+* **Obsługa wielu monitorów:** Operator AI w pełni obsługuje teraz zestawy z wieloma monitorami. Ruchy i kliknięcia myszy działają poprawnie na wszystkich monitorach dzięki fladze `MOUSEEVENTF_VIRTUALDESK`, zapewniając dokładne pozycjonowanie niezależnie od tego, na którym monitorze znajduje się docelowa aplikacja.
+* **Ulepszona symulacja klawiatury:** Poprawiono wprowadzanie klawiszy, aby w pełni obsługiwać klawisze rozszerzone (strzałki, Home, End, Page Up/Down, Insert, Delete i F1-F12). Zapewnia to bezbłędne działanie poleceń nawigacji i skrótów wysyłanych przez Operatora AI we wszystkich aplikacjach.
+* **Obsługa obrazów HEIC/HEIF:** Dodano natywną obsługę formatów zdjęć iPhone. Można teraz bezpośrednio wybierać pliki `.heic` i `.heif` do opisu AI, OCR lub czytania dokumentów bez wcześniejszej konwersji.
+
 ## Zmiany w wersji 6.5.0
 
 *   **Asystent głosowy**: Dodano funkcję asystenta głosowego i ekranowego w czasie rzeczywistym, dostępną wyłącznie dla dostawcy Google Gemini (lub zgodnych z Gemini dostawców niestandardowych). Obejmuje interaktywną zmianę głosu i głębi myślenia bezpośrednio w oknie dialogowym, z automatycznym ponownym połączeniem po zmianie ustawień.
