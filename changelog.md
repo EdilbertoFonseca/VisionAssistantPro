@@ -1,11 +1,18 @@
-## Changes for 6.5.0
+## Changes for 7.0.0
 
-*   **Live Assistant**: Added a real-time voice and screen assistant feature, available exclusively for the Google Gemini provider (or Gemini-compatible custom providers). Includes interactive voice and thinking depth customization directly inside the dialog, with automatic reconnection upon changing settings.
-*   **MiniMax AI Provider**: Integrated MiniMax as a peer provider with full multimodal support (chat, vision, OCR), custom TTS using over 300+ dynamic voices, and automatic stripping of reasoning blocks (e.g., `<think>...</think>`) from outputs.
-*   **Document Viewer Translation**: Corrected a silent translation failure for non-English NVDA users by ensuring the standard 2-letter language code is sent to Google Translate instead of the localized language name.
-*   **PDF Batch Scan Retry**: Implemented a highly optimized, separate, and silent retry logic for PDF document batch scanning to prevent redundant uploads and avoid disruptive error popups during retries.
-*   **Document Viewer Status**: Fixed a bug where the plugin's overall status (checked via `I`) remained stuck on "Batch Processing Started" during long document scans.
-*   **Resolved Threading Crash**: Fixed a severe `IsMain() failed in wxTimerImpl` thread assertion crash when opening documents from a background thread by transitioning the GUI callback queue to `wx.CallAfter`.
+*   **Resuming Unfinished Scans**: Added a resume feature for both the Document Reader and Smart File Actions. If a scan gets interrupted, you can now continue from where it stopped instead of starting over from scratch.
+*   **New `[screen_fg_obj]` Variable**: Added a custom prompt variable to capture a screenshot of only the active foreground window rather than the entire screen.
+*   **Smart Retries & Key Rotation**: The addon now silently retries up to 5 times on the same key when hitting temporary server overloads (like "high demand" or malformed responses). If the retries fail, it automatically switches to the next API key in your list.
+*   **Screen Curtain Detection**: Added a check to prevent taking screenshots when the Screen Curtain is active (whether permanently enabled or toggled temporarily with the hotkey). It will warn you and stop, preventing you from sending black images and wasting API tokens.
+*   **Document Reader Tweaks**: The PDF range dialog now automatically pre-selects the default target language from your addon settings. Also improved thread handling to make sure background tasks stop cleanly when the reader is closed.
+*   **Native Mistral OCR Integration**: Integrated Mistral's native Document OCR API. Multi-page documents are automatically merged, uploaded, and processed in batches using Mistral's specialized `/v1/ocr` endpoint, while single-page images are processed directly without unnecessary PDF conversions [1].
+*   **Dynamic Custom URL Handlers**: Modifying the Custom API URL now instantly clears the cached model list and restores the manual model entry text box. This ensures full compatibility with custom endpoints (such as Cloudflare AI Gateway) that do not support the standard `/v1/models` listing endpoint.
+*   **Overhauled AI Operator Input Engine**: Completely rewritten the underlying mouse and keyboard simulation system for the AI Operator. Replaced the legacy `mouse_event` API with the modern Windows `SendInput` API, bringing significantly higher compatibility with modern applications, UAC-protected windows, and high-DPI displays.
+*   **Fixed Drag & Drop Operations**: Drag and drop actions in the AI Operator are now fully stable and reliable. The new engine uses natural "easing" curves, precise cursor positioning, optimized timing, and a smart "nudge" technique to ensure that Windows and applications correctly recognize and execute drag-and-drop gestures without failing mid-way.
+*   **Multi-Monitor Support**: The AI Operator now fully supports multi-monitor setups. Mouse movements and clicks work correctly across all monitors using the `MOUSEEVENTF_VIRTUALDESK` flag, ensuring accurate positioning regardless of which monitor the target application is on.
+*   **Enhanced Keyboard Simulation**: Improved keystroke injection to fully support "Extended Keys" (such as Arrow keys, Home, End, Page Up/Down, Insert, Delete, and F1-F12). This ensures that navigation and shortcut commands sent by the AI Operator work flawlessly across all applications.
+*   **HEIC/HEIF Image Support**: Added native support for iPhone photo formats. You can now directly select `.heic` and `.heif` files for AI description, OCR, or Document Reading without prior conversion.
+
 ---
 
 ### 🌟 Support the Future of Vision Assistant Pro

@@ -96,7 +96,36 @@ To prevent keyboard conflicts, this add-on uses a **Command Layer**.
 - **Alt + G:** Generate and save a high-quality audio file (WAV/MP3). *Hidden if provider doesn't support TTS.*
 - **Alt + S / Ctrl + S:** Save the extracted text as a TXT or HTML file.
 
-## 3. Custom Prompts & Variables
+## 3. AI Operator - Autonomous Computer Control
+
+The **AI Operator** turns Vision Assistant Pro from a passive reader into an active assistant that can interact with your computer on your behalf. You can ask it to describe the screen, answer questions about what it sees, or even take control—clicking buttons, dragging items, typing text, and navigating through applications using natural language commands.
+
+The biggest advantage? It works perfectly in completely inaccessible software. If you are stuck in a custom app, a remote desktop, or a website where your screen reader goes totally silent, the operator doesn't mind. Because it "sees" the screen visually, it can find, read, and interact with elements that have zero accessibility labels.
+
+### How It Works
+1. Press **NVDA + Shift + V**, then press **Shift + A** (or use the direct shortcut) to open the AI Operator dialog.
+2. Type what you want to do in plain language (e.g., "Click the Save button", "What does the error message say?", or "Rename the file to final.pdf").
+3. The AI will analyze your screen, identify the relevant elements, and carry out the action or provide the answer. If a task requires multiple steps, the operator will continue working until it's complete.
+4. Press **Shift + A** again at any time to instantly abort an ongoing operation.
+
+### Supported Actions
+The operator understands a wide range of commands:
+- **Describe & Answer**: "Describe the screen layout" or "What does the error message say?"
+- **Click**: "Click the Save button"
+- **Right Click**: "Right-click the file"
+- **Double Click**: "Double-click the document"
+- **Drag & Drop**: "Drag the document to the Archive folder"
+- **Type**: "Type 'Hello World' in the search box"
+- **Scroll**: "Scroll down three times"
+- **Keypress**: "Press Enter", "Press Tab", "Press Escape"
+- **Multi-step Tasks**: "Open File Explorer, find the report, and rename it to final.pdf"
+
+### Important Notes
+- **⚠️ API Usage Warning**: Because the operator needs to "see" exactly what's happening on screen, it sends a high-resolution screenshot with every step. Frequent use will consume your API quota much faster than standard text-based features.
+- **Administrator Applications**: If NVDA is not running with Administrator privileges, the operator may not be able to interact with windows that require elevated permissions. This is a Windows security limitation, not a bug in the add-on.
+- **Best Practices**: For best results, give clear and specific commands. "Click the blue Submit button at the bottom of the form" will almost always work better than just "Click the button".
+
+## 4. Custom Prompts & Variables
 
 You can manage prompts in **Settings > Prompts > Manage Prompts...**.
 
@@ -104,6 +133,7 @@ You can manage prompts in **Settings > Prompts > Manage Prompts...**.
 - `[selection]`: Currently selected text.
 - `[clipboard]`: Clipboard content.
 - `[screen_obj]`: Screenshot of the navigator object.
+- `[screen_fg_obj]`: Screenshot of the active foreground window.
 - `[screen_full]`: Full screen screenshot.
 - `[file_ocr]`: Select image/PDF file for text extraction.
 - `[file_read]`: Select document for reading (TXT, Code, PDF).
@@ -112,13 +142,13 @@ You can manage prompts in **Settings > Prompts > Manage Prompts...**.
 ***
 **Note:** An active internet connection is required for all AI features. Multi-page documents are processed automatically.
 
-## 4. Support & Community
+## 5. Support & Community
 
 Stay updated with the latest news, features, and releases:
 - **Telegram Channel:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** For bug reports and feature requests.
 
-## 5. Project Supporters
+## 6. Project Supporters
 
 A heartfelt thank you to our community members who support the continuous development and maintenance of this project through their generous financial contributions:
 
@@ -133,6 +163,21 @@ A heartfelt thank you to our community members who support the continuous develo
 
 
 ---
+## Changes for 7.0.0
+
+*   **Resuming Unfinished Scans**: Added a resume feature for both the Document Reader and Smart File Actions. If a scan gets interrupted, you can now continue from where it stopped instead of starting over from scratch.
+*   **New `[screen_fg_obj]` Variable**: Added a custom prompt variable to capture a screenshot of only the active foreground window rather than the entire screen.
+*   **Smart Retries & Key Rotation**: The addon now silently retries up to 5 times on the same key when hitting temporary server overloads (like "high demand" or malformed responses). If the retries fail, it automatically switches to the next API key in your list.
+*   **Screen Curtain Detection**: Added a check to prevent taking screenshots when the Screen Curtain is active (whether permanently enabled or toggled temporarily with the hotkey). It will warn you and stop, preventing you from sending black images and wasting API tokens.
+*   **Document Reader Tweaks**: The PDF range dialog now automatically pre-selects the default target language from your addon settings. Also improved thread handling to make sure background tasks stop cleanly when the reader is closed.
+*   **Native Mistral OCR Integration**: Integrated Mistral's native Document OCR API. Multi-page documents are automatically merged, uploaded, and processed in batches using Mistral's specialized `/v1/ocr` endpoint, while single-page images are processed directly without unnecessary PDF conversions [1].
+*   **Dynamic Custom URL Handlers**: Modifying the Custom API URL now instantly clears the cached model list and restores the manual model entry text box. This ensures full compatibility with custom endpoints (such as Cloudflare AI Gateway) that do not support the standard `/v1/models` listing endpoint.
+*   **Overhauled AI Operator Input Engine**: Completely rewritten the underlying mouse and keyboard simulation system for the AI Operator. Replaced the legacy `mouse_event` API with the modern Windows `SendInput` API, bringing significantly higher compatibility with modern applications, UAC-protected windows, and high-DPI displays.
+*   **Fixed Drag & Drop Operations**: Drag and drop actions in the AI Operator are now fully stable and reliable. The new engine uses natural "easing" curves, precise cursor positioning, optimized timing, and a smart "nudge" technique to ensure that Windows and applications correctly recognize and execute drag-and-drop gestures without failing mid-way.
+*   **Multi-Monitor Support**: The AI Operator now fully supports multi-monitor setups. Mouse movements and clicks work correctly across all monitors using the `MOUSEEVENTF_VIRTUALDESK` flag, ensuring accurate positioning regardless of which monitor the target application is on.
+*   **Enhanced Keyboard Simulation**: Improved keystroke injection to fully support "Extended Keys" (such as Arrow keys, Home, End, Page Up/Down, Insert, Delete, and F1-F12). This ensures that navigation and shortcut commands sent by the AI Operator work flawlessly across all applications.
+*   **HEIC/HEIF Image Support**: Added native support for iPhone photo formats. You can now directly select `.heic` and `.heif` files for AI description, OCR, or Document Reading without prior conversion.
+
 ## Changes for 6.5.0
 
 *   **Live Assistant**: Added a real-time voice and screen assistant feature, available exclusively for the Google Gemini provider (or Gemini-compatible custom providers). Includes interactive voice and thinking depth customization directly inside the dialog, with automatic reconnection upon changing settings.

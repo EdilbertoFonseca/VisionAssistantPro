@@ -96,7 +96,36 @@ Pentru a preveni conflictele de tastatură, acest add-on folosește un **strat d
 - **Alt + G:** Generează și salvează un fișier audio de calitate înaltă (WAV/MP3). *Ascuns dacă furnizorul nu acceptă TTS.*
 - **Alt + S / Ctrl + S:** Salvează textul extras ca fișier TXT sau HTML.
 
-## 3. Prompturi personalizate și variabile
+## 3. AI Operator - Control autonom al computerului
+
+**AI Operator** transformă Vision Assistant Pro dintr-un cititor pasiv într-un asistent activ care poate interacționa cu computerul în numele tău. Îi poți cere să descrie ecranul, să răspundă la întrebări despre ceea ce vede sau chiar să preia controlul — apăsând butoane, trăgând elemente, tastând text și navigând prin aplicații folosind comenzi în limbaj natural.
+
+Cel mai mare avantaj? Funcționează perfect în programe complet inaccesibile. Dacă ai rămas blocat într-o aplicație personalizată, într-o sesiune Remote Desktop sau pe un site unde cititorul de ecran nu mai spune nimic, operatorul nu este afectat. Pentru că „vede” ecranul vizual, poate găsi, citi și interacționa cu elemente care nu au deloc etichete de accesibilitate.
+
+### Cum funcționează
+1. Apasă **NVDA + Shift + V**, apoi **Shift + A** (sau folosește scurtătura directă) pentru a deschide dialogul AI Operator.
+2. Scrie în limbaj natural ce dorești să facă, de exemplu: „Apasă butonul Salvează”, „Ce spune mesajul de eroare?” sau „Redenumește fișierul în final.pdf”.
+3. AI-ul va analiza ecranul, va identifica elementele relevante și va efectua acțiunea sau va furniza răspunsul. Dacă o sarcină necesită mai mulți pași, operatorul va continua să lucreze până la finalizare.
+4. Apasă din nou **Shift + A** în orice moment pentru a opri instantaneu o operație în desfășurare.
+
+### Acțiuni acceptate
+Operatorul înțelege o gamă largă de comenzi:
+- **Descriere și răspunsuri**: „Descrie aspectul ecranului” sau „Ce spune mesajul de eroare?”
+- **Clic**: „Apasă butonul Salvează”
+- **Clic dreapta**: „Fă clic dreapta pe fișier”
+- **Dublu clic**: „Fă dublu clic pe document”
+- **Tragere și plasare**: „Trage documentul în dosarul Arhivă”
+- **Tastare**: „Tastează «Salut lume» în caseta de căutare”
+- **Derulare**: „Derulează în jos de trei ori”
+- **Apăsarea tastelor**: „Apasă Enter”, „Apasă Tab”, „Apasă Escape”
+- **Sarcini în mai mulți pași**: „Deschide File Explorer, găsește raportul și redenumește-l în final.pdf”
+
+### Note importante
+- **⚠️ Avertisment privind utilizarea API-ului**: Deoarece operatorul trebuie să „vadă” exact ce se întâmplă pe ecran, trimite o captură de ecran de înaltă rezoluție la fiecare pas. Folosirea frecventă va consuma cota API mult mai repede decât funcțiile obișnuite bazate pe text.
+- **Aplicații cu privilegii de administrator**: Dacă NVDA nu rulează cu privilegii de administrator, operatorul s-ar putea să nu poată interacționa cu ferestrele care necesită permisiuni elevate. Aceasta este o limitare de securitate Windows, nu o eroare a add-on-ului.
+- **Bune practici**: Pentru cele mai bune rezultate, folosește comenzi clare și precise. „Apasă butonul albastru Trimite din partea de jos a formularului” va funcționa aproape întotdeauna mai bine decât doar „Apasă butonul”.
+
+## 4. Prompturi personalizate și variabile
 
 Poți gestiona prompturile în **Setări > Prompturi > Gestionează prompturile...**.
 
@@ -104,6 +133,7 @@ Poți gestiona prompturile în **Setări > Prompturi > Gestionează prompturile.
 - `[selection]`: Textul selectat în prezent.
 - `[clipboard]`: Conținutul clipboardului.
 - `[screen_obj]`: Captură de ecran a obiectului navigatorului.
+- `[screen_fg_obj]`: Captură de ecran a ferestrei active din prim-plan.
 - `[screen_full]`: Captură de ecran complet.
 - `[file_ocr]`: Selectează un fișier imagine/PDF pentru extragerea textului.
 - `[file_read]`: Selectează un document pentru citire (TXT, cod, PDF).
@@ -112,13 +142,13 @@ Poți gestiona prompturile în **Setări > Prompturi > Gestionează prompturile.
 ***
 **Notă:** Este necesară o conexiune activă la internet pentru toate funcțiile AI. Documentele cu mai multe pagini sunt procesate automat.
 
-## 4. Suport și comunitate
+## 5. Suport și comunitate
 
 Rămâi la curent cu cele mai recente noutăți, funcții și lansări:
 - **Canal Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **Probleme GitHub:** Pentru raportări de erori și cereri de funcții.
 
-## 5. Susținătorii proiectului
+## 6. Susținătorii proiectului
 
 Le mulțumim membrilor comunității care susțin dezvoltarea și întreținerea continuă a acestui proiect prin contribuții financiare generoase:
 
@@ -127,11 +157,27 @@ Le mulțumim membrilor comunității care susțin dezvoltarea și întreținerea
 *   **Ilya**
 *   **Anonymous Supporter** (`UQDd...CnMY`)
 *   **leonardo0216**
+*   **Sergei Fleytin**
 
 *Dacă vrei să susții financiar proiectul și să îți vezi numele aici, poți găsi opțiunea **Donează** în meniul Instrumente al NVDA, în submeniul Vision Assistant, sau în timpul configurării după instalare.*
 
 
 ---
+## Modificări pentru 7.0.0
+
+*   **Reluarea scanărilor neterminate**: A fost adăugată o funcție de reluare atât pentru Cititorul de documente, cât și pentru Acțiunile inteligente pentru fișiere. Dacă o scanare este întreruptă, acum poți continua de unde s-a oprit în loc să o iei de la început.
+*   **Variabila nouă `[screen_fg_obj]`**: A fost adăugată o variabilă de prompt personalizat pentru capturarea unei capturi de ecran doar a ferestrei active din prim-plan, în locul întregului ecran.
+*   **Reîncercări inteligente și rotația cheilor**: Add-on-ul reîncearcă acum în mod silențios de până la 5 ori cu aceeași cheie când apar supraîncărcări temporare ale serverului, cum ar fi „cerere ridicată” sau răspunsuri formatate incorect. Dacă reîncercările eșuează, trece automat la următoarea cheie API din listă.
+*   **Detectarea Perdelei ecranului**: A fost adăugată o verificare care împiedică realizarea capturilor de ecran când Perdeaua ecranului este activă, indiferent dacă este activată permanent sau temporar cu scurtătura. Vei fi avertizat, iar operația se va opri, împiedicând trimiterea imaginilor negre și risipirea tokenilor API.
+*   **Ajustări pentru Cititorul de documente**: Dialogul intervalului PDF preselectează acum automat limba țintă implicită din setările add-on-ului. De asemenea, gestionarea firelor de execuție a fost îmbunătățită pentru a asigura oprirea corectă a sarcinilor din fundal când cititorul este închis.
+*   **Integrare nativă Mistral OCR**: A fost integrat API-ul nativ Document OCR de la Mistral. Documentele cu mai multe pagini sunt îmbinate, încărcate și procesate automat în loturi prin endpointul specializat `/v1/ocr` al Mistral, iar imaginile cu o singură pagină sunt procesate direct, fără conversii inutile în PDF [1].
+*   **Gestionare dinamică a URL-urilor personalizate**: Modificarea URL-ului API personalizat șterge acum instantaneu lista de modele din cache și restaurează caseta de text pentru introducerea manuală a modelului. Astfel se asigură compatibilitate completă cu endpointuri personalizate, precum Cloudflare AI Gateway, care nu acceptă endpointul standard de listare `/v1/models`.
+*   **Motor de intrare AI Operator reproiectat**: Sistemul de simulare a mouse-ului și tastaturii folosit de AI Operator a fost rescris complet. API-ul vechi `mouse_event` a fost înlocuit cu API-ul modern Windows `SendInput`, oferind compatibilitate mult mai bună cu aplicațiile moderne, ferestrele protejate prin UAC și ecranele cu DPI ridicat.
+*   **Operații drag-and-drop remediate**: Acțiunile de tragere și plasare din AI Operator sunt acum complet stabile și fiabile. Noul motor folosește curbe naturale de accelerare și decelerare („easing”), poziționare precisă a cursorului, temporizare optimizată și o tehnică inteligentă de „nudge”, astfel încât Windows și aplicațiile să recunoască și să execute corect gesturile de tragere și plasare fără eșecuri la jumătatea acțiunii.
+*   **Suport pentru mai multe monitoare**: AI Operator acceptă acum complet configurațiile cu mai multe monitoare. Mișcările și clicurile mouse-ului funcționează corect pe toate monitoarele folosind indicatorul `MOUSEEVENTF_VIRTUALDESK`, asigurând poziționarea precisă indiferent de monitorul pe care se află aplicația țintă.
+*   **Simulare îmbunătățită a tastaturii**: Injectarea tastelor a fost îmbunătățită pentru a accepta complet „tastele extinse”, precum tastele săgeți, Home, End, Page Up/Down, Insert, Delete și F1-F12. Astfel, comenzile de navigare și scurtăturile trimise de AI Operator funcționează impecabil în toate aplicațiile.
+*   **Suport pentru imagini HEIC/HEIF**: A fost adăugat suport nativ pentru formatele foto de iPhone. Acum poți selecta direct fișiere `.heic` și `.heif` pentru descriere AI, OCR sau citire în Cititorul de documente, fără conversie prealabilă.
+
 ## Modificări pentru 6.5.0
 
 *   **Asistent live**: A fost adăugată o funcție de asistent vocal și de ecran în timp real, disponibilă exclusiv pentru furnizorul Google Gemini sau pentru furnizori personalizați compatibili cu Gemini. Include personalizarea interactivă a vocii și a profunzimii de gândire direct în dialog, cu reconectare automată când se modifică setările.

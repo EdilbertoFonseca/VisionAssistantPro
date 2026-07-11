@@ -96,7 +96,36 @@ Para evitar conflictos de teclado, este complemento usa una **Capa de comandos**
 - **Alt + G:** Generar y guardar un archivo de audio de alta calidad (WAV/MP3). *Oculto si el proveedor no admite TTS.*
 - **Alt + S / Ctrl + S:** Guardar el texto extraído como archivo TXT o HTML.
 
-## 3. Indicaciones personalizadas y variables
+## 3. Operador de IA - Control autónomo del equipo
+
+El **Operador de IA** convierte Vision Assistant Pro de un lector pasivo en un asistente activo capaz de interactuar con tu equipo en tu nombre. Puedes pedirle que describa la pantalla, responda preguntas sobre lo que ve, o tome el control: hacer clic en botones, arrastrar elementos, escribir texto y navegar por aplicaciones mediante comandos en lenguaje natural.
+
+La mayor ventaja es que funciona perfectamente en software completamente inaccesible. Si estás atascado en una aplicación personalizada, un escritorio remoto o un sitio web donde tu lector de pantalla permanece en silencio, al Operador no le importa. Como "ve" la pantalla visualmente, puede encontrar, leer e interactuar con elementos que no tienen ninguna etiqueta de accesibilidad.
+
+### Cómo funciona
+1. Presiona **NVDA + Shift + V**, luego presiona **Shift + A** para abrir el diálogo del Operador de IA.
+2. Escribe lo que quieres hacer en lenguaje natural (por ejemplo, "Haz clic en el botón Guardar", "¿Qué dice el mensaje de error?" o "Cambia el nombre del archivo a final.pdf").
+3. La IA analizará tu pantalla, identificará los elementos relevantes y realizará la acción o proporcionará la respuesta. Si una tarea requiere varios pasos, el Operador continuará trabajando hasta completarla.
+4. Presiona **Shift + A** de nuevo en cualquier momento para cancelar una operación en curso al instante.
+
+### Acciones compatibles
+El Operador entiende una amplia gama de comandos:
+- **Describir y responder**: "Describe el diseño de la pantalla" o "¿Qué dice el mensaje de error?"
+- **Clic**: "Haz clic en el botón Guardar"
+- **Clic derecho**: "Haz clic derecho en el archivo"
+- **Doble clic**: "Haz doble clic en el documento"
+- **Arrastrar y soltar**: "Arrastra el documento a la carpeta Archivo"
+- **Escribir**: "Escribe 'Hola Mundo' en el cuadro de búsqueda"
+- **Desplazar**: "Desplázate hacia abajo tres veces"
+- **Tecla**: "Presiona Enter", "Presiona Tab", "Presiona Escape"
+- **Tareas de varios pasos**: "Abre el Explorador de archivos, encuentra el informe y cámbiale el nombre a final.pdf"
+
+### Notas importantes
+- **⚠️ Advertencia de uso de API:** Dado que el Operador de IA necesita "ver" exactamente lo que está pasando, envía una captura de pantalla de alta resolución con cada paso. El uso frecuente consumirá tu cuota de API mucho más rápido que las funciones estándar basadas en texto.
+- **Aplicaciones de administrador:** Si NVDA no se está ejecutando con privilegios de administrador, es posible que el Operador no pueda interactuar con ventanas que requieren permisos elevados. Esto es una limitación de seguridad de Windows, no un error del complemento.
+- **Mejores prácticas:** Para mejores resultados, da comandos claros y específicos. "Haz clic en el botón azul Enviar en la parte inferior del formulario" funcionará casi siempre mejor que simplemente "Haz clic en el botón".
+
+## 4. Indicaciones personalizadas y variables
 
 Puedes administrar las indicaciones en **Configuración > Indicaciones > Administrar indicaciones...**.
 
@@ -104,6 +133,7 @@ Puedes administrar las indicaciones en **Configuración > Indicaciones > Adminis
 - `[selection]`: Texto seleccionado actualmente.
 - `[clipboard]`: Contenido del portapapeles.
 - `[screen_obj]`: Captura de pantalla del objeto del navegador.
+- `[screen_fg_obj]`: Captura de pantalla de la ventana activa en primer plano.
 - `[screen_full]`: Captura de pantalla completa.
 - `[file_ocr]`: Seleccionar archivo de imagen/PDF para extracción de texto.
 - `[file_read]`: Seleccionar documento para leer (TXT, código, PDF).
@@ -112,13 +142,13 @@ Puedes administrar las indicaciones en **Configuración > Indicaciones > Adminis
 ***
 **Nota:** Se requiere una conexión a Internet activa para todas las funciones de IA. Los documentos de varias páginas se procesan automáticamente.
 
-## 4. Soporte y comunidad
+## 5. Soporte y comunidad
 
 Mantente actualizado con las últimas noticias, funciones y lanzamientos:
 - **Canal de Telegram:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
 - **GitHub Issues:** Para informes de errores y solicitudes de funciones.
 
-## 5. Colaboradores del proyecto
+## 6. Colaboradores del proyecto
 
 Un agradecimiento de corazón a los miembros de nuestra comunidad que apoyan el desarrollo continuo y el mantenimiento de este proyecto con sus generosas contribuciones económicas:
 
@@ -127,11 +157,26 @@ Un agradecimiento de corazón a los miembros de nuestra comunidad que apoyan el 
 *   **Ilya**
 *   **Colaborador anónimo** (`UQDd...CnMY`)
 *   **leonardo0216**
+*   **Sergei Fleytin**
 
 *Si deseas apoyar el proyecto económicamente y ver tu nombre aquí, puedes encontrar la opción **Donar** en el menú Herramientas de NVDA (submenú Vision Assistant) o durante el proceso de configuración después de la instalación.*
 
-
 ---
+## Cambios para 7.0.0
+
+*   **Reanudación de escaneos no finalizados**: Se añadió una función para reanudar tanto el Lector de documentos como las Acciones inteligentes de archivo. Si un escaneo se interrumpe, ahora puedes continuar desde donde se detuvo en lugar de empezar desde cero.
+*   **Nueva variable `[screen_fg_obj]`**: Se añadió una variable de indicación personalizada para capturar una captura de pantalla solo de la ventana activa en primer plano, en lugar de toda la pantalla.
+*   **Reintentos inteligentes y rotación de claves**: El complemento ahora reintenta silenciosamente hasta 5 veces con la misma clave ante sobrecargas temporales del servidor (como "alta demanda" o respuestas malformadas). Si los reintentos fallan, cambia automáticamente a la siguiente clave API de la lista.
+*   **Detección de cortina de pantalla**: Se añadió una verificación para evitar tomar capturas de pantalla cuando la Cortina de pantalla está activa (ya sea habilitada permanentemente o activada temporalmente con el atajo de teclado). Avisará y se detendrá, evitando enviar imágenes negras y desperdiciar tokens de API.
+*   **Ajustes del Lector de documentos**: El diálogo de rango de PDF ahora preselecciona automáticamente el idioma de destino predeterminado de la configuración del complemento. También se mejoró el manejo de hilos para que las tareas en segundo plano se detengan correctamente al cerrar el lector.
+*   **Integración OCR nativa de Mistral**: Se integró la API OCR de documentos nativa de Mistral. Los documentos de varias páginas se fusionan, cargan y procesan automáticamente en lotes usando el punto de acceso especializado `/v1/ocr` de Mistral, mientras que las imágenes de una sola página se procesan directamente sin conversiones PDF innecesarias.
+*   **Controladores de URL personalizados dinámicos**: Modificar la URL de API personalizada ahora borra instantáneamente la lista de modelos en caché y restaura el cuadro de texto de entrada manual del modelo, garantizando compatibilidad total con puntos de acceso personalizados (como Cloudflare AI Gateway) que no admiten el listado estándar `/v1/models`.
+*   **Motor de entrada del Operador de IA renovado**: Se reescribió completamente el sistema de simulación de ratón y teclado del Operador de IA. Se reemplazó la API `mouse_event` heredada con la moderna API `SendInput` de Windows, aportando mayor compatibilidad con aplicaciones modernas, ventanas protegidas por UAC y pantallas de alta resolución.
+*   **Arrastrar y soltar corregido**: Las operaciones de arrastrar y soltar en el Operador de IA son ahora completamente estables y fiables. El nuevo motor usa curvas de "aceleración" naturales, posicionamiento preciso del cursor, temporización optimizada y una técnica inteligente de "empuje" para garantizar que Windows y las aplicaciones reconozcan y ejecuten correctamente los gestos de arrastrar y soltar.
+*   **Soporte multimonitor**: El Operador de IA ahora es totalmente compatible con configuraciones de varios monitores. Los movimientos del ratón y los clics funcionan correctamente en todos los monitores usando el indicador `MOUSEEVENTF_VIRTUALDESK`, garantizando un posicionamiento preciso independientemente del monitor en el que se encuentre la aplicación.
+*   **Simulación de teclado mejorada**: Se mejoró la inyección de teclas para admitir completamente las "teclas extendidas" (como las teclas de flecha, Inicio, Fin, Re Pág/Av Pág, Insertar, Suprimir y F1-F12). Esto garantiza que los comandos de navegación y atajos enviados por el Operador de IA funcionen correctamente en todas las aplicaciones.
+*   **Soporte de imágenes HEIC/HEIF**: Se añadió compatibilidad nativa con formatos de foto de iPhone. Ahora puedes seleccionar directamente archivos `.heic` y `.heif` para descripción con IA, OCR o Lector de documentos sin conversión previa.
+
 ## Cambios para 6.5.0
 
 *   **Asistente en vivo**: Se añadió una función de asistente de voz y pantalla en tiempo real, disponible exclusivamente para el proveedor Google Gemini (o proveedores personalizados compatibles con Gemini). Incluye personalización interactiva de voz y profundidad de razonamiento directamente dentro del diálogo, con reconexión automática al cambiar la configuración.
@@ -254,6 +299,7 @@ Un agradecimiento de corazón a los miembros de nuestra comunidad que apoyan el 
 *   **Estabilidad del dictado:** Se mejoró significativamente la estabilidad del Dictado inteligente. Se añadió una verificación de seguridad para ignorar los clips de audio de menos de 1 segundo, evitando alucinaciones de IA y errores vacíos.
 *   **Gestión de archivos:** Se corrigió un problema donde la carga de archivos con nombres no ingleses fallaba.
 *   **Optimización de indicaciones:** Se mejoró la lógica de traducción y los resultados de Visión estructurados.
+
 ## Cambios para 2.9
 
 *   **Se añadieron traducciones al francés y turco.**
