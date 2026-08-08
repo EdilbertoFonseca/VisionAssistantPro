@@ -74,7 +74,7 @@ Untuk mencegah konflik tombol keyboard, add-on ini memakai **Lapisan Perintah**.
 | **D**         | Pembaca Dokumen        | Pembaca lanjutan untuk PDF dan gambar dengan pilihan rentang halaman.      |
 | **F**         | **Tindakan File Cerdas** | Mengenali konteks dari file gambar, PDF, atau TIFF yang dipilih.          |
 | **M**         | Transkripsi dan Sulih Suara Media | Mentranskripsikan atau menyulihsuarakan file audio/video ke bahasa target. |
-| **C**         | Pemecah CAPTCHA        | Menangkap dan memecahkan CAPTCHA (Mendukung portal pemerintah).            |
+| **C**         | Pemecah CAPTCHA        | Menangkap dan memecahkan CAPTCHA.                                          |
 | **Shift + C** | Obrolan Langsung       | Membuka antarmuka obrolan berbasis teks secara langsung dengan AI.         |
 | **S**         | Dikte Cerdas           | Mengubah ucapan menjadi teks. Tekan untuk mulai merekam, tekan lagi untuk berhenti dan mengetik hasilnya. |
 | **Control+T** | Terjemahan Suara       | Mentranskripsikan, menerjemahkan, lalu mengetik hasil sesuai pengaturan bahasa. |
@@ -116,7 +116,7 @@ Operator AI memahami beragam perintah:
 - **Tugas Bertahap:** "Buka File Explorer, cari laporan, lalu ubah namanya menjadi final.pdf"
 
 ### Catatan Penting
-> **Peringatan Penggunaan API:** Karena Operator AI perlu "melihat" apa yang terjadi di layar, fitur ini mengirim tangkapan layar beresolusi tinggi pada setiap langkah. Penggunaan yang sering akan menghabiskan kuota API lebih cepat daripada fitur berbasis teks. Jika perlu, tekan **Shift+A lagi untuk segera menghentikan proses**.
+- **Peringatan Penggunaan API:** Karena Operator AI perlu "melihat" apa yang terjadi di layar, fitur ini mengirim tangkapan layar beresolusi tinggi pada setiap langkah. Penggunaan yang sering akan menghabiskan kuota API lebih cepat daripada fitur berbasis teks.
 - **Aplikasi Administrator:** Jika NVDA tidak dijalankan dengan hak Administrator, Operator AI mungkin tidak dapat berinteraksi dengan jendela yang memerlukan izin lebih tinggi. Ini adalah batasan keamanan Windows, bukan bug add-on.
 - **Praktik Terbaik:** Berikan perintah yang jelas dan spesifik. "Klik tombol Kirim berwarna biru di bagian bawah formulir" hampir selalu lebih efektif daripada sekadar "Klik tombol".
 
