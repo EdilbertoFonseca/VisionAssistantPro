@@ -1,121 +1,307 @@
 # Pomoc Vision Assistant Pro
 
-**Vision Assistant Pro** to wielofunkcyjny asystent AI dla NVDA wykorzystujący silniki AI do odczytywania ekranu, tłumaczenia, dyktowania głosowego i analizy dokumentów.
+<!-- DOWNLOAD_COUNT_START --> Pobrań łącznie: 61 000+ <!-- DOWNLOAD_COUNT_END -->
 
-_Ten dodatek został udostępniony społeczności z okazji Międzynarodowego Dnia Osób z Niepełnosprawnościami._
+**Vision Assistant Pro** to wielomodalny asystent AI dla NVDA. Korzysta z czołowych silników AI, żeby odczytywać ekran, tłumaczyć, zapisywać mowę i analizować dokumenty.
+
+_Dodatek trafił do społeczności z okazji Międzynarodowego Dnia Osób z Niepełnosprawnościami._
 
 ## 1. Konfiguracja
 
-Przejdź do **Menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**.
+Przejdź do **menu NVDA > Preferencje > Ustawienia > Vision Assistant Pro**. Okno ustawień jest podzielone na 8 zakładek: **Połączenie**, **Zachowanie AI**, **Języki tłumaczenia**, **Czytnik dokumentów**, **Wideo**, **CAPTCHA**, **Polecenia** i **Zaawansowane**.
 
-### 1.1 Ustawienia połączenia
-- **Dostawca:** Wybierz preferowaną usługę AI. Obsługiwani dostawcy to **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax** oraz **Niestandardowy** (serwery zgodne z OpenAI, np. Ollama/LM Studio).
-- **Ważne:** Zalecamy korzystanie z **Google Gemini**, który zapewnia najlepszą jakość (szczególnie przy analizie obrazów i plików).
-- **Klucz API:** Wymagany. Można podać wiele kluczy (rozdzielonych przecinkami lub w osobnych wierszach), aby dodatek rotował je automatycznie.
-- **Pobierz modele:** Po wprowadzeniu klucza API naciśnij ten przycisk, aby pobrać aktualną listę dostępnych modeli od dostawcy.
-- **Model AI:** Wybierz główny model używany do czatu i analizy.
+### 1.1 Zakładka Połączenie
+- **Dostawca:** wybór usługi AI. Obsługiwani dostawcy to **Google Gemini**, **OpenAI**, **Mistral**, **Groq**, **MiniMax** oraz **Niestandardowy** (serwery zgodne z OpenAI, na przykład Ollama, LM Studio, Jan.ai albo KoboldCPP).
+- **Klucz API:** jeden klucz albo kilka (rozdzielonych przecinkami lub nowymi wierszami) do automatycznej rotacji.
+- **Pobierz modele:** po wpisaniu klucza ten przycisk pobiera od dostawcy aktualną listę modeli.
+- **Model AI:** główny model używany do rozmowy i analizy.
+- **Ustawienia niestandardowego dostawcy:** konfiguracja lokalnych i własnych adresów usług. Są tu dwie rzeczy: przycisk **Konfiguracja lokalnej AI**, który jednym kliknięciem ustawia Ollama, LM Studio, Jan.ai albo KoboldCPP, oraz **Adresy usług** do ręcznego wpisania własnego adresu.
+- **Osobny model dla każdego zadania:** można wskazać osobne modele dla OCR, STT, TTS, Operatora AI, wideo i asystenta głosowego.
+- **Opcje połączenia i wyjścia:** adres proxy, sprawdzanie aktualizacji przy starcie, czyszczenie Markdownu w czacie, kopiowanie odpowiedzi AI do schowka, tryb bezpośredni (nie pokazuje okna czatu) oraz tryb bezpośredni asystenta głosowego.
 
-### 1.2 Osobny model dla każdego zadania
-*Dostępne dla wszystkich dostawców, w tym Gemini, OpenAI, Groq, Mistral i Niestandardowy.*
+### 1.2 Zakładka Zachowanie AI
+- **Kreatywność (temperatura):** steruje losowością odpowiedzi (od 0,0 do 2,0). Niższe wartości dają bardziej przewidywalne odpowiedzi. Nie wpływa na OCR ani na tłumaczenie.
 
-> **⚠️ Uwaga:** Te ustawienia są przeznaczone wyłącznie dla **doświadczonych użytkowników**. Jeśli nie wiesz, do czego służy dany model, zostaw tę opcję **odznaczoną**. Wybranie nieodpowiedniego modelu (np. modelu tekstowego dla zadań wizualnych) spowoduje błędy i zatrzyma działanie dodatku.
+### 1.3 Zakładka Języki tłumaczenia
+- **Język źródłowy:** domyślny język wejściowy.
+- **Język docelowy:** główny język tłumaczenia.
+- **Język odpowiedzi AI:** język ogólnych odpowiedzi AI.
+- **Zamiana:** automatycznie zamienia język źródłowy z docelowym na podstawie wykrytego wejścia.
 
-Zaznacz **„Osobny model dla każdego zadania"**, aby uzyskać szczegółową kontrolę. Pozwala to wybrać konkretne modele z listy rozwijanej dla różnych zadań:
-- **Model dla OCR / rozpoznawania obrazów:** Wyspecjalizowany model do analizy obrazów.
-- **Rozpoznawanie mowy (STT):** Konkretny model do dyktowania.
-- **Synteza mowy (TTS):** Model do generowania audio.
-- **Model Operatora AI:** Konkretny model do zadań autonomicznego sterowania komputerem.
-*Uwaga: Nieobsługiwane funkcje (np. TTS dla Groq) zostaną automatycznie ukryte.*
+### 1.4 Zakładka Czytnik dokumentów
+- **Silnik OCR:** do wyboru **Chrome (szybki)** dla szybkich wyników albo **AI (zaawansowany)** dla lepszego zachowania układu strony.
+- **Porcja OCR:** liczba stron na jedno żądanie (0 wyłącza dzielenie i wysyła wszystko w jednym żądaniu).
+- **Wplataj opisy obrazów w tekst:** przy wyodrębnianiu treści dokumentu opis obrazu ląduje dokładnie tam, gdzie w dokumencie znajduje się obraz, a nie osobno na końcu.
+- **Numery stron przy eksporcie:** włącza numery stron i separatory w dokumentach wielostronicowych.
+- **Głos TTS:** domyślny styl głosu przy generowaniu mowy.
 
-### 1.3 Adresy usług (niestandardowy dostawca)
-*Dostępne tylko przy wybranym dostawcy „Niestandardowy".*
+### 1.5 Zakładka Wideo
+- **Rozmiar fragmentu wideo:** długość odcinka w minutach przy generowaniu audiodeskrypcji (0 wyłącza dzielenie i przetwarza cały plik).
+- **Dodaj listę postaci:** wstawia listę postaci jako pierwszy napis.
+- **Dodaj informację o AI:** wstawia informację o udziale AI na początku napisów SRT do wideo.
 
-> **⚠️ Uwaga:** Ta sekcja umożliwia ręczną konfigurację API i jest przeznaczona dla **zaawansowanych użytkowników** prowadzących lokalne serwery lub proxy. Błędne adresy URL lub nazwy modeli uniemożliwią połączenie. Jeśli nie wiesz dokładnie, do czego służą te pola, zostaw tę opcję **odznaczoną**.
+### 1.6 Zakładka CAPTCHA
 
-Zaznacz **„Adresy usług"**, aby ręcznie podać dane serwera. W przeciwieństwie do natywnych dostawców, tutaj trzeba **wpisać** konkretne adresy URL i nazwy modeli:
-- **URL listy modeli:** Adres do pobrania dostępnych modeli.
-- **URL dla OCR/STT/TTS:** Pełne adresy usług (np. `http://localhost:11434/v1/audio/speech`).
-- **Niestandardowe modele:** Wpisz ręcznie nazwę modelu (np. `llama3:8b`) dla każdego zadania.
+Dodatek radzi sobie z **dwoma rodzajami CAPTCHA**, a wybiera między nimi sam. Obsługuje je jeden skrót — **C** w warstwie poleceń — i nie trzeba z góry wiedzieć, na którą się trafiło.
 
-### 1.4 Preferencje ogólne
-- **Silnik OCR:** Wybierz między **Chrome (szybki)** dla błyskawicznych wyników a **AI (zaawansowany)** dla lepszego zachowania układu strony.
-    - *Uwaga:* Jeśli wybierzesz „AI (zaawansowany)", ale dostawcą jest OpenAI/Groq, dodatek inteligentnie skieruje obraz do modelu rozpoznawania obrazów aktywnego dostawcy.
-- **Głos TTS:** Wybierz preferowany styl głosu. Lista aktualizuje się automatycznie na podstawie aktywnego dostawcy.
-- **Kreatywność (temperatura):** Kontroluje losowość odpowiedzi AI. Niższe wartości są lepsze dla tłumaczenia i OCR.
-- **URL serwera proxy:** Skonfiguruj, jeśli usługi AI są ograniczone w twoim regionie (obsługuje lokalne proxy, np. `127.0.0.1`, oraz adresy pośredniczące).
+- **Klasyczna CAPTCHA tekstowa** to zniekształcony ciąg liter i cyfr do przepisania. AI odczytuje znaki z obrazu i wpisuje je za Ciebie.
+- **CAPTCHA obrazkowa** to zagadka, w której trzeba klikać w obrazki o zadanych cechach: „zaznacz wszystkie pola z sygnalizatorem świetlnym”, „wybierz koty bez ogona”.
+
+Po naciśnięciu **C** dodatek sprawdza, z czym ma do czynienia. Jeśli wykryje zagadkę obrazkową, mówi o tym i przechodzi w tryb rozwiązywania — to trwa dłużej niż odczytanie kodu. Jeśli obrazkowa jest wyłączona w ustawieniach, usłyszysz o tym.
+
+Ustawienia:
+- **Włącz rozwiązywanie CAPTCHA obrazkowej:** włącza i wyłącza obsługę zagadek obrazkowych (hCaptcha, reCAPTCHA). Wyłączenie nie rusza CAPTCHA tekstowej — ta działa dalej.
+- **Metoda dla CAPTCHA tekstowej:** przechwytywanie **obiektu nawigatora** albo **całego ekranu**. Dotyczy wyłącznie kodów do przepisania.
+
+### 1.7 Zakładka Polecenia
+- **Zarządzaj poleceniami:** otwiera osobne okno, w którym można zmienić domyślne polecenia systemowe albo tworzyć, edytować, porządkować i podglądać własne polecenia ze zmiennymi (na przykład `[selection]`, `[screen_fg_obj]`).
+
+### 1.8 Zakładka Zaawansowane i globalny dziennik
+W zakładce **Zaawansowane** konfiguruje się globalny dziennik dodatku:
+- **Włącz osobny plik dziennika:** zapisuje zdarzenia, ruch do API i błędy ze wszystkich modułów dodatku do osobnego pliku (`vision_assistant.log`).
+- **Poziom szczegółowości dziennika:** **Diagnostyka (wszystkie szczegóły)**, **Informacje (ogólne)**, **Ostrzeżenia (tylko ostrzeżenia)** albo **Błędy (tylko błędy)**.
+- **Przechowuj dziennik przez:** automatyczne czyszczenie starszych wpisów, od godziny do 90 dni.
+- **Zarządzanie dziennikiem:** **Otwórz plik dziennika**, **Otwórz folder dziennika** i **Wyczyść plik dziennika** pozwalają zajrzeć do danych albo je usunąć bez restartu NVDA i bez mieszania się do standardowego dziennika NVDA.
 
 ## 2. Warstwa poleceń i skróty
 
-Aby uniknąć konfliktów z innymi skrótami, dodatek korzysta z **warstwy poleceń**.
-1. Naciśnij **NVDA + Shift + V** (klawisz główny), aby aktywować warstwę (usłyszysz sygnał dźwiękowy).
-2. Puść klawisze, a następnie naciśnij jeden z poniższych:
+Aby uniknąć konfliktów skrótów klawiszowych, dodatek używa **warstwy poleceń**.
+1. Naciśnij **NVDA + Shift + V** (klawisz główny), żeby włączyć warstwę (usłyszysz sygnał).
+2. Puść klawisze, a potem naciśnij jeden z poniższych:
 
-| Klawisz       | Funkcja                       | Opis                                                                        |
-|---------------|-------------------------------|-----------------------------------------------------------------------------|
-| **Shift + A** | **Operator AI**               | **Sterowanie autonomiczne:** Powiedz AI, aby wykonała zadanie na ekranie.   |
-| **E**         | **Eksplorator interfejsu**    | **Interaktywne klikanie:** Identyfikuje i klika elementy interfejsu w dowolnej aplikacji. |
-| **T**         | Tłumacz                       | Tłumaczy tekst pod kursorem nawigatora lub zaznaczenie.                     |
-| **Shift + T** | Tłumaczenie schowka           | Tłumaczy zawartość schowka.                                                 |
-| **R**         | Poprawianie tekstu            | Podsumuj, popraw gramatykę, wyjaśnij lub uruchom **niestandardowe polecenie**. |
-| **V**         | Opis obiektu                  | Opisuje bieżący obiekt nawigatora.                                          |
-| **O**         | Rozpoznawanie ekranu          | Analizuje układ i zawartość całego ekranu.                                  |
-| **Shift + V** | Analiza wideo online          | Analizuj filmy z **YouTube**, **Instagrama**, **TikToka** lub **Twittera (X)**, a także lokalne pliki wideo. |
-| **Control + V** | Nagrywanie ekranu           | **Analiza lokalnego nagrania:** Nagrywa bezgłośny film z ekranu, po czym AI opisuje scenę, układ i akcję. |
-| **D**         | Czytnik dokumentów            | Czytnik PDF i obrazów z wyborem zakresu stron.                              |
-| **F**         | **Akcja na pliku**            | Rozpoznawanie zależne od kontekstu z wybranego obrazu, PDF lub TIFF.        |
-| **A**         | Transkrypcja audio            | Transkrybuje pliki MP3, WAV lub OGG na tekst.                               |
-| **C**         | Rozwiązywanie CAPTCHA         | Przechwytuje i rozwiązuje CAPTCHA.                                          |
-| **S**         | Dyktowanie                    | Zamienia mowę na tekst. Naciśnij raz, aby nagrywać, ponownie, aby zakończyć. |
-| **Control+L** | **Asystent głosowy**          | **W czasie rzeczywistym (tylko Gemini):** Rozpoczyna lub kończy rozmowę głosową i ekranową z asystentem AI. |
-| **I**         | Raport stanu                  | Odczytuje bieżący postęp (np. „Skanowanie...", „Bezczynny").                |
-| **L**         | **Oznacz obiekt**             | **Semantyczne etykietowanie AI:** Trwale oznacza bieżący element/ikonę.     |
-| **Shift + L** | **Zarządzaj / Skanuj etykiety** | Otwiera Menedżer etykiet (jeśli istnieją) lub skanuje aplikację w poszukiwaniu nieoznaczonych elementów. |
-| **U**         | Sprawdzanie aktualizacji      | Ręcznie sprawdza najnowszą wersję dodatku na GitHubie.                      |
-| **Spacja**    | Ostatnia odpowiedź AI         | Wyświetla ostatnią odpowiedź AI w oknie czatu do przeglądu lub kontynuacji. |
-| **H**         | Pomoc poleceń                 | Wyświetla listę wszystkich dostępnych skrótów w warstwie poleceń.           |
+| Klawisz | Funkcja | Opis |
+|---------------|--------------------------|-----------------------------------------------------------------------------|
+| **Shift + A** | **Operator AI** | **Działanie autonomiczne:** zlecasz AI wykonanie zadania na ekranie. Ponowne naciśnięcie natychmiast przerywa trwającą operację. |
+| **E** | **Eksplorator interfejsu** | **Kliknięcie interaktywne:** rozpoznaje i klika elementy interfejsu w dowolnej aplikacji. |
+| **T** | Tłumacz | Tłumaczy tekst z obiektu nawigatora albo zaznaczenie. |
+| **Shift + T** | Tłumacz schowka | Tłumaczy zawartość schowka. |
+| **R** | Poprawianie tekstu | Streszcza, poprawia gramatykę, wyjaśnia albo uruchamia **polecenia niestandardowe**. |
+| **V** | Opis obiektu | Opisuje bieżący obiekt nawigatora. |
+| **O** | Opis całego ekranu | Analizuje układ i zawartość całego ekranu. |
+| **Shift + V** | Analiza wideo | Analizuje lokalne pliki wideo oraz filmy z **YouTube**, **Instagrama**, **TikToka** i **Twittera (X)**. |
+| **Control + V** | Nagrywanie ekranu | Nagrywa bezgłośne wideo z ekranu i analizuje przebieg oraz układ. |
+| **D** | Czytnik dokumentów | Zaawansowany czytnik PDF i obrazów z wyborem zakresu stron. |
+| **F** | **Akcja na pliku** | Rozpoznawanie zależne od kontekstu dla zaznaczonego obrazu, pliku PDF albo TIFF. |
+| **M** | Transkrypcja i dubbing mediów | Transkrybuje albo dubbinguje pliki dźwiękowe i wideo (MP3, WAV, MP4 i inne) na język docelowy. |
+| **C** | Rozwiązywanie CAPTCHA | Przechwytuje i rozwiązuje CAPTCHA — **tekstową i obrazkową, jednym skrótem**; rodzaj rozpoznaje sam. |
+| **Shift + C** | Czat | Otwiera okno rozmowy tekstowej z AI. |
+| **S** | Dyktowanie | Zamienia mowę na tekst. Naciśnij, żeby zacząć nagrywanie, i ponownie, żeby zakończyć i wpisać. |
+| **Control + T** | Tłumaczenie mowy | transkrybuje wypowiedź, tłumaczy ją i wpisuje wynik zgodnie z ustawieniami języków. |
+| **Control + L** | **Asystent głosowy** | **Rozmowa w czasie rzeczywistym (tylko Gemini):** rozpoczyna albo kończy rozmowę głosową i ekranową z asystentem. |
+| **I** | Ogłoś stan | Ogłasza bieżący postęp (na przykład „Skanowanie...”, „Bezczynny”). |
+| **L** | **Etykietuj obiekt** | **Etykietowanie semantyczne:** trwale nazywa bieżący element albo ikonę. |
+| **Shift + L** | **Zarządzaj/skanuj etykiety** | Otwiera menedżera etykiet (jeśli etykiety istnieją) albo skanuje aplikację w poszukiwaniu nienazwanych elementów. |
+| **U** | Sprawdź aktualizację | Ręcznie sprawdza na GitHubie najnowszą wersję dodatku. |
+| **Spacja** | Przywołaj ostatni wynik | Pokazuje ostatnią odpowiedź AI w oknie rozmowy do przejrzenia albo dopytania. |
+| **H** | Pomoc poleceń | Wyświetla listę wszystkich dostępnych skrótów. |
+| **Alt + S** | Ustawienia | Otwiera okno ustawień Vision Assistant Pro. |
+| **Alt + Q** | Raport kluczy z wyczerpanym limitem | Podaje liczbę kluczy Gemini, które przekroczyły dzienny limit, wraz z czasem odnowienia. |
+| **Alt + M** | Audyt przydziału modeli | Podaje modele AI wybrane obecnie w osobnym przydziale dla zadań. |
+| **Góra / Dół** | Nawigacja po szybkich ustawieniach | Przechodzi między kategoriami szybkich ustawień (dostawca, model i inne) w warstwie. |
+| **Lewo / Prawo** | Zmiana szybkiego ustawienia | Zmienia wartość wybranego szybkiego ustawienia. |
 
-### 2.1 Skróty czytnika dokumentów (wewnątrz przeglądarki)
-- **Ctrl + PageDown:** Przejdź do następnej strony.
-- **Ctrl + PageUp:** Przejdź do poprzedniej strony.
-- **Alt + A:** Otwórz okno czatu, aby zadać pytanie o dokument.
-- **Alt + R:** Wymuś **ponowne skanowanie AI** przy użyciu aktywnego dostawcy.
-- **Alt + G:** Wygeneruj i zapisz plik audio (WAV/MP3). *Ukryte, jeśli dostawca nie obsługuje TTS.*
-- **Alt + S / Ctrl + S:** Zapisz wyodrębniony tekst jako plik TXT lub HTML.
+## 3. Operator AI — autonomiczne sterowanie komputerem
 
-## 3. Polecenia niestandardowe i zmienne
+**Operator AI** zamienia Vision Assistant Pro z czytnika w asystenta, który działa na komputerze w Twoim imieniu. Można poprosić go o opis ekranu, o odpowiedź na pytanie o to, co widzi, albo oddać mu sterowanie: klikanie przycisków, przeciąganie elementów, wpisywanie tekstu i poruszanie się po aplikacjach zwykłym językiem.
 
-Tymi poleceniami można zarządzać w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
+Największa zaleta? Działa w oprogramowaniu całkowicie niedostępnym. Jeśli firmowa aplikacja, pulpit zdalny albo strona nie dają się obsłużyć, bo czytnik ekranu przy nich milczy, operatorowi to nie przeszkadza. Ponieważ „widzi” ekran wizualnie, potrafi znaleźć, odczytać i obsłużyć elementy pozbawione jakichkolwiek etykiet dostępności.
+
+### Jak to działa
+1. Naciśnij **NVDA + Shift + V**, potem **Shift + A** (albo użyj skrótu bezpośredniego), żeby otworzyć okno Operatora AI.
+2. Napisz zwykłym językiem, co ma zrobić (na przykład „Kliknij przycisk Zapisz”, „Co mówi komunikat błędu?”, „Zmień nazwę pliku na final.pdf”).
+3. AI przeanalizuje ekran, rozpozna właściwe elementy i wykona zadanie albo poda odpowiedź. Jeśli zadanie wymaga kilku kroków, operator pracuje aż do końca.
+4. Ponowne **Shift + A** w dowolnym momencie natychmiast przerywa trwającą operację.
+
+### Obsługiwane działania
+Operator rozumie szeroki zakres poleceń:
+- **Opis i odpowiedź**: „Opisz układ ekranu” albo „Co mówi komunikat błędu?”
+- **Kliknięcie**: „Kliknij przycisk Zapisz”
+- **Kliknięcie prawym przyciskiem**: „Kliknij plik prawym przyciskiem”
+- **Dwukrotne kliknięcie**: „Kliknij dwukrotnie dokument”
+- **Przeciągnij i upuść**: „Przeciągnij dokument do folderu Archiwum”
+- **Wpisywanie**: „Wpisz »Witaj świecie« w polu wyszukiwania”
+- **Przewijanie**: „Przewiń trzy razy w dół”
+- **Naciśnięcie klawisza**: „Naciśnij Enter”, „Naciśnij Tab”, „Naciśnij Escape”
+- **Zadania wieloetapowe**: „Otwórz Eksplorator plików, znajdź raport i zmień jego nazwę na final.pdf”
+
+### Ważne uwagi
+- **⚠️ Ostrzeżenie o zużyciu API**: operator musi „widzieć” dokładnie to, co dzieje się na ekranie, więc przy każdym kroku wysyła zrzut ekranu w wysokiej rozdzielczości. Częste korzystanie zużywa limit API dużo szybciej niż zwykłe funkcje tekstowe.
+- **Aplikacje administracyjne**: jeśli NVDA nie działa z uprawnieniami administratora, operator może nie obsłużyć okien wymagających podwyższonych uprawnień. To ograniczenie bezpieczeństwa Windows, nie błąd dodatku.
+- **Dobre praktyki**: najlepiej działają polecenia konkretne. „Kliknij niebieski przycisk Wyślij na dole formularza” zadziała prawie zawsze lepiej niż samo „Kliknij przycisk”.
+
+## 4. Analiza wideo i audiodeskrypcja
+
+> **Uwaga:** analiza wideo i audiodeskrypcja działają wyłącznie na dostawcy **Google Gemini**. Upewnij się, że w ustawieniach dodatku aktywnym dostawcą jest Google Gemini.
+
+Vision Assistant Pro przetwarza wideo z myślą o osobach niewidomych. Analizuje zarówno filmy online, jak i lokalne nagrania ekranu, dając szczegółowe opisy wizualne oraz gotowe skrypty audiodeskrypcji w formacie SRT.
+
+### 4.1 Nagrywanie ekranu (Control + V)
+Jeśli trafisz na bezgłośne wideo, animację albo poradnik na ekranie, możesz nagrać go bezpośrednio:
+1. Naciśnij **NVDA + Shift + V**, żeby wejść w warstwę poleceń, potem **Control + V**.
+2. Dodatek zacznie po cichu nagrywać ekran w tle.
+3. Ponowne **Control + V** kończy nagrywanie.
+4. AI przeanalizuje nagrany fragment i szczegółowo opisze scenę, postacie i przebieg zdarzeń.
+
+### 4.2 Analiza wideo (Shift + V)
+Analizować można zarówno lokalne pliki, jak i filmy online. Wystarczy zaznaczyć plik wideo w Eksploratorze Windows albo skopiować link do schowka. Można też nacisnąć **Shift + V** w dowolnym miejscu (na przykład w odtwarzaczu), żeby otworzyć okno, w którym wskazuje się plik albo wkleja adres ręcznie.
+- **Obsługiwane serwisy:** YouTube, Instagram, TikTok i Twitter (X).
+- Dodatek sam rozpozna plik lokalny albo adres, przetworzy wideo i poda pełny opis wizualny oraz podsumowanie dźwięku.
+
+### 4.3 Generowanie audiodeskrypcji (SRT)
+Dodatek tworzy skrypty audiodeskrypcji w standardowym formacie SubRip (SRT).
+- **Dopasowanie do pauz:** AI słucha ścieżki dźwiękowej i zaczepia opisy o naturalne pauzy i ciszę, żeby jak najmniej nachodziły na dialog.
+- **Śledzenie postaci:** silnik najpierw wyodrębnia poszczególne postacie po niezmiennych cechach twarzy. Buduje globalny słownik, dzięki czemu rozpoznaje i nazywa te same osoby w różnych scenach bez pomyłek.
+- **Dosłowny OCR tekstu:** każdy tekst pojawiający się na ekranie, taki jak np. napisy końcowe jest cytowany dosłownie.
+- **Jak z tego skorzystać:** żeby odsłuchać wygenerowane napisy, umieść plik `.srt` w tym samym folderze co wideo i nadaj mu dokładnie tę samą nazwę. Potem ustaw w odtwarzaczu (na przykład VLC albo PotPlayer) przekazywanie tekstu napisów wprost do czytnika ekranu albo silnika TTS podczas odtwarzania.
+
+### 4.4 Zsynchronizowana narracja dźwiękowa (eksport MP3)
+Dodatek nie kończy na plikach SRT — jest pełnym narzędziem produkcyjnym audiodeskrypcji: syntezuje opisy na mowę i miksuje je z wideo. Jako silnik głosu można teraz wybrać **Gemini Live TTS**, który przez Gemini Live API tworzy bardzo naturalną narrację bez ograniczeń długości. Przy generowaniu MP3 dla plików lokalnych dostępnych jest kilka trybów miksowania:
+- **Standardowa audiodeskrypcja (miks głosu):** narracja nakłada się bezpośrednio na dźwięk wideo. Pojawi się pytanie, czy zastosować **przyciszanie tła** podczas opisów, żeby narracja była wyraźna.
+- **Rozszerzona audiodeskrypcja (pauza dźwięku):** silnik zatrzymuje oryginalny dźwięk na czas opisu, dzięki czemu nie umknie ani słowo dialogu, ani narracji.
+- **Filmy z YouTube:** dla źródeł z YouTube (które nie są pobierane lokalnie) eksport MP3 zawiera wyłącznie zsynchronizowaną ścieżkę głosu AI, bez dźwięku tła.
+
+## 5. Transkrypcja i dubbing mediów (M)
+Moduł transkrypcji został napisany od nowa i obsługuje zarówno pliki dźwiękowe, jak i wideo (MP3, WAV, MP4, MKV i inne). Naciśnij **M** w warstwie poleceń, żeby wybrać plik i jeden z trzech trybów pracy:
+1. **Transkrybuj (język oryginału)**: dokładnie transkrybuje wypowiedź w języku oryginału.
+2. **Transkrybuj i przetłumacz (język docelowy)**: transkrybuje wypowiedź i tłumaczy ją na ustawiony język docelowy.
+3. **Zdubbinguj i przetłumacz (język docelowy)** *(tylko Gemini)*: transkrybuje wypowiedź, tłumaczy ją na język docelowy i tworzy mówioną ścieżkę dźwiękową silnikiem TTS dodatku.
+
+## 6. Zaawansowany czytnik dokumentów i obrazów
+
+Vision Assistant Pro ma zoptymalizowany czytnik dokumentów przygotowany pod wielostronicowe pliki PDF, złożone obrazy, a nawet format HEIC z iPhone'a.
+
+### 6.1 Przetwarzanie wsadowe i wznawianie
+Nie trzeba czytać wielkiego dokumentu za jednym razem. Podaj zakres stron (na przykład `1-20`), a AI przetworzy je w tle. Jeśli NVDA ulegnie awarii albo przerwiesz skanowanie, dodatek zapamięta postęp i zaproponuje **wznowienie** dokładnie w miejscu przerwania.
+
+### 6.2 Akcja na pliku
+Nie zawsze trzeba najpierw otwierać dokument. W Eksploratorze plików Windows wystarczy zaznaczyć plik PDF albo obraz i w warstwie poleceń nacisnąć **D** (czytnik dokumentów) albo **F** (akcja na pliku). Dodatek pominie okno wyboru pliku i od razu zacznie przetwarzanie zaznaczonego dokumentu.
+
+### 6.3 Skróty czytnika dokumentów
+Gdy okno czytnika jest otwarte, działają następujące skróty:
+- **Ctrl + PageDown:** następna strona.
+- **Ctrl + PageUp:** poprzednia strona.
+- **Alt + A:** okno rozmowy z pytaniami o dokument.
+- **Alt + R:** wymuszenie **ponownego skanowania przez AI** aktywnym dostawcą.
+- **Alt + G:** wygenerowanie i zapisanie pliku dźwiękowego wysokiej jakości (WAV/MP3). *(Ukryte, jeśli dostawca nie obsługuje TTS).*
+- **Alt + S / Ctrl + S:** zapis wyodrębnionego tekstu jako plik TXT albo HTML.
+
+## 7. Etykietowanie semantyczne i Eksplorator interfejsu
+
+Aplikacja, w której wszędzie słychać „nieoznaczony przycisk”? Silnik etykietowania semantycznego rozwiązuje to na stałe.
+
+### 7.1 Trwałe etykietowanie obiektu (L)
+Ustaw czytnik na nieoznaczonej grafice albo przycisku i naciśnij **L** w warstwie poleceń. AI obejrzy przycisk, rozpozna jego funkcję i nada mu trwałą etykietę.
+*W odróżnieniu od starszych narzędzi do etykietowania, ten dodatek korzysta z hybrydowego systemu „sygnatury obiektu” (AutomationId/ControlID). Własne etykiety przetrwają zmianę rozmiaru okna, przełączenie monitora i aktualizację aplikacji.*
+
+### 7.2 Skanowanie całej aplikacji (Shift + L)
+Naciśnij **Shift + L**, żeby przeskanować całe aktywne okno naraz. AI znajdzie wszystkie nieoznaczone elementy i nazwie je za jednym razem. Etykiety można potem przeglądać, zmieniać i usuwać zbiorczo we wbudowanym menedżerze etykiet.
+
+### 7.3 Eksplorator interfejsu (E)
+Chcesz obsłużyć element bez ręcznego docierania do niego? Naciśnij **E**, żeby uruchomić Eksplorator interfejsu. AI przeskanuje ekran i utworzy dostępną listę wszystkich klikalnych elementów (pomijając szum systemowy w rodzaju paska zadań). Wybierz pozycję z listy, a dodatek od razu ją kliknie.
+
+## 8. Asystent głosowy
+
+Asystent głosowy zamienia Vision Assistant Pro w interaktywnego pomocnika działającego w czasie rzeczywistym.
+*(Uwaga: funkcja dostępna wyłącznie w Google Gemini i w niestandardowych dostawcach zgodnych z Gemini).*
+
+- **Uruchomienie:** naciśnij **Control + L** w warstwie poleceń, żeby otworzyć okno asystenta głosowego.
+- **Rozmowa w czasie rzeczywistym:** mów swobodnie do mikrofonu. AI jednocześnie słucha i patrzy na aktywny ekran. Można pytać na przykład „Na co teraz patrzę?” albo „Przeczytaj mi trzeci akapit”.
+- **Dostosowanie:** w oknie można zmienić styl głosu AI (na przykład profesjonalny, przyjazny, energiczny) oraz **głębię myślenia**, czyli to, jak dokładnie AI rozważa odpowiedź.
+
+## 9. Polecenia niestandardowe i zmienne
+
+Poleceniami zarządza się w **Ustawienia > Polecenia > Zarządzaj poleceniami...**.
 
 ### Obsługiwane zmienne
-- `[selection]`: Aktualnie zaznaczony tekst.
-- `[clipboard]`: Zawartość schowka.
-- `[screen_obj]`: Zrzut ekranu obiektu nawigatora.
-- `[screen_fg_obj]`: Zrzut ekranu aktywnego okna pierwszoplanowego.
-- `[screen_full]`: Zrzut całego ekranu.
-- `[file_ocr]`: Wybierz obraz/PDF do wyodrębnienia tekstu.
-- `[file_read]`: Wybierz dokument do odczytu (TXT, kod, PDF).
-- `[file_audio]`: Wybierz plik audio do analizy (MP3, WAV, OGG).
+- `[selection]`: zaznaczony tekst.
+- `[clipboard]`: zawartość schowka.
+- `[clipboard_image]`: obraz w schowku.
+- `[screen_obj]`: zrzut obiektu nawigatora.
+- `[screen_fg_obj]`: zrzut aktywnego okna pierwszoplanowego.
+- `[screen_full]`: zrzut całego ekranu.
+- `[file_ocr]`: wybór obrazu albo pliku PDF do wyodrębnienia tekstu.
+- `[file_read]`: wybór dokumentu do odczytu (TXT, kod, PDF).
+- `[file_audio]`: wybór pliku dźwiękowego do analizy (MP3, WAV, OGG).
+- `{target_lang}`: bieżący język docelowy.
+- `{source_lang}`: bieżący język źródłowy.
+- `{response_lang}`: bieżący język odpowiedzi AI.
+- `{swap_target}`: język zapasowy przy tłumaczeniu z zamianą.
+- `{swap_instruction}`: blok instrukcji tłumaczenia z zamianą.
+
+## 10. Zastosowania w praktyce (której funkcji użyć?)
+
+Vision Assistant Pro ma dużo narzędzi. Poniżej typowe sytuacje, które pomogą wybrać właściwe:
+
+- **Sytuacja: chcesz zrozumieć układ skomplikowanego okna albo niedostępnej aplikacji.**
+  *Rozwiązanie:* naciśnij **O** (opis całego ekranu). AI przeanalizuje ekran i opisze, gdzie dokładnie znajdują się elementy, teksty i przyciski.
+
+- **Sytuacja: na stronie jest obraz albo w dokumencie nieoznaczona grafika.**
+  *Rozwiązanie:* ustaw obiekt nawigatora na grafice i naciśnij **V** (opis obiektu). AI opisze, co konkretnie ten obraz przedstawia.
+
+- **Sytuacja: chcesz obejrzeć film z audiodeskrypcją.**
+  *Rozwiązanie:* naciśnij **Shift + V** na filmie i wybierz **„Generuj audiodeskrypcję (plik SRT)”**. Po zakończeniu kliknij **„Generuj zsynchronizowaną narrację (MP3)”** i wybierz **„Rozszerzona AD”**. Dodatek utworzy ścieżkę, która zatrzymuje dialog filmu na czas opisu scen.
+
+- **Sytuacja: aplikacja jest pełna „nieoznaczonych przycisków”.**
+  *Rozwiązanie:* naciśnij **L**, żeby trwale nazwać konkretny przycisk przy pomocy AI. Albo **Shift + L**, żeby przeskanować i nazwać całe okno naraz. Jeśli chcesz tylko szybko coś kliknąć, naciśnij **E** (Eksplorator interfejsu) po listę wszystkich klikalnych elementów.
+
+- **Sytuacja: musisz przejść przez niedostępną CAPTCHA.**
+  *Rozwiązanie:* naciśnij **C** (rozwiązywanie CAPTCHA) — **ten sam skrót niezależnie od rodzaju zagadki**. Przy kodzie do przepisania AI odczyta znaki i wpisze je w pole. Przy zagadce obrazkowej w rodzaju „zaznacz wszystkie sygnalizatory” rozpozna obrazki i sam poklika, co trzeba; usłyszysz wtedy, że wszedł w tryb rozwiązywania, bo to trwa dłużej.
+
+- **Sytuacja: chcesz przeczytać długi, pięćdziesięciostronicowy dokument PDF.**
+  *Rozwiązanie:* naciśnij **D** (czytnik dokumentów), ustaw dostawcę na Google Gemini i podaj zakres stron `1-50`. Dodatek dokładnie wyodrębni tekst w tle.
+
+- **Sytuacja: oglądasz bezgłośny poradnik wideo albo animację.**
+  *Rozwiązanie:* naciśnij **Control + V**, żeby zacząć nagrywanie ekranu. Pozwól poradnikowi się odtworzyć i naciśnij **Control + V** ponownie. AI wyjaśni dokładnie, co zostało pokazane.
+
+- **Sytuacja: pojawia się nieoczekiwany błąd, nie działa połączenie z API albo chcesz zdiagnozować własny serwer lokalny.**
+  *Rozwiązanie:* przejdź do **Ustawienia > Zaawansowane**, zaznacz **„Włącz osobny plik dziennika”** i ustaw **poziom szczegółowości** na **„Diagnostyka”**. Powtórz czynność, a potem kliknij **„Otwórz plik dziennika”**, żeby obejrzeć szczegóły techniczne albo dołączyć `vision_assistant.log` do zgłoszenia.
 
 ***
-**Uwaga:** Wszystkie funkcje AI wymagają aktywnego połączenia z internetem. Dokumenty wielostronicowe są przetwarzane automatycznie.
+**Uwaga:** wszystkie funkcje AI wymagają aktywnego połączenia z internetem. Dokumenty wielostronicowe są przetwarzane automatycznie.
 
-## 4. Wsparcie i społeczność
+## 11. Wsparcie i społeczność
 
-Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami:
-- **Kanał w Telegramie:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
-- **GitHub Issues:** Zgłaszanie błędów i propozycje nowych funkcji.
+Bądź na bieżąco z nowościami, funkcjami i wydaniami:
+- **Kanał na Telegramie:** [t.me/VisionAssistantPro](https://t.me/VisionAssistantPro)
+- **GitHub Issues:** zgłoszenia błędów i propozycje funkcji.
 
-## 5. Patroni projektu
+### Zgłaszanie błędów i dzienniki
+Otwierając zgłoszenie na GitHubie albo prosząc o pomoc, podaj aktywnego dostawcę AI, model i wersję NVDA. Jeśli masz problemy z połączeniem albo nieoczekiwane awarie, włącz osobny plik dziennika w **Ustawienia > Zaawansowane**, powtórz sytuację i dołącz plik `vision_assistant.log` — to znacznie przyspieszy rozwiązanie problemu.
 
-Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładami finansowymi wspierają ciągły rozwój i utrzymanie tego projektu:
+## 12. Patroni projektu
+
+Serdecznie dziękujemy osobom ze społeczności, które wspierają rozwój i utrzymanie tego projektu swoim wkładem finansowym:
 
 *   **@Alyabani94**
 *   **Ali Alamri**
-*   **Anonimowy wspierający** (`UQDd...CnMY`)
+*   **Ilya**
+*   **Anonimowy darczyńca** (`UQDd...CnMY`)
 *   **leonardo0216**
+*   **Sergei Fleytin**
+*   **Suman Gayen**
 
 *Jeśli chcesz wesprzeć projekt finansowo i zobaczyć tutaj swoje imię, opcję **Wsparcie** znajdziesz w menu Narzędzia NVDA (podmenu Vision Assistant) albo podczas konfiguracji po instalacji.*
 
+---
+## Zmiany w wersji 2026.08.06
+
+*   **Etykietowanie w Eksploratorze interfejsu**: teraz można dodawać etykiety wprost do znalezionych elementów w Eksploratorze interfejsu. Doszedł przycisk „Dodaj etykietę”, a okno zostaje otwarte i utrzymuje fokus, więc kilka obiektów da się opisać jeden po drugim bez przerywania pracy.
+*   **Rozbudowana warstwa szybkich ustawień**: warstwa Vision Assistant (`Insert+Shift+V`) jest teraz trwała i w pełni interaktywna. Strzałkami góra i dół przechodzi się między szybkimi ustawieniami (dostawca, model, język odpowiedzi AI, model TTS), a strzałkami lewo i prawo od razu zmienia ich wartości, z krótkim komunikatem głosowym. Wybory działają natychmiast (łącznie z automatycznym włączeniem osobnego modelu dla zadania, jeśli jest potrzebny), a warstwa pozostaje aktywna przez cały czas konfiguracji.
+*   **Czat (`Shift+C`)**: nowe polecenie w warstwie. `Shift+C` otwiera okno czatu — czysty interfejs tekstowy do rozmowy z AI, bez potrzeby zaczynania od obrazu czy dokumentu.
+*   **Poprawne przywoływanie historii rozmowy**: naprawiony poważny błąd, przez który naciśnięcie `Spacji` w celu przywołania ostatniego wyniku gubiło dalszą historię rozmowy. Dodatek śledzi teraz całą rozmowę globalnie. Po zamknięciu okna i naciśnięciu `Spacji` wraca pełna historia wymiany. Działa dla czatu, analizy obrazu, rozmowy o dokumencie i tłumaczenia.
+*   **Opisy obrazów wplecione w tekst przy OCR**: doszła opcja, która przy OCR dokumentu wplata opis obrazu dokładnie tam, gdzie w dokumencie znajduje się ten obraz. Można ją przełączyć w ustawieniach OCR dodatku, w opcjach czytnika dokumentów przed wyodrębnieniem oraz na bieżąco w warstwie szybkich ustawień.
+*   **Tłumaczenie mowy (`Control+T`)**: nowa funkcja. Dyktujesz, a AI od razu tłumaczy wypowiedź i wpisuje ją jako tekst, zgodnie z ustawionym językiem źródłowym i docelowym.
+*   **Poprawki pobierania aktualizacji**: okno pobierania aktualizacji pokazuje teraz poprawnie postęp w procentach, a błąd, przez który po anulowaniu instalacji pojawiał się fantomowy komunikat „Pobieranie aktualizacji”, został naprawiony.
+*   **Poprawki pobierania eSpeak-NG**: doszedł postęp pobierania eSpeak-NG w procentach.
+*   **Odporność wsadowego OCR**: naprawiony błąd we wsadowym OCR plików PDF, przez który przetwarzanie zatrzymywało się, gdy aktywny klucz API wyczerpał limit w połowie pracy. Teraz dodatek sam przełącza się na kolejny dostępny klucz i kontynuuje.
+*   **Obsługa CAPTCHA obrazkowej**: doszła solidna obsługa rozwiązywania CAPTCHA z obrazu. Dodatek próbuje automatycznie rozwiązywać złożone zagadki obrazkowe w rodzaju hCaptcha i reCAPTCHA, co wyraźnie poprawia dostępność trudnych formularzy internetowych.
+*   **Przebudowana transkrypcja dźwięku**: moduł transkrypcji został napisany od nowa i obsługuje teraz zarówno pliki dźwiękowe, jak i wideo. Ma trzy tryby pracy: „Transkrybuj (język oryginału)”, „Transkrybuj i przetłumacz (język docelowy)” oraz nowy „Zdubbinguj i przetłumacz (język docelowy)” — ten ostatni dostępny wyłącznie w Gemini, tworzy przetłumaczoną ścieżkę głosową oryginalnej wypowiedzi.
+*   **Numery stron w czytniku dokumentów**: doszło ustawienie, które włącza i wyłącza numery stron oraz separatory w dokumentach wielostronicowych. Opcja jest w ustawieniach głównych i w warstwie szybkich ustawień. Działa zarówno przy eksporcie do pliku tekstowego i HTML, jak i w oknie „Pokaż sformatowane”, dzięki czemu połączone dokumenty czyta się bez przerw.
+*   **Gemini Live TTS bez limitu dla opisów wideo**: przy tworzeniu zsynchronizowanej narracji dźwiękowej (MP3) do filmów można teraz wybrać silnik głosu „Gemini Live TTS”. Korzysta on z Gemini Live API i tworzy wysokiej jakości audiodeskrypcję bez ograniczeń długości ani liczby znaków.
+*   **Modularyzacja kodu**: struktura dodatku została przebudowana z jednego pliku na architekturę wielomodułową, co ułatwia utrzymanie.
+*   **Przeprojektowane ustawienia**: okno ustawień zostało w całości przebudowane na nowoczesny układ z zakładkami zamiast grup. Porządek i nawigacja są wygodniejsze, a wszystkie dotychczasowe opcje zostają.
+*   **Globalny dziennik w osobnym pliku**: doszedł opcjonalny globalny dziennik pod nową zakładką ustawień „Zaawansowane”. Zapisuje zdarzenia, ruch do API i błędy ze wszystkich modułów dodatku do osobnego pliku (`vision_assistant.log`). Obsługuje poziomy szczegółowości (diagnostyka, informacje, ostrzeżenia, błędy) i automatyczne przechowywanie (od godziny do 90 dni), a plik można otworzyć lub wyczyścić wprost z ustawień. Bez wpływu na wydajność i bez zaśmiecania dziennika NVDA.
+*   **Postęp wysyłania do Gemini**: doszły komunikaty o postępie w procentach przy wysyłaniu dużych plików (wideo, dźwięk, dokumenty) do Google Gemini API.
 
 ---
 ## Zmiany w wersji 2026.07.15
@@ -148,7 +334,7 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 *   **Dostawca MiniMax**: Zintegrowano MiniMax jako równorzędnego dostawcę z pełną obsługą multimodalną (czat, obraz, OCR), własnym TTS z ponad 300 dynamicznymi głosami oraz automatycznym usuwaniem bloków rozumowania (np. `<think>...</think>`) z odpowiedzi.
 *   **Tłumaczenie w czytniku dokumentów**: Naprawiono ciche niepowodzenie tłumaczenia u osób korzystających z NVDA w językach innych niż angielski, dbając o to, by do Google Translate trafiał standardowy dwuliterowy kod języka zamiast zlokalizowanej nazwy.
 *   **Ponawianie skanowania wsadowego PDF**: Wprowadzono zoptymalizowaną, osobną i cichą logikę ponawiania przy skanowaniu wsadowym dokumentów PDF, aby zapobiec zbędnym przesłaniom i uniknąć uciążliwych okienek z błędami podczas ponawiania.
-*   **Status czytnika dokumentów**: Naprawiono błąd, przez który ogólny status dodatku (sprawdzany przez `I`) pozostawał zatrzymany na „Rozpoczęto przetwarzanie wsadowe" podczas długiego skanowania dokumentów.
+*   **Status czytnika dokumentów**: Naprawiono błąd, przez który ogólny status dodatku (sprawdzany przez `I`) pozostawał zatrzymany na „Rozpoczęto przetwarzanie wsadowe” podczas długiego skanowania dokumentów.
 *   **Naprawiona awaria wątkowania**: Naprawiono poważną awarię (`IsMain() failed in wxTimerImpl`) przy otwieraniu dokumentów z wątku działającego w tle, przenosząc kolejkę wywołań GUI na `wx.CallAfter`.
 
 ---
@@ -169,9 +355,9 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 ---
 ## Zmiany w wersji 6.1.0
 
-*   **Uniwersalna integracja lokalnej AI (Konfiguracja lokalnej AI)**: Dodano nowy przycisk **„Konfiguracja lokalnej AI"** w ustawieniach niestandardowego dostawcy. Teraz można od razu automatycznie skonfigurować lokalne silniki AI, w tym **Ollama**, **LM Studio**, **Jan.ai** i **KoboldCPP**.
+*   **Uniwersalna integracja lokalnej AI (Konfiguracja lokalnej AI)**: Dodano nowy przycisk **„Konfiguracja lokalnej AI”** w ustawieniach niestandardowego dostawcy. Teraz można od razu automatycznie skonfigurować lokalne silniki AI, w tym **Ollama**, **LM Studio**, **Jan.ai** i **KoboldCPP**.
 *   **Ominięcie lokalnego proxy**: Przebudowano logikę połączenia z zaawansowanym mechanizmem omijania proxy. Dodatek całkowicie omija systemowe proxy Windows przy połączeniach lokalnych, dzięki czemu połączenie z lokalną AI jest stabilne nawet przy aktywnym VPN lub trybie TUN.
-*   **Awaryjne zatrzymanie Operatora AI (Shift+A)**: Dodano wyzwalacz zatrzymania. Naciśnięcie polecenia Operatora AI (**Shift+A** w warstwie poleceń) podczas trwającej operacji autonomicznej natychmiast przerywa pętlę i ogłasza *„Operator AI zatrzymany."*
+*   **Awaryjne zatrzymanie Operatora AI (Shift+A)**: Dodano wyzwalacz zatrzymania. Naciśnięcie polecenia Operatora AI (**Shift+A** w warstwie poleceń) podczas trwającej operacji autonomicznej natychmiast przerywa pętlę i ogłasza *„Operator AI zatrzymany.”*
 *   **Bardzo stabilne etykietowanie AI (v2)**: Zastąpiono klucze oparte na bezwzględnych współrzędnych ekranu zaawansowanym, hybrydowym systemem **sygnatur obiektów**. Etykiety opierają się teraz na identyfikatorach programowych (UIA **AutomationId** lub Win32 **ControlID**) oraz współrzędnych względem okna, dzięki czemu są one całkowicie odporne na zmianę rozmiaru, przesuwanie, zmianę monitora czy skalowanie okna.
 *   **Płynna automatyczna migracja etykiet**: Aktualizacja jest całkowicie przezroczysta. Dodatek automatycznie przeniesie starsze etykiety oparte na współrzędnych do nowego, stabilnego formatu sygnatur w tle przy pierwszym ustawieniu fokusu, bez utraty danych.
 
@@ -180,7 +366,7 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 *   **etykietowanie AI**: Teraz można trwale nadawać etykiety nienazwanym przyciskom i ikonom za pomocą AI. Naciśnij **L**, by oznaczyć bieżący obiekt nawigatora (obsługa zarówno fokusu Tab, jak i nawigacji obiektowej), lub **Shift+L**, by przeskanować i oznaczyć całą aplikację naraz.
 *   **Zarządzanie etykietami**: Nowe, w pełni dostępne okno Menedżer etykiet (przez **Shift+L**, jeśli etykiety istnieją) pozwala przeglądać, zmieniać nazwy i zbiorczo usuwać etykiety.
-*   **Bezpośrednia analiza pliku (z pominięciem okna dialogowego)**: Dodatek wykrywa, czy fokus znajduje się na pliku PDF lub graficznym w Eksploratorze Windows. Naciśnięcie **F (Akcja na pliku)** lub **D (Czytnik dokumentów)** na zaznaczonym pliku natychmiast go przetworzy, pomijając standardowe okno „Otwórz".
+*   **Bezpośrednia analiza pliku (z pominięciem okna dialogowego)**: Dodatek wykrywa, czy fokus znajduje się na pliku PDF lub graficznym w Eksploratorze Windows. Naciśnięcie **F (Akcja na pliku)** lub **D (Czytnik dokumentów)** na zaznaczonym pliku natychmiast go przetworzy, pomijając standardowe okno „Otwórz”.
 
 ## Zmiany w wersji 5.6
 
@@ -190,18 +376,18 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 ## Zmiany w wersji 5.5.2
 
-* **Naprawa błędu wpisywania w Operatorze AI:** Rozwiązano błąd, w którym litera „v" była wpisywana zamiast wklejania tekstu na niektórych systemach. Poprawka usuwa konflikty czasowe występujące przy dużym obciążeniu systemu.
+* **Naprawa błędu wpisywania w Operatorze AI:** Rozwiązano błąd, w którym litera „v” była wpisywana zamiast wklejania tekstu na niektórych systemach. Poprawka usuwa konflikty czasowe występujące przy dużym obciążeniu systemu.
 * **Większa stabilność:** Dodano solidną obsługę błędów dla operacji na schowku, aby zapobiec awariom dodatku, gdy schowek systemowy jest tymczasowo zablokowany przez inne aplikacje.
 * **Optymalizacja czasu reakcji:** Dostosowano wewnętrzne opóźnienia zdarzeń klawiatury w celu zapewnienia większej niezawodności na różnych prędkościach systemowych i lepszej zgodności z zewnętrznymi menedżerami schowka.
 
 ## Zmiany w wersji 5.5 (Aktualizacja automatyzacji)
 
 * **Operator AI (Sterowanie autonomiczne - Shift+A):** To perła w koronie wersji 5.5. Vision Assistant Pro przeszedł z biernego asystenta w Twojego osobistego **Operatora AI**. Nie tylko opisuje ekran, lecz przejmuje sterowanie.
-    * *Jak to działa:* Możesz teraz wydawać AI instrukcje słowne, aby obsługiwała Twój komputer. Na przykład w całkowicie niedostępnej aplikacji, gdzie czytnik ekranu milczy, możesz nacisnąć **Shift+A** i wpisać: *"Kliknij przycisk Ustawienia"* lub *"Znajdź pole wyszukiwania, wpisz 'Najnowsze wiadomości' i naciśnij enter."* AI wizualnie identyfikuje elementy, przesuwa kursor i wykonuje zadanie za Ciebie.
+    * *Jak to działa:* Możesz teraz wydawać AI instrukcje słowne, aby obsługiwała Twój komputer. Na przykład w całkowicie niedostępnej aplikacji, gdzie czytnik ekranu milczy, możesz nacisnąć **Shift+A** i wpisać: *„Kliknij przycisk Ustawienia”* lub *„Znajdź pole wyszukiwania, wpisz 'Najnowsze wiadomości' i naciśnij enter.”* AI wizualnie identyfikuje elementy, przesuwa kursor i wykonuje zadanie za Ciebie.
     * *Uwaga o wydajności:* Funkcja jest zoptymalizowana dla **Gemini 3.0 Flash (Preview)**, dostarczając niezwykle szybkich i inteligentnych odpowiedzi, które poradzą sobie nawet z najbardziej złożonymi układami interfejsu.
-    * **⚠️ Ostrzeżenie o zużyciu API:** Ponieważ Operator AI musi „widzieć" dokładnie to, co się dzieje, aby działać precyzyjnie, wysyła zrzut ekranu w wysokiej rozdzielczości na każdym kroku. Częste używanie znacznie szybciej zużyje Twój limit API niż standardowe zadania tekstowe.
-* **Wizualny Eksplorator interfejsu (E):** Zmęczony nawigacją po „nieoznaczonych przyciskach"? Naciśnij **E**, aby uruchomić Eksplorator interfejsu. AI przeskanuje całe okno i wygeneruje listę każdego klikalnego elementu, jaki widzi: ikon, grafik i menu. Wybierz element z listy, a Operator AI kliknie go za Ciebie. To jak „warstwa dostępności" nałożona na dowolną aplikację.
-* **Akcja na pliku zależna od kontekstu (F):** Klawisz „F" został gruntownie przebudowany. Nie zakłada już, że chcesz tylko OCR. Gdy wybierzesz pojedynczy obraz, zapyta o Twoją intencję: możesz wybrać **Szczegółowy opis wizualny**, aby zrozumieć scenę, lub **Strukturalne wyodrębnienie tekstu (OCR)** do czytania. Menu dostosowuje się dynamicznie do typu pliku i aktywnego silnika AI.
+    * **⚠️ Ostrzeżenie o zużyciu API:** Ponieważ Operator AI musi „widzieć” dokładnie to, co się dzieje, aby działać precyzyjnie, wysyła zrzut ekranu w wysokiej rozdzielczości na każdym kroku. Częste używanie znacznie szybciej zużyje Twój limit API niż standardowe zadania tekstowe.
+* **Wizualny Eksplorator interfejsu (E):** Zmęczony nawigacją po „nieoznaczonych przyciskach”? Naciśnij **E**, aby uruchomić Eksplorator interfejsu. AI przeskanuje całe okno i wygeneruje listę każdego klikalnego elementu, jaki widzi: ikon, grafik i menu. Wybierz element z listy, a Operator AI kliknie go za Ciebie. To jak „warstwa dostępności” nałożona na dowolną aplikację.
+* **Akcja na pliku zależna od kontekstu (F):** Klawisz „F” został gruntownie przebudowany. Nie zakłada już, że chcesz tylko OCR. Gdy wybierzesz pojedynczy obraz, zapyta o Twoją intencję: możesz wybrać **Szczegółowy opis wizualny**, aby zrozumieć scenę, lub **Strukturalne wyodrębnienie tekstu (OCR)** do czytania. Menu dostosowuje się dynamicznie do typu pliku i aktywnego silnika AI.
 * **Optymalizacja rdzenia:** Wykonaliśmy głębokie czyszczenie wewnętrznej logiki dodatku, usuwając nieużywane funkcje legacy i zbędny kod. Daje to lżejsze, szybsze i bardziej niezawodne działanie.
 
 ## Zmiany w wersji 5.0
@@ -231,14 +417,14 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 ## Zmiany w wersji 4.0.3
 * **Obsługa niestabilnego połączenia:** Dodano mechanizm automatycznych ponownych prób, aby lepiej radzić sobie z chwilowymi błędami serwera i niestabilnym połączeniem.
 * **Okno tłumaczenia:** Dodano dedykowane okno dla wyników tłumaczenia. Długie tłumaczenia można teraz przeglądać wiersz po wierszu, podobnie jak wyniki OCR.
-* **Zbiorczy podgląd sformatowany:** Funkcja „Podgląd sformatowany" w czytniku dokumentów wyświetla teraz wszystkie przetworzone strony w jednym uporządkowanym oknie z nagłówkami stron.
+* **Zbiorczy podgląd sformatowany:** Funkcja „Podgląd sformatowany” w czytniku dokumentów wyświetla teraz wszystkie przetworzone strony w jednym uporządkowanym oknie z nagłówkami stron.
 * **Szybszy OCR:** Dla dokumentów jednostronicowych pomijany jest wybór zakresu stron, co przyspiesza proces rozpoznawania.
-* **Stabilność API:** Zmieniono metodę uwierzytelniania na opartą o nagłówki HTTP, eliminując błędy „Wszystkie klucze API zawiodły" powodowane przez konflikty rotacji kluczy.
+* **Stabilność API:** Zmieniono metodę uwierzytelniania na opartą o nagłówki HTTP, eliminując błędy „Wszystkie klucze API zawiodły” powodowane przez konflikty rotacji kluczy.
 * **Poprawki błędów:** Naprawiono kilka potencjalnych awarii, w tym problem przy zamykaniu dodatku oraz błąd fokusu w oknie czatu.
 
 ## Zmiany w wersji 4.0.1
 * **Czytnik dokumentów:** Nowa przeglądarka PDF i obrazów z wyborem zakresu stron, przetwarzaniem w tle i nawigacją Ctrl+PageUp/Down.
-* **Podmenu Narzędzia:** Dodano podmenu „Vision Assistant" w menu Narzędzia NVDA, umożliwiające szybki dostęp do głównych funkcji, ustawień i dokumentacji.
+* **Podmenu Narzędzia:** Dodano podmenu „Vision Assistant” w menu Narzędzia NVDA, umożliwiające szybki dostęp do głównych funkcji, ustawień i dokumentacji.
 * **Konfiguracja:** Teraz można wybrać preferowany silnik OCR i głos TTS bezpośrednio w panelu ustawień.
 * **Wiele kluczy API:** Dodano obsługę wielu kluczy API Gemini. Klucze można podać po jednym w wierszu lub rozdzielone przecinkami.
 * **Alternatywny silnik OCR:** Dodano nowy silnik OCR, zapewniający niezawodne rozpoznawanie tekstu nawet po przekroczeniu limitów API Gemini.
@@ -247,7 +433,7 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 * **Instagram Stories:** Dodano możliwość opisu i analizy Instagram Stories za pomocą adresów URL.
 * **TikTok:** Dodano obsługę filmów TikTok, umożliwiając opis wizualny i transkrypcję audio.
 * **Okno aktualizacji:** Nowy dostępny interfejs z polem tekstowym do przejrzenia zmian przed instalacją.
-* **Ujednolicenie interfejsu:** Ustandaryzowano okna dialogowe plików w całym dodatku i rozszerzono polecenie „L" o raportowanie postępu w czasie rzeczywistym.
+* **Ujednolicenie interfejsu:** Ustandaryzowano okna dialogowe plików w całym dodatku i rozszerzono polecenie „L” o raportowanie postępu w czasie rzeczywistym.
 
 ## Zmiany w wersji 3.6.0
 * **System pomocy:** Dodano polecenie pomocy (`H`) w warstwie poleceń, wyświetlające listę wszystkich skrótów i ich funkcji.
@@ -273,27 +459,27 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 ## Zmiany w wersji 2.9
 
 * **Dodano tłumaczenia na francuski i turecki.**
-* **Podgląd sformatowany:** Dodano przycisk „Podgląd sformatowany" w oknach czatu, umożliwiający wyświetlenie rozmowy z prawidłowym formatowaniem (nagłówki, pogrubienie, kod) w standardowym oknie przeglądarki.
-* **Ustawienie Markdown:** Dodano opcję „Czyść Markdown w czacie" w ustawieniach. Odznaczenie pozwala widzieć surową składnię Markdown (np. `**`, `#`) w oknie czatu.
-* **Zarządzanie oknami:** Naprawiono problem z wielokrotnym otwieraniem okien „Poprawianie tekstu" lub czatu.
-* **Usprawnienia interfejsu:** Ujednolicono tytuły okien dialogowych plików na „Otwórz" i usunięto zbędne komunikaty głosowe (np. „Otwieranie menu...").
+* **Podgląd sformatowany:** Dodano przycisk „Podgląd sformatowany” w oknach czatu, umożliwiający wyświetlenie rozmowy z prawidłowym formatowaniem (nagłówki, pogrubienie, kod) w standardowym oknie przeglądarki.
+* **Ustawienie Markdown:** Dodano opcję „Czyść Markdown w czacie” w ustawieniach. Odznaczenie pozwala widzieć surową składnię Markdown (np. `**`, `#`) w oknie czatu.
+* **Zarządzanie oknami:** Naprawiono problem z wielokrotnym otwieraniem okien „Poprawianie tekstu” lub czatu.
+* **Usprawnienia interfejsu:** Ujednolicono tytuły okien dialogowych plików na „Otwórz” i usunięto zbędne komunikaty głosowe (np. „Otwieranie menu...”).
 
 ## Zmiany w wersji 2.8
 * Dodano tłumaczenie na włoski.
-* **Raport stanu:** Dodano polecenie (NVDA+Control+Shift+I) odczytujące bieżący stan dodatku (np. „Przesyłanie...", „Analizowanie...").
-* **Eksport HTML:** Przycisk „Zapisz treść" w oknach wyników zapisuje teraz dane jako sformatowany plik HTML, zachowując style takie jak nagłówki i pogrubienia.
+* **Raport stanu:** Dodano polecenie (NVDA+Control+Shift+I) odczytujące bieżący stan dodatku (np. „Przesyłanie...”, „Analizowanie...”).
+* **Eksport HTML:** Przycisk „Zapisz treść” w oknach wyników zapisuje teraz dane jako sformatowany plik HTML, zachowując style takie jak nagłówki i pogrubienia.
 * **Interfejs ustawień:** Poprawiono układ panelu ustawień z dostępnym grupowaniem.
 * **Nowe modele:** Dodano obsługę gemini-flash-latest i gemini-flash-lite-latest.
 * **Języki:** Dodano nepalski do obsługiwanych języków.
-* **Poprawianie tekstu:** Naprawiono błąd, przez który polecenia „Poprawianie tekstu" nie działały, gdy język interfejsu NVDA nie był angielski.
+* **Poprawianie tekstu:** Naprawiono błąd, przez który polecenia „Poprawianie tekstu” nie działały, gdy język interfejsu NVDA nie był angielski.
 * **Dyktowanie:** Poprawiono wykrywanie ciszy, aby zapobiec błędnemu rozpoznawaniu tekstu przy braku mowy.
-* **Ustawienia aktualizacji:** Opcja „Sprawdzaj aktualizacje przy uruchomieniu" jest teraz domyślnie wyłączona, zgodnie z polityką Add-on Store.
+* **Ustawienia aktualizacji:** Opcja „Sprawdzaj aktualizacje przy uruchomieniu” jest teraz domyślnie wyłączona, zgodnie z polityką Add-on Store.
 * Porządki w kodzie.
 
 ## Zmiany w wersji 2.7
 * Przeniesiono strukturę projektu na oficjalny szablon dodatków NV Access, zapewniając zgodność ze standardami.
 * Dodano automatyczne ponawianie prób przy błędach HTTP 429 (limit zapytań), poprawiając niezawodność w okresach dużego ruchu.
-* Zoptymalizowano polecenia tłumaczenia dla wyższej dokładności i lepszej obsługi logiki „Zamień języki".
+* Zoptymalizowano polecenia tłumaczenia dla wyższej dokładności i lepszej obsługi logiki „Zamień języki”.
 * Zaktualizowano tłumaczenie rosyjskie.
 
 ## Zmiany w wersji 2.6
@@ -303,7 +489,7 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 
 ## Zmiany w wersji 2.5
 * Dodano polecenie OCR pliku (NVDA+Control+Shift+F).
-* Dodano przycisk „Zapisz czat" w oknach wyników.
+* Dodano przycisk „Zapisz czat” w oknach wyników.
 * Wdrożono pełną obsługę lokalizacji (i18n).
 * Przeniesiono sygnały dźwiękowe na natywny moduł NVDA.
 * Przejście na Gemini File API dla lepszej obsługi plików PDF i audio.
@@ -327,7 +513,7 @@ Serdecznie dziękujemy członkom społeczności, którzy swoimi hojnymi wkładam
 * Dodano obsługę ponad 20 nowych języków.
 * Dodano okno dialogowe do doprecyzowywania wyników za pomocą pytań uzupełniających.
 * Dodano wbudowane dyktowanie.
-* Dodano kategorię „Vision Assistant" w oknie Zdarzenia wejścia NVDA.
+* Dodano kategorię „Vision Assistant” w oknie Zdarzenia wejścia NVDA.
 * Naprawiono awarie COMError w niektórych aplikacjach, takich jak Firefox i Word.
 * Dodano mechanizm automatycznego ponawiania prób przy błędach serwera.
 
