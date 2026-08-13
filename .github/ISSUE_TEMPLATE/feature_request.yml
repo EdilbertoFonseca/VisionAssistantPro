@@ -1,4 +1,4 @@
-name: 💡 Feature Request
+name: Feature Request
 description: Suggest an idea or a new feature
 title: "[Feature]: "
 labels: ["enhancement"]
@@ -6,39 +6,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping make Vision Assistant Pro better! The more clearly you describe your idea, the easier it is for us to understand and consider it.
+        Thanks for helping make Vision Assistant Pro better! Describe your idea below.
 
   - type: textarea
-    id: problem
+    id: description
     attributes:
-      label: Is your idea related to a problem?
-      description: A clear description of the problem or limitation you are facing.
-      placeholder: "I'm always frustrated when ..."
-    validations:
-      required: false
-
-  - type: textarea
-    id: solution
-    attributes:
-      label: Describe the solution you'd like
-      description: A clear description of what you want to happen.
+      label: Describe your idea
+      description: What would you like to see added or improved?
       placeholder: "It would be great if the add-on could ..."
     validations:
       required: true
-
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives you've considered
-      description: Any alternative solutions or workarounds you have tried.
-      placeholder: "I've tried ..., but it doesn't work because ..."
-    validations:
-      required: false
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional context
-      description: Add any other context, mockups, or examples that illustrate your idea.
-    validations:
-      required: false

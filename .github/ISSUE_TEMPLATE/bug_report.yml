@@ -1,4 +1,4 @@
-name: 🐛 Bug Report
+name: Bug Report
 description: Report a problem or unexpected behavior
 title: "[Bug]: "
 labels: ["bug"]
@@ -84,9 +84,17 @@ body:
         3. Check **"Enable dedicated log file"** and set **"Log Level"** to **"Debug"**.
         4. Reproduce the issue, then click **"Open Log File"** to find your `vision_assistant.log` file.
 
-        Attach the file below, or paste the relevant error messages here.
-      placeholder: "Drag and drop your vision_assistant.log file here, or paste the error messages from the log."
+        Paste the relevant error messages here, or attach the log file below.
+      placeholder: "Paste the error messages from the log here."
       render: shell
+    validations:
+      required: false
+
+  - type: upload
+    id: log-file
+    attributes:
+      label: Attach the log file
+      description: Attach your `vision_assistant.log` file here if you prefer, instead of pasting the text above.
     validations:
       required: false
 
@@ -94,6 +102,6 @@ body:
     id: additional
     attributes:
       label: Additional context
-      description: Add any other context, screenshots, or details that might help.
+      description: Add any other context or details that might help.
     validations:
       required: false
