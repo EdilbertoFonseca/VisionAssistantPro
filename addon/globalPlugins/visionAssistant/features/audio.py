@@ -281,8 +281,8 @@ class AudioMixin:
         self._browse_and_run(self._ask_audio_action_from_browse, wc, multiple=False)
         self._dialog_open = False
 
-    def _ask_audio_action_from_browse(self, paths):
-        if paths: wx.CallAfter(self._ask_audio_action, paths[0])
+    def _ask_audio_action_from_browse(self, path):
+        if path: wx.CallAfter(self._ask_audio_action, path)
 
     def _ask_audio_action(self, path):
         self._dialog_open = True
