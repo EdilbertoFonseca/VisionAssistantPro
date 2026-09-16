@@ -1,6 +1,6 @@
 # Vision Assistant Pro Documentation
 
-<!-- DOWNLOAD_COUNT_START --> Total Downloads: 74,110 <!-- DOWNLOAD_COUNT_END -->
+<!-- DOWNLOAD_COUNT_START --> Total Downloads: 62,863 <!-- DOWNLOAD_COUNT_END -->
 
 **Vision Assistant Pro** is an advanced, multi-modal AI assistant for NVDA. It leverages world-class AI engines to provide intelligent screen reading, translation, voice dictation, and document analysis.
 
@@ -18,6 +18,7 @@ Go to **NVDA Menu > Preferences > Settings > Vision Assistant Pro**. The setting
 - **Custom Provider Settings:** Configure local or custom endpoints. Includes **Setup Local AI** (one-click setup for Ollama, LM Studio, Jan.ai, or KoboldCPP) and **Advanced Endpoint Configuration**.
 - **Advanced Model Routing (Task-specific):** Optionally select dedicated models from dropdowns for OCR, STT, TTS, AI Operator, Video, and Live Assistant tasks.
 - **Connection & Output Options:** Configure Proxy URL, startup update checks, Clean Markdown in Chat, Copy AI responses to clipboard, and Direct Output (No Chat Window).
+- **Save Chats to History:** Keep your chat conversations in the History list.
 
 ### 1.2 Live Assistant Tab
 - **Live Assistant: Direct Output (No Window):** Start the Live Assistant without its conversation window; open it later with the Recall Last Result key (`Space`).
@@ -41,11 +42,13 @@ Note: This tab appears only when **Google Gemini** (or a Gemini-compatible Custo
 - **Describe Images Inline:** Toggle inline image descriptions during document text extraction.
 - **Export Page Numbers:** Toggle page numbers and separators in multi-page document outputs.
 - **TTS Voice:** Select default voice style for audio generation.
+- **Save Documents to History:** Keep opened documents in the History list; cached OCR text and resume data are still saved.
 
 ### 1.6 Video Tab
 - **Video Chunk Size:** Segment duration in minutes for Audio Description generation (set to 0 to process whole file).
 - **Add Character List:** Option to add character dictionary as the first subtitle entry.
 - **Add AI Disclaimer:** Option to insert an AI disclaimer at the beginning of video SRT subtitles.
+- **Character Dictionary & Series Management:** Add, edit, import, or manage character names, physical descriptions, and roles per series — the AI automatically matches discovered characters to your dictionary and merges new ones as you analyze more episodes. Your manual notes are always preserved with priority over AI updates, while physical descriptions stay up-to-date across episodes.
 
 ### 1.7 CAPTCHA Tab
 - **Enable Visual CAPTCHA Solver:** Toggle automated visual challenge solving (hCaptcha, reCAPTCHA).
@@ -61,6 +64,7 @@ Navigate to the **Advanced** tab to configure global add-on logging:
 - **Log Level:** Select verbosity between **Debug (All Details)**, **Info (General Information)**, **Warning (Warnings Only)**, and **Error (Errors Only)**.
 - **Keep Logs For:** Set automatic retention periods to automatically clean up older log entries (ranging from 1 hour to 90 days).
 - **Log Management Controls:** Use **Open Log File**, **Open Log Folder**, or **Clear Log File** to inspect or clear log data directly without restarting NVDA or interfering with standard NVDA logs.
+- **Unified Data Directory:** All add-on data files (history, series, labels, OCR progress, caches, and logs) are stored in a single `VisionAssistant` folder inside your NVDA configuration directory — keeping everything organized and making manual backups effortless.
 
 ### 1.10 Settings Backup & Restore
 The **Advanced** tab also includes a **Backup and Restore** section:
@@ -116,7 +120,9 @@ When a chat window is open (Direct Chat, document chat, refine, and similar), yo
 - **Alt + C:** Copy the current message.
 
 ### 3.2 History (Control + H)
-Press **Control + H** in the Command Layer to open the **History** dialog with your past chats and documents, filterable by type (All / Chats / Documents). Open a chat to continue the conversation — including its attached files, which are re-attached automatically — or open a document and keep reading. Press **Delete** on any item to remove it, or **Clear All** to empty the list.
+Press **Control + H** in the Command Layer to open the **History** dialog with your past chats and documents, filterable by type (All / Chats / Documents). Open a chat to continue the conversation — including its attached files, which are re-attached automatically — or open a document and keep reading. Press **Delete** on any item to remove it, or **Clear All** to empty the list. For documents, Delete asks whether you want to remove only the history entry or also clear that document's cached OCR text so the next open re-scans it from scratch — with a **Don't ask again** option to remember your choice.
+
+You can also choose what the list remembers. **Save chats to history** (Connection tab) and **Save documents to history** (Document Reader tab) are both on by default, and both can be toggled in Quick Settings. The document option affects the History entry only — cached OCR text and resume data are always kept.
 
 ## 4. AI Operator - Autonomous Computer Control
 
@@ -164,18 +170,20 @@ If you encounter a silent video, an animation, or a tutorial on your screen, you
 You can analyze both local video files and online videos. Simply select a local video file in Windows Explorer, or copy an online video link to your clipboard. You can also press **Shift + V** anywhere (like inside a media player) to open a dialog where you can browse for a video file or paste a URL manually.
 - **Supported Online Platforms:** YouTube, Instagram, TikTok, and Twitter (X).
 - The AI will automatically detect the local file or the URL, process the video, and provide a comprehensive visual description and audio summary.
+- **48-Hour Video File Caching:** Videos uploaded to Gemini are cached for 48 hours! You can regenerate SRT or MP3 outputs for the same video without re-uploading — even after restarting NVDA. The cache is key-aware and automatically invalidated when your API key changes.
 
 ### 5.3 Audio Description Generation (SRT)
 For a more structured experience, the add-on can generate professional Audio Description scripts in standard SubRip (SRT) format. 
 - **Smart Gap-Timing:** The AI listens to the audio track and specifically anchors its visual descriptions to natural pauses and silent gaps to intelligently minimize dialogue overlap.
-- **Character Tracking:** The engine performs a pre-pass to extract distinct characters based on immutable facial features. It builds a global dictionary to accurately track and label characters across different scenes without confusion.
+- **Character Tracking:** The engine performs a pre-pass to extract distinct characters based on immutable facial features. It builds a global dictionary to accurately track and label characters across different scenes without confusion. It also tracks each character's **first appearance**, describing their physical look only once — at the moment they first show up — and using established names only in later scenes to keep the narrative fresh and natural.
 - **Verbatim Text OCR:** Any text appearing on the screen (signs, phones, credits) is strictly quoted verbatim.
 - **How to Use:** To listen to the generated subtitle, simply place the `.srt` file in the same folder as your video file and give it the exact same name. Then, configure your media player (e.g., VLC or PotPlayer) to route the subtitle text directly to your screen reader or TTS engine during playback.
+- **Improved Save Experience:** When saving SRT or MP3 files, the file dialog now opens in the source video's folder by default, whether you opened the video via the file dialog or Shift+V from Explorer.
 
 ### 5.4 Synchronized Audio Narration (MP3 Export)
 Beyond just creating text-based SRT files, the add-on functions as a complete Audio Description production tool by synthesizing the descriptions into speech and mixing them with the video. You can now choose **Gemini Live TTS** as the voice engine, which utilizes the Gemini Live API to generate highly realistic, unlimited voice narration. When generating an MP3 for local video files, you have multiple mixing modes:
 - **Standard AD (Mix Voice):** The narration is overlaid directly on top of the video's audio. You will be prompted if you want to apply **Audio Ducking** (lowering the background volume during descriptions) to ensure the narration is clear.
-- **Extended AD (Pause Audio):** The engine pauses the original video audio during descriptions, ensuring you never miss a single word of the original dialogue or the AI narration.
+- **Extended AD (Pause Audio):** The engine pauses the original video audio during descriptions, ensuring you never miss a single word of the original dialogue or the AI narration. Silence detection now uses the **Silero VAD** neural model (downloaded automatically on first use, just like ffmpeg and eSpeak) for precise gap timing — distinguishing natural dialogue pauses from music and background noise.
 - **YouTube Videos:** For YouTube sources (which are not downloaded locally), the MP3 export will strictly contain the synchronized AI voice track without the background video audio.
 
 ## 6. Media Transcription & Dubbing (M)
@@ -244,6 +252,7 @@ The Live Assistant turns Vision Assistant Pro into a real-time, interactive copi
 - **Activation:** Press **Control + L** in the Command Layer to open the Live Assistant dialog.
 - **Real-time Interaction:** Talk naturally through your microphone. The AI will simultaneously listen to your voice and look at your active screen. You can ask questions like "What am I looking at?" or "Read the third paragraph to me."
 - **Push to Talk:** Enable **Push to Talk** in the Live Assistant settings tab (or toggle it right inside the Live Assistant window), then hold your assigned key to speak and release it to finish. This keeps the microphone muted until you press the key — perfect for noisy environments.
+- **Webcam Input:** Tick **Use &Webcam** in the Live Assistant window to send your camera feed to the AI instead of your screen — ask about physical objects, printed documents, or your surroundings. If ffmpeg isn't installed yet, ticking the box downloads it once with your permission; the option is disabled when no camera is detected or Windows privacy settings block camera access.
 - **Customization:** Inside the dialog, you can change the AI's Voice Style (e.g., Professional, Friendly, Upbeat) and adjust its "Thinking Depth" to control how deeply it reasons before answering.
 
 ## 10. Custom Prompts & Variables
@@ -318,22 +327,36 @@ A heartfelt thank you to our community members who support the continuous develo
 *   **@Alyabani94**
 *   **Ali Alamri**
 *   **Ilya**
-*   **Anonymous Supporter** (`UQDd...CnMY`)
 *   **leonardo0216**
 *   **Sergei Fleytin**
-*   **Suman Gayen**
+*   **Arne Siebert**
+*   **Schalkefan**
+*   **[avalai.org](https://avalai.org)**
 
 *If you wish to support the project financially and see your name here, you can find the **Donate** option in the NVDA Tools menu (Vision Assistant submenu) or during the setup process after installation.*
 
 
 ---
+## Changes for 2026.10.01
+
+*   **Character Dictionary & Series Management**: The Video Analysis dialog now includes a powerful **Character Dictionary** system! Add, edit, import, or manage character names, physical descriptions, and roles per series — the AI automatically matches discovered characters to your dictionary and merges new ones as you analyze more episodes. Your manual notes are always preserved with priority over AI updates, while physical descriptions stay up-to-date across episodes. The dictionary is saved per series and reused for every video in that series. In the character list, press **F2** to edit the selected character and **Delete** to remove it.
+*   **48-Hour Video File Caching**: Videos uploaded to Gemini are now cached for 48 hours! You can regenerate SRT or MP3 outputs for the same video without re-uploading — even after restarting NVDA. The cache is key-aware and automatically invalidated when your API key changes.
+*   **AI-Powered Silence Detection (Silero VAD)**: Extended AD now uses the Silero VAD neural model for precise silence detection — distinguishing natural dialogue pauses from music and background noise. The model is downloaded automatically on first use (with your permission), just like ffmpeg and eSpeak.
+*   **Character First-Appearance Tracking**: The AI now describes each character's physical appearance only once — at their first appearance in the video. Subsequent appearances use names only, eliminating repetitive descriptions across segments while keeping the narrative fresh and natural.
+*   **Unified Data Directory**: All add-on data files (history, series, labels, OCR progress, caches, and logs) have been migrated into a single `VisionAssistant` folder inside your NVDA configuration directory — keeping everything organized and making manual backups effortless.
+*   **Improved Video Save Experience**: When saving SRT or MP3 files, the file dialog now opens in the source video's folder by default, whether you open the video via the file dialog or Shift+V from Explorer.
+*   **Delete Documents With or Without Their Cached Text**: The History dialog (`Control + H`) now offers two ways to delete a document — press Delete and choose **Delete from history only** or **Delete from history and cached text**. The second option clears that document's cached OCR text, so the next open re-scans it from scratch — ideal after a poor scan. A **Don't ask again** checkbox remembers your choice for future deletions. Your interrupted-operation resume data is never touched.
+*   **Engine-Aware, Merging OCR Cache in the Document Reader**: Cached OCR text is now stored per OCR engine, so switching the OCR engine always re-scans with the new engine instead of replaying the old result. Reopening a document shows the page-range dialog again (pre-filled with your last choice), instantly reusing already-scanned pages and scanning only the missing ones — the cache merges page by page instead of being replaced, so every range you read is kept for later.
+*   **Webcam Video for Live Assistant**: The Live Assistant window now has a **Use &Webcam** checkbox to send your webcam feed to the AI instead of your screen — perfect for asking questions about physical objects, documents, or your surroundings. If ffmpeg isn't installed yet, ticking the box downloads it (one-time, with your permission). The option is disabled when no camera is detected or Windows privacy settings block camera access, with a button to open the camera privacy settings. If the camera is enabled but produces no frames, the problem is logged to the NVDA log for diagnosis instead of silently switching back to the screen.
+*   **Bug Fixes & Stability Improvements**: Fixed a hang during MP3 generation when closing the progress dialog mid-task, resolved a race condition in the character dictionary storage, added proper error reporting for MP3 encoding failures, and fixed the document reader's wait loop to respect user cancellation.
+
 ## Changes for 2026.09.01
 
 *   **History (Control + H)**: The Command Layer now includes a **History** dialog (`Control + H`) that lists your past chats and documents with filters for All, Chats, and Documents. Reopen any chat with its full conversation — attached files are re-attached automatically — or reopen a document and keep reading. Press **Delete** on any item to remove it, or clear everything at once.
 *   **Recent Documents in the Reader**: Pressing **D** in the Command Layer now shows your recently read documents first. Pick one to continue from the page you were on — even when the OCR already finished — or press **Open File...** (`Ctrl + O`) to browse as usual.
 *   **Push to Talk for Live Assistant**: Take full control of your live conversations! Enable **Push to Talk** in the new Live Assistant settings tab and assign any key — or even a lone modifier like `Left Ctrl` — to talk. Hold the key to speak and release it when you're done, with a short beep on each press and release. A matching toggle also appears right in the Live Assistant window, so you can switch between push-to-talk and open-mic mode without leaving the conversation.
 *   **Gemini 2.5 Flash Native Audio**: The Live Assistant now supports Gemini 2.5 Flash's native audio model (`gemini-2.5-flash-native-audio-preview-12-2025`) for low-latency, natural voice conversations. You can switch to it from **Settings → Advanced Model Routing → Live Assistant Model (Gemini only)**, or keep "Auto" to stay on the recommended model.
-*   **Settings Backup & Restore**: Added a powerful backup and restore system in the **Advanced** tab! You can now save all of your add-on settings — including API keys, models, custom prompts, and preferences — into a single JSON file, and restore them perfectly at any time, on any machine, or after reinstalling NVDA.
+*   **Settings Backup & Restore**: Added a powerful backup and restore system in the **Advanced** tab! You can now save all of your add-on settings — including API keys, models, custom prompts, and preferences — into a single JSON file, and restore them perfectly at any time, on any machine, or after reinstalling NVDA. When backing up, you choose what to include: **Everything** (settings, custom labels, OCR progress, and history) or **Settings Only**.
 *   **Direct Text & HTML Reading**: The Document Reader can now open plain text (`.txt`) and HTML (`.html`, `.htm`) files directly! It automatically detects the file encoding, strips scripts and formatting clutter, and intelligently splits the content into readable pages — even re-importing its own exported files while preserving page structure — so you can read them instantly with no OCR or AI processing!
 *   **Gemini Live TTS for the Document Reader**: The "Generate Audio" button now supports Gemini Live — a high-quality, natural-pace streaming text-to-speech engine! When Gemini is your active provider, you can choose between Standard TTS and Gemini Live right in the reader, and your selection is remembered for next time!
 *   **Custom Prompt Shortcuts**: You can now assign a shortcut key to any of your custom prompts right from the Prompt Manager! Give every prompt its own dedicated key or key combination to run it instantly, automatically capturing your current selection or context with zero extra steps!
@@ -400,7 +423,7 @@ A heartfelt thank you to our community members who support the continuous develo
 ## Changes for 6.5.0
 
 *   **Live Assistant**: Added a real-time voice and screen assistant feature, available exclusively for the Google Gemini provider (or Gemini-compatible custom providers). Includes interactive voice and thinking depth customization directly inside the dialog, with automatic reconnection upon changing settings.
-*   **MiniMax AI Provider**: Integrated MiniMax as a peer provider with full multimodal support (chat, vision, OCR), custom TTS using over 300+ dynamic voices, and automatic stripping of reasoning blocks (e.g., `<think>...</think>`) from outputs.
+*   **MiniMax AI Provider**: Integrated MiniMax as a peer provider with full multimodal support (chat, vision, OCR), custom TTS using over 300+ dynamic voices, and automatic stripping of reasoning blocks (e.g., ` thinking... response`) from outputs.
 *   **Document Viewer Translation**: Corrected a silent translation failure for non-English NVDA users by ensuring the standard 2-letter language code is sent to Google Translate instead of the localized language name.
 *   **PDF Batch Scan Retry**: Implemented a highly optimized, separate, and silent retry logic for PDF document batch scanning to prevent redundant uploads and avoid disruptive error popups during retries.
 *   **Document Viewer Status**: Fixed a bug where the plugin's overall status (checked via `I`) remained stuck on "Batch Processing Started" during long document scans.
@@ -581,4 +604,4 @@ A heartfelt thank you to our community members who support the continuous develo
 * Added automatic retry mechanism for server errors.
 
 ## Changes for 1.0
-* Initial release.
+* Initial release.
