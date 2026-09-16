@@ -1,6 +1,6 @@
 # Vision Assistant Pro Documentation
 
-<!-- DOWNLOAD_COUNT_START --> Total Downloads: 62,863 <!-- DOWNLOAD_COUNT_END -->
+<!-- DOWNLOAD_COUNT_START --> Total Downloads: 74,208 <!-- DOWNLOAD_COUNT_END -->
 
 **Vision Assistant Pro** is an advanced, multi-modal AI assistant for NVDA. It leverages world-class AI engines to provide intelligent screen reading, translation, voice dictation, and document analysis.
 
@@ -604,4 +604,4 @@ A heartfelt thank you to our community members who support the continuous develo
 * Added automatic retry mechanism for server errors.
 
 ## Changes for 1.0
-* Initial release.
+* Initial release.
